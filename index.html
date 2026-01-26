@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Toilet Basic Tower Defense - Value & Stats</title>
     <style>
-        /* --- 기본 스타일 (White Theme) --- */
+        /* --- 기본 스타일 (Dark Theme + White Text) --- */
         body {
-            background-color: #ffffff; /* 배경 흰색 */
-            color: #333333; /* 글씨 검은색 계열 */
+            background-color: #0a0a1a; /* 배경: 어두운 남색 */
+            color: #ffffff; /* 텍스트: 흰색 */
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
@@ -20,10 +20,10 @@
 
         /* --- 네비게이션바 --- */
         .nav-bar {
-            background-color: #ffffff;
+            background-color: #14142b;
             width: 100%;
             padding: 10px 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1); /* 그림자 연하게 */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
             position: sticky;
             top: 0;
             z-index: 100;
@@ -31,18 +31,18 @@
             justify-content: space-between;
             align-items: center;
             box-sizing: border-box;
-            border-bottom: 1px solid #e0e0e0;
+            border-bottom: 1px solid #333;
         }
         
         .nav-left { display: flex; gap: 10px; align-items: center; }
         .nav-right { display: flex; gap: 10px; align-items: center; }
 
         .nav-btn {
-            background-color: #f0f0f0; color: #555; border: 1px solid #ddd;
+            background-color: #2c2c44; color: #ffffff; border: 1px solid #555;
             padding: 8px 16px; border-radius: 20px; cursor: pointer;
             font-size: 14px; font-weight: bold; transition: all 0.3s;
         }
-        .nav-btn:hover { background-color: #e0e0e0; color: #000; }
+        .nav-btn:hover { background-color: #444; color: #fff; }
         .nav-btn.active { background-color: #007bff; color: white; border-color: #007bff; }
 
         .link-btn {
@@ -60,42 +60,40 @@
         .view-section.active { display: block; animation: fadeIn 0.3s; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        h1 { text-align: center; margin-bottom: 10px; font-size: 28px; color: #000; }
+        h1 { text-align: center; margin-bottom: 10px; font-size: 28px; color: #ffffff; }
 
         /* 🔥 정렬 버튼 바 */
         .sort-bar {
             display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;
-            margin-bottom: 25px; padding: 10px; background: #f9f9f9;
-            border-radius: 12px; border: 1px solid #ddd;
+            margin-bottom: 25px; padding: 10px; background: #14142b;
+            border-radius: 12px; border: 1px solid #333;
         }
         .sort-btn {
-            background: #ffffff; color: #555; border: 1px solid #ccc;
+            background: #2c2c44; color: #ffffff; border: 1px solid #555;
             padding: 8px 16px; border-radius: 8px; cursor: pointer;
             font-size: 13px; font-weight: bold; transition: 0.2s;
             display: flex; align-items: center; gap: 5px;
         }
-        .sort-btn:hover { color: #000; border-color: #999; }
+        .sort-btn:hover { color: #fff; border-color: #777; }
         .sort-btn.active { background: #007bff; color: white; border-color: #007bff; box-shadow: 0 0 8px rgba(0,123,255,0.4); }
         
-        .reverse-btn { background: #eee; color: #333; }
-        .reverse-btn:hover { background: #ddd; }
+        .reverse-btn { background: #444; color: #fff; }
+        .reverse-btn:hover { background: #555; }
 
         /* --- 유닛 카드 그리드 --- */
         .unit-grid {
             display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px;
         }
         .unit-card {
-            background-color: #ffffff; border-radius: 8px; overflow: hidden;
-            border: 1px solid #ddd; box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            background-color: #14142b; border-radius: 8px; overflow: hidden;
+            border: 1px solid #333; box-shadow: 0 4px 6px rgba(0,0,0,0.5);
             transition: transform 0.2s; cursor: pointer; position: relative;
         }
-        .unit-card:hover { transform: translateY(-5px); border-color: #007bff; box-shadow: 0 8px 15px rgba(0,0,0,0.1); }
+        .unit-card:hover { transform: translateY(-5px); border-color: #777; }
 
         .card-image {
-            height: 140px; background-color: #f4f4f4; /* 이미지 배경 밝은 회색 */
-            position: relative;
+            height: 140px; background-color: #000; position: relative;
             display: flex; align-items: center; justify-content: center; overflow: hidden;
-            border-bottom: 1px solid #eee;
         }
         .card-image img { width: 100%; height: 100%; object-fit: contain; }
 
@@ -103,16 +101,14 @@
         .unit-tags { position: absolute; top: 6px; left: 6px; display: flex; flex-direction: column; gap: 3px; }
         .tag {
             padding: 2px 5px; border-radius: 3px; font-size: 9px; font-weight: 800;
-            text-transform: uppercase; text-shadow: 1px 1px 0px rgba(255,255,255,0.5); width: fit-content;
-            border: 1px solid rgba(0,0,0,0.1);
+            text-transform: uppercase; text-shadow: 1px 1px 2px rgba(0,0,0,0.8); width: fit-content;
         }
-        /* 태그 색상은 유지하되 가독성 조정 */
         .tag.common { background: #b0bec5; color: #000; }
         .tag.uncommon { background: #66bb6a; color: #000; }
         .tag.rare { background: #29b6f6; color: #000; }
-        .tag.epic { background: #ab47bc; color: #fff; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); }
+        .tag.epic { background: #ab47bc; color: #fff; }
         .tag.legendary { background: #ffca28; color: #000; }
-        .tag.mythical { background: #ef5350; color: #fff; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); }
+        .tag.mythical { background: #ef5350; color: #fff; }
         .tag.absolute { background: #000080; color: #fff; border: 1px solid #fff; box-shadow: 0 0 5px #00f; }
         .tag.exclusive { background: #ff69b4; color: #fff; border: 1px solid #ff1493; }
         .tag.crate { background: #ff69b4; color: #fff; border: 1px solid #ff1493; }
@@ -122,91 +118,93 @@
             width: 28px; height: 28px; border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
             font-weight: 900; font-size: 14px; 
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            border: 2px solid rgba(255,255,255,0.8);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.6);
+            border: 2px solid rgba(255,255,255,0.3);
             text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
             z-index: 10;
         }
 
-        .tier-S { background: linear-gradient(135deg, #FFD700 0%, #FF8C00 50%, #FF0080 100%); color: #fff; border-color: #fff; }
+        .tier-S { background: linear-gradient(135deg, #FFD700 0%, #FF8C00 50%, #FF0080 100%); color: #fff; border-color: #fff; box-shadow: 0 0 10px rgba(255, 215, 0, 0.7); animation: pulseGlow 2s infinite; }
         .tier-A { background: linear-gradient(135deg, #ff416c, #ff4b2b); color: #fff; }
         .tier-B { background: linear-gradient(135deg, #36D1DC, #5B86E5); color: #fff; }
-        .tier-C { background: #777; color: #fff; }
+        .tier-C { background: #555; color: #ddd; }
         .tier-none { display: none; }
 
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 0 5px rgba(255, 215, 0, 0.5); }
+            50% { box-shadow: 0 0 15px rgba(255, 215, 0, 0.9); }
+            100% { box-shadow: 0 0 5px rgba(255, 215, 0, 0.5); }
+        }
+
         .card-info { padding: 8px; text-align: center; }
-        .unit-name { margin-bottom: 4px; font-size: 13px; font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #333; }
-        .price-text { margin: 0; font-size: 12px; color: #007bff; font-weight: bold; } /* 밝은 파랑으로 변경 */
+        .unit-name { margin-bottom: 4px; font-size: 13px; font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #ffffff; }
+        .price-text { margin: 0; font-size: 12px; color: #00e5ff; font-weight: bold; }
 
         /* --- 모달 --- */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5); z-index: 999;
+            background: rgba(0,0,0,0.85); z-index: 999;
             display: none; justify-content: center; align-items: center;
-            backdrop-filter: blur(2px);
         }
         .modal-content {
-            background: #ffffff; width: 90%; max-width: 450px; max-height: 90vh;
+            background: #1e1e2f; width: 90%; max-width: 450px; max-height: 90vh;
             border-radius: 12px; padding: 20px; overflow-y: auto;
-            border: 1px solid #ccc; position: relative;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            color: #333;
+            border: 1px solid #444; position: relative;
+            color: #ffffff;
         }
         .close-modal {
             position: absolute; top: 15px; right: 15px; width: 30px; height: 30px;
-            background-color: #ff4d4d; color: white; 
+            background-color: rgba(255, 50, 50, 0.8); color: white; 
             font-size: 20px; font-weight: bold; border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
             cursor: pointer; z-index: 1001; transition: 0.2s; padding-bottom: 2px;
-            border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
         .close-modal:hover { background-color: #ff0000; transform: scale(1.1); }
 
-        .stat-header { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; margin-top: 10px; border-bottom: 1px solid #eee; padding-bottom: 15px; }
-        .stat-img-wrapper { position: relative; width: 80px; height: 80px; border-radius: 8px; background: #f0f0f0; border: 1px solid #ddd; flex-shrink: 0; }
+        .stat-header { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; margin-top: 10px; border-bottom: 1px solid #444; padding-bottom: 15px; }
+        .stat-img-wrapper { position: relative; width: 80px; height: 80px; border-radius: 8px; background: #000; border: 1px solid #555; flex-shrink: 0; }
         .stat-img-wrapper img { width: 100%; height: 100%; object-fit: contain; }
-        .stat-title h2 { margin: 0; font-size: 18px; color: #000; }
+        .stat-title h2 { margin: 0; font-size: 18px; color: #fff; }
         .stat-meta { display: flex; gap: 8px; margin-top: 5px; }
         
         .type-badge { padding: 3px 6px; border-radius: 3px; font-size: 11px; font-weight: bold; color: white; }
         .type-AOE { background-color: #ff4d4d; }
-        .type-Splash { background-color: #00d2ff; color: #fff; text-shadow: 0 0 2px rgba(0,0,0,0.5); }
+        .type-Splash { background-color: #00d2ff; color: #000; }
         .type-Single { background-color: #555; }
         .type-Farm { background-color: #28a745; }
         .type-Crate { background-color: #ff69b4; }
 
         .info-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
-        .info-table th, .info-table td { padding: 8px; text-align: center; border-bottom: 1px solid #eee; font-size: 13px; }
-        .info-table th { background-color: #f8f9fa; color: #555; font-weight: bold; border-top: 1px solid #eee; }
-        .info-table td { color: #333; }
+        .info-table th, .info-table td { padding: 8px; text-align: center; border-bottom: 1px solid #333; font-size: 13px; color: #ffffff; }
+        .info-table th { background-color: #14142b; color: #ffffff; font-weight: normal; }
+        .info-table td { color: #ffffff; }
         .hidden-row { display: none; }
 
         .more-btn {
-            width: 100%; padding: 10px; background-color: #f0f0f0; color: #333;
-            border: 1px solid #ddd; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.2s; font-size: 13px;
+            width: 100%; padding: 10px; background-color: #333; color: #fff;
+            border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.2s; font-size: 13px;
         }
-        .more-btn:hover { background-color: #e0e0e0; }
+        .more-btn:hover { background-color: #444; }
 
-        .sign-calc-box { margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-radius: 8px; border: 1px solid #ddd; }
-        .sign-header { font-size: 14px; font-weight: bold; margin-bottom: 10px; color: #d32f2f; /* 포인트 컬러 */ }
+        .sign-calc-box { margin-top: 20px; padding: 15px; background-color: #14142b; border-radius: 8px; border: 1px solid #444; }
+        .sign-header { font-size: 14px; font-weight: bold; margin-bottom: 10px; color: #ffca28; }
         .sign-controls { display: flex; gap: 10px; margin-bottom: 10px; }
-        .sign-select { padding: 6px; border-radius: 5px; background: #fff; color: #333; border: 1px solid #ccc; flex: 1; font-size: 12px; }
-        .sign-result { font-size: 16px; color: #007bff; font-weight: bold; text-align: right; }
+        .sign-select { padding: 6px; border-radius: 5px; background: #2c2c44; color: white; border: 1px solid #555; flex: 1; font-size: 12px; }
+        .sign-result { font-size: 16px; color: #00e5ff; font-weight: bold; text-align: right; }
 
         /* 거래 계산기 스타일 */
         .trade-container { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; }
-        .trade-box { flex: 1; min-width: 280px; background: #ffffff; border-radius: 12px; padding: 15px; border: 1px solid #ccc; display: flex; flex-direction: column; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .trade-slots { background: #f4f4f4; border-radius: 8px; min-height: 200px; padding: 8px; display: grid; grid-template-columns: repeat(3, 1fr); grid-auto-rows: 70px; gap: 8px; margin-bottom: 15px; border: 1px solid #eee; }
-        .mini-card { background: #fff; border-radius: 6px; position: relative; cursor: pointer; border: 1px solid #ddd; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .trade-box { flex: 1; min-width: 280px; background: #1e1e2f; border-radius: 12px; padding: 15px; border: 2px solid #333; display: flex; flex-direction: column; }
+        .trade-slots { background: #12121a; border-radius: 8px; min-height: 200px; padding: 8px; display: grid; grid-template-columns: repeat(3, 1fr); grid-auto-rows: 70px; gap: 8px; margin-bottom: 15px; }
+        .mini-card { background: #2a2a40; border-radius: 6px; position: relative; cursor: pointer; border: 1px solid #444; overflow: hidden; }
         .mini-card img { width: 100%; height: 100%; object-fit: cover; }
-        .mini-val { position: absolute; bottom: 0; width: 100%; background: rgba(255,255,255,0.9); font-size: 9px; text-align: center; color: #007bff; font-weight: bold; border-top: 1px solid #eee; }
-        .signed-badge-overlay { position: absolute; top: 0; left: 0; background: linear-gradient(45deg, #FFD700, #ff8c00); color: black; font-size: 9px; font-weight: bold; padding: 2px 5px; border-bottom-right-radius: 6px; box-shadow: 1px 1px 2px rgba(0,0,0,0.3); }
-        .add-btn { background: #28a745; color: white; border: none; padding: 10px; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: auto; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .add-btn:hover { background: #218838; }
+        .mini-val { position: absolute; bottom: 0; width: 100%; background: rgba(0,0,0,0.8); font-size: 9px; text-align: center; color: #00e5ff; }
+        .signed-badge-overlay { position: absolute; top: 0; left: 0; background: linear-gradient(45deg, #FFD700, #ff8c00); color: black; font-size: 9px; font-weight: bold; padding: 2px 5px; border-bottom-right-radius: 6px; }
+        .add-btn { background: #28a745; color: white; border: none; padding: 10px; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: auto; }
         
-        .result-panel { background: #fff; margin-top: 20px; padding: 15px; border-radius: 10px; text-align: center; display: none; border: 1px solid #ddd; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-        .status-badge { padding: 6px 15px; border-radius: 15px; font-size: 16px; font-weight: bold; display: inline-block; margin-bottom: 8px; color: white; }
-        .win { background: #28a745; } .fair { background: #ffc107; color: #333; } .loss { background: #dc3545; }
+        .result-panel { background: #252535; margin-top: 20px; padding: 15px; border-radius: 10px; text-align: center; display: none; }
+        .status-badge { padding: 6px 15px; border-radius: 15px; font-size: 16px; font-weight: bold; display: inline-block; margin-bottom: 8px; }
+        .win { background: #28a745; color: white; } .fair { background: #ffc107; color: black; } .loss { background: #dc3545; color: white; }
 
         @media (max-width: 768px) {
             .nav-bar { padding: 10px; }
@@ -245,27 +243,27 @@
             <h1>⚖️ Trade Calculator</h1>
             <div class="trade-container">
                 <div class="trade-box">
-                    <div style="text-align:center; color:#007bff; font-weight:bold; margin-bottom:10px;">Your Offer</div>
+                    <div style="text-align:center; color:#4facfe; font-weight:bold; margin-bottom:10px;">Your Offer</div>
                     <div class="trade-slots" id="slots-me"></div>
-                    <div style="text-align:center; background:#f0f0f0; padding:10px; border-radius:8px; border:1px solid #ddd;">
-                        <div style="color:#666; font-size:12px;">Total Value</div>
-                        <div style="color:#007bff; font-size:20px; font-weight:bold;" id="total-me">0</div>
+                    <div style="text-align:center; background:#000; padding:10px; border-radius:8px;">
+                        <div style="color:#ffffff; font-size:12px;">Total Value</div>
+                        <div style="color:#00e5ff; font-size:20px; font-weight:bold;" id="total-me">0</div>
                     </div>
                     <button class="add-btn" onclick="openSelector('me')">+ Add Unit</button>
                 </div>
                 <div class="trade-box">
-                    <div style="text-align:center; color:#ff4d4d; font-weight:bold; margin-bottom:10px;">Other Offer</div>
+                    <div style="text-align:center; color:#ff6b6b; font-weight:bold; margin-bottom:10px;">Other Offer</div>
                     <div class="trade-slots" id="slots-partner"></div>
-                    <div style="text-align:center; background:#f0f0f0; padding:10px; border-radius:8px; border:1px solid #ddd;">
-                        <div style="color:#666; font-size:12px;">Total Value</div>
-                        <div style="color:#007bff; font-size:20px; font-weight:bold;" id="total-partner">0</div>
+                    <div style="text-align:center; background:#000; padding:10px; border-radius:8px;">
+                        <div style="color:#ffffff; font-size:12px;">Total Value</div>
+                        <div style="color:#00e5ff; font-size:20px; font-weight:bold;" id="total-partner">0</div>
                     </div>
                     <button class="add-btn" onclick="openSelector('partner')">+ Add Unit</button>
                 </div>
             </div>
             <div class="result-panel" id="result-panel">
                 <div id="result-badge" class="status-badge">Fair</div>
-                <div id="result-text" style="color:#555; font-weight:bold;">Diff: 0</div>
+                <div id="result-text" style="color:#ccc;">Diff: 0</div>
             </div>
         </div>
     </div>
@@ -274,9 +272,9 @@
         <div class="modal-content">
             <span class="close-modal" onclick="closeSelector()">×</span>
             <h2 style="text-align:center;">Select Item</h2>
-            <div style="text-align:center; margin-bottom:20px; background:#f9f9f9; padding:10px; border-radius:8px; border:1px solid #ddd;">
-                <label for="trade-sign-select" style="color:#d32f2f; font-weight:bold; margin-right:10px;">✍️ Signature:</label>
-                <select id="trade-sign-select" style="padding:6px; border-radius:5px; background:#fff; color:#333; border:1px solid #ccc;">
+            <div style="text-align:center; margin-bottom:20px; background:#14142b; padding:10px; border-radius:8px; border:1px solid #444;">
+                <label for="trade-sign-select" style="color:#ffca28; font-weight:bold; margin-right:10px;">✍️ Signature:</label>
+                <select id="trade-sign-select" style="padding:6px; border-radius:5px; background:#2c2c44; color:white; border:1px solid #555;">
                     <option value="1">Unsigned (x1)</option>
                     <option value="1.5">Partner (x1.5)</option>
                     <option value="2">Developer (x2)</option>
@@ -462,7 +460,7 @@
                     const targetUnit = unitData.find(u => u.name === item.name);
                     const r = targetUnit ? targetUnit.rarity : "?"; const v = targetUnit ? targetUnit.value.toLocaleString() : "?";
                     const row = document.createElement('tr');
-                    row.innerHTML = `<td style="text-align:left; padding-left:10px;">${item.name}</td><td style="color:#d32f2f; font-weight:bold;">${item.prob}</td><td><span class="tag ${r}" style="font-size:8px;">${r}</span></td><td style="color:#007bff;">💎${v}</td>`;
+                    row.innerHTML = `<td style="text-align:left; padding-left:10px;">${item.name}</td><td style="color:#ffca28; font-weight:bold;">${item.prob}</td><td><span class="tag ${r}" style="font-size:8px;">${r}</span></td><td style="color:#00e5ff;">💎${v}</td>`;
                     tbody.appendChild(row);
                 });
             } else {
@@ -475,7 +473,7 @@
                 if (unit.stats) {
                     unit.stats.forEach((s, idx) => {
                         const row = document.createElement('tr'); if (idx > 0) row.classList.add('hidden-row');
-                        row.innerHTML = isFarm ? `<td>${s.lv}</td><td style="color:#28a745; font-weight:bold;">+$${s.dmg.toLocaleString()}</td><td style="color:#555;">$${s.price.toLocaleString()}</td>` : `<td>${s.lv}</td><td style="color:#d32f2f; font-weight:bold;">${s.dmg.toLocaleString()}</td><td>${s.cool}s</td><td>${s.range}</td><td style="color:#555;">$${s.price.toLocaleString()}</td>`;
+                        row.innerHTML = isFarm ? `<td>${s.lv}</td><td style="color:#28a745; font-weight:bold;">+$${s.dmg.toLocaleString()}</td><td style="color:#ffff00;">$${s.price.toLocaleString()}</td>` : `<td>${s.lv}</td><td style="color:#ff6b6b; font-weight:bold;">${s.dmg.toLocaleString()}</td><td>${s.cool}s</td><td>${s.range}</td><td style="color:#ffff00;">$${s.price.toLocaleString()}</td>`;
                         tbody.appendChild(row);
                     });
                     document.getElementById('more-stats-btn').style.display = unit.stats.length > 1 ? 'block' : 'none';
