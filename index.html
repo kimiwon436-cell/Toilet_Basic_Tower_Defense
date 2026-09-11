@@ -289,6 +289,7 @@
             cursor: pointer;
             font-weight: 600;
             margin-bottom: 12px;
+            transition: 0.2s;
         }
 
         .add-unit-btn:hover { background: #2d364a; }
@@ -353,6 +354,84 @@
         .result-fair { background: #2d2a10; color: var(--accent-yellow); border: 1px solid var(--accent-yellow); }
         .result-win { background: #0f2d18; color: var(--accent-green); border: 1px solid var(--accent-green); }
         .result-lose { background: #331416; color: var(--accent-red); border: 1px solid var(--accent-red); }
+
+        /* ================= 3. Trade Ads 전용 스타일 ================= */
+        .roblox-btn {
+            background-color: #ffffff;
+            color: #000000;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 15px;
+            transition: 0.2s;
+        }
+        .roblox-btn:hover { background-color: #e5e5e5; }
+        .roblox-btn img { width: 24px; height: 24px; }
+
+        .ad-dashboard {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .ad-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .ad-user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 150px;
+        }
+
+        .ad-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background-color: #272c3d;
+            border: 2px solid var(--border-color);
+            object-fit: cover;
+        }
+
+        .ad-username { font-size: 14px; font-weight: 700; color: #fff; }
+        .ad-time { font-size: 11px; color: var(--text-secondary); }
+
+        .ad-content {
+            flex: 1;
+            background: #11131a;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #232736;
+            font-size: 14px;
+            color: #e2e8f0;
+        }
+
+        .trade-btn {
+            background-color: var(--accent-blue);
+            color: #fff;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: 0.2s;
+        }
+        .trade-btn:hover { background-color: #2563eb; }
 
         /* ================= 4. 티어 리스트 (Tier Lists) ================= */
         .tier-row {
@@ -443,6 +522,8 @@
         @media (max-width: 768px) {
             .calc-wrapper { grid-template-columns: 1fr; }
             .vs-box { padding-top: 0; }
+            .ad-card { flex-direction: column; align-items: stretch; }
+            .trade-btn { width: 100%; text-align: center; }
         }
     </style>
 </head>
@@ -515,13 +596,45 @@
             </div>
         </div>
 
-        <!-- ================= TAB 3: Trade Ads (출시 예정) ================= -->
+        <!-- ================= TAB 3: Trade Ads (업데이트 됨) ================= -->
         <div id="tab-ads" class="tab-pane">
-            <div class="coming-soon-box">
-                <div class="coming-soon-icon">📢</div>
-                <div>Trade Ads - Coming Soon!</div>
-                <div class="coming-soon-desc">유저간 실시간 거래 매칭 게시판이 준비 중입니다.</div>
+            
+            <!-- 로그인 전 화면 (Roblox Login) -->
+            <div id="roblox-login-box" class="coming-soon-box">
+                <div class="coming-soon-icon">🔗</div>
+                <div>Connect Roblox Account</div>
+                <div class="coming-soon-desc">안전한 실시간 거래 매칭을 위해 로블록스 계정을 연동해주세요.</div>
+                <button class="roblox-btn" onclick="mockRobloxLogin()">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Roblox_player_icon_black.svg" alt="Roblox">
+                    Login with Roblox
+                </button>
             </div>
+
+            <!-- 로그인 후 화면 (Trade Dashboard) -->
+            <div id="trade-ads-dashboard" class="ad-dashboard" style="display: none;">
+                
+                <!-- 내 거래 글 올리기 -->
+                <div class="calc-panel" style="min-height: auto;">
+                    <div class="calc-panel-header">
+                        <span style="font-weight: 700;">📝 Post a Trade Ad</span>
+                    </div>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <input type="text" id="adInput" class="search-input" style="border: 1px solid var(--border-color); padding: 12px;" placeholder="Ex) Trading [Laser Noob] for [Hologram Noob]! Reply fast.">
+                        <button class="add-unit-btn" style="margin: 0; padding: 12px 20px;" onclick="submitTradeAd()">Post</button>
+                    </div>
+                </div>
+
+                <!-- 실시간 거래 피드 -->
+                <div class="calc-panel" style="min-height: auto;">
+                    <div class="calc-panel-header">
+                        <span style="font-weight: 700;">📢 Live Trades</span>
+                    </div>
+                    <div id="ads-feed" style="display: flex; flex-direction: column; gap: 12px;">
+                        <!-- Ads가 JavaScript로 여기에 렌더링 됩니다 -->
+                    </div>
+                </div>
+            </div>
+
         </div>
 
         <!-- ================= TAB 4: Tier Lists ================= -->
@@ -533,7 +646,7 @@
             <div class="tier-row"><div class="tier-label tier-D">D</div><div id="tier-D" class="tier-items"></div></div>
         </div>
 
-        <!-- ================= TAB 5: Codes (출시 예정) ================= -->
+        <!-- ================= TAB 5: Codes ================= -->
         <div id="tab-codes" class="tab-pane">
             <div class="coming-soon-box">
                 <div class="coming-soon-icon">🎁</div>
@@ -542,7 +655,7 @@
             </div>
         </div>
 
-        <!-- ================= TAB 6: Discord (출시 예정) ================= -->
+        <!-- ================= TAB 6: Discord ================= -->
         <div id="tab-discord" class="tab-pane">
             <div class="coming-soon-box">
                 <div class="coming-soon-icon">💬</div>
@@ -588,19 +701,21 @@
         ];
 
         const rarityWeight = {
-            "Common": 1,
-            "Uncommon": 2,
-            "Rare": 3,
-            "Epic": 4,
-            "Legendary": 5,
-            "Mythical": 6,
-            "Exclusive": 7
+            "Common": 1, "Uncommon": 2, "Rare": 3, "Epic": 4, 
+            "Legendary": 5, "Mythical": 6, "Exclusive": 7
         };
 
         let selectedCategory = 'All';
         let myOffer = [];
         let theirOffer = [];
         let pickerTarget = 'my';
+        let currentUser = null; // 로블록스 로그인 유저 정보
+
+        // 더미 거래 데이터 (게시판 확인용)
+        let tradeAds = [
+            { username: "RobloxKing_99", avatar: "https://tr.rbxcdn.com/38c6edcb50633730ff4cf39ac8859840/150/150/AvatarHeadshot/Png", text: "Trading King Noob and Laser Noob! Looking for Hologram Noob. W/L?", time: "2 mins ago" },
+            { username: "ProTrader123", avatar: "https://tr.rbxcdn.com/a42b102878ce65293dae21184ff5d901/150/150/AvatarHeadshot/Png", text: "Anyone have Fairy Noob? Offering 300 gems worth of units.", time: "15 mins ago" }
+        ];
 
         // 탭 전환
         function switchTab(tabId, btn) {
@@ -611,47 +726,35 @@
             btn.classList.add('active');
         }
 
-        // 1. 가치표 빌드 및 정렬/검색 처리
+        /* ----------------------------------
+           기존 기능: Value List / Calculator / Tier List
+           ---------------------------------- */
         function renderValueList() {
             const grid = document.getElementById('cardGrid');
             const query = document.getElementById('searchInput').value.toLowerCase();
             const sortVal = document.getElementById('sortSelect').value;
-            
             grid.innerHTML = '';
-
-            // 필터링
             let filtered = unitData.filter(unit => {
                 const matchName = unit.name.toLowerCase().includes(query);
                 const matchCategory = selectedCategory === 'All' || unit.rarity === selectedCategory;
                 return matchName && matchCategory;
             });
-
-            // 정렬
             filtered.sort((a, b) => {
-                if (sortVal === 'value-desc') {
-                    return b.value - a.value;
-                } else if (sortVal === 'value-asc') {
-                    return a.value - b.value;
-                } else if (sortVal === 'rarity-desc') {
-                    return rarityWeight[b.rarity] - rarityWeight[a.rarity];
-                } else if (sortVal === 'rarity-asc') {
-                    return rarityWeight[a.rarity] - rarityWeight[b.rarity];
-                }
+                if (sortVal === 'value-desc') return b.value - a.value;
+                if (sortVal === 'value-asc') return a.value - b.value;
+                if (sortVal === 'rarity-desc') return rarityWeight[b.rarity] - rarityWeight[a.rarity];
+                if (sortVal === 'rarity-asc') return rarityWeight[a.rarity] - rarityWeight[b.rarity];
                 return 0;
             });
-
-            // 렌더링
             filtered.forEach(unit => {
                 const card = document.createElement('div');
                 card.className = 'unit-card';
-
                 const imgSrc = encodeURI(`./${unit.img}`);
-
                 card.innerHTML = `
                     <div class="unit-title">${unit.name}</div>
                     <div class="rarity-tag rarity-${unit.rarity}">${unit.rarity}</div>
                     <div class="unit-img-wrapper">
-                        <img src="${imgSrc}" alt="${unit.name}" loading="lazy" onerror="this.src='https://via.placeholder.com/120/11131a/ef4444?text=File+Not+Found'">
+                        <img src="${imgSrc}" loading="lazy" onerror="this.src='https://via.placeholder.com/120/11131a/ef4444?text=Missing'">
                     </div>
                     <div class="stats-list">
                         <div class="stat-row"><span>Value</span> <span class="stat-val">💎 ${unit.value.toLocaleString()}</span></div>
@@ -670,12 +773,10 @@
             renderValueList();
         }
 
-        // 2. 계산기 선택 모달
         function openPicker(target) {
             pickerTarget = target;
             const modalGrid = document.getElementById('modalGrid');
             modalGrid.innerHTML = '';
-
             unitData.forEach(unit => {
                 const item = document.createElement('div');
                 item.className = 'modal-item';
@@ -685,7 +786,6 @@
                     closePicker();
                     updateCalculator();
                 };
-                
                 const imgSrc = encodeURI(`./${unit.img}`);
                 item.innerHTML = `
                     <img src="${imgSrc}" style="width:40px; height:40px; object-fit:contain;" onerror="this.src='https://via.placeholder.com/40'">
@@ -694,88 +794,119 @@
                 `;
                 modalGrid.appendChild(item);
             });
-
             document.getElementById('unitModal').style.display = 'flex';
         }
 
         function closePicker() { document.getElementById('unitModal').style.display = 'none'; }
-
-        function removeFromCalc(target, idx) {
-            if (target === 'my') myOffer.splice(idx, 1);
-            else theirOffer.splice(idx, 1);
-            updateCalculator();
-        }
+        function removeFromCalc(target, idx) { target === 'my' ? myOffer.splice(idx, 1) : theirOffer.splice(idx, 1); updateCalculator(); }
 
         function updateCalculator() {
             const myGrid = document.getElementById('myOfferGrid');
             const theirGrid = document.getElementById('theirOfferGrid');
-            myGrid.innerHTML = '';
-            theirGrid.innerHTML = '';
-
+            myGrid.innerHTML = ''; theirGrid.innerHTML = '';
             let mySum = 0, theirSum = 0;
-
-            myOffer.forEach((u, i) => {
-                mySum += u.value;
-                myGrid.appendChild(createMiniCard(u, 'my', i));
-            });
-
-            theirOffer.forEach((u, i) => {
-                theirSum += u.value;
-                theirGrid.appendChild(createMiniCard(u, 'their', i));
-            });
-
+            myOffer.forEach((u, i) => { mySum += u.value; myGrid.appendChild(createMiniCard(u, 'my', i)); });
+            theirOffer.forEach((u, i) => { theirSum += u.value; theirGrid.appendChild(createMiniCard(u, 'their', i)); });
             document.getElementById('mySum').innerText = mySum.toLocaleString();
             document.getElementById('theirSum').innerText = theirSum.toLocaleString();
-
+            
             const res = document.getElementById('calcResult');
             const diff = mySum - theirSum;
-
-            if (mySum === 0 && theirSum === 0) {
-                res.className = 'result-badge result-fair';
-                res.innerText = '⚖️ FAIR TRADE';
-            } else if (Math.abs(diff) <= Math.max(mySum, theirSum) * 0.1) {
-                res.className = 'result-badge result-fair';
-                res.innerText = '⚖️ FAIR TRADE';
+            if (mySum === 0 && theirSum === 0 || Math.abs(diff) <= Math.max(mySum, theirSum) * 0.1) {
+                res.className = 'result-badge result-fair'; res.innerText = '⚖️ FAIR TRADE';
             } else if (diff < 0) {
-                res.className = 'result-badge result-win';
-                res.innerText = `🎉 WIN (+${Math.abs(diff).toLocaleString()})`;
+                res.className = 'result-badge result-win'; res.innerText = `🎉 WIN (+${Math.abs(diff).toLocaleString()})`;
             } else {
-                res.className = 'result-badge result-lose';
-                res.innerText = `🔻 LOSE (-${diff.toLocaleString()})`;
+                res.className = 'result-badge result-lose'; res.innerText = `🔻 LOSE (-${diff.toLocaleString()})`;
             }
         }
 
         function createMiniCard(u, target, idx) {
-            const card = document.createElement('div');
-            card.className = 'selected-unit-mini';
+            const card = document.createElement('div'); card.className = 'selected-unit-mini';
             const imgSrc = encodeURI(`./${u.img}`);
-            card.innerHTML = `
-                <button class="remove-btn" onclick="removeFromCalc('${target}', ${idx})">✕</button>
-                <img src="${imgSrc}" onerror="this.src='https://via.placeholder.com/40'">
-                <div class="name">${u.name}</div>
-                <div class="val">💎 ${u.value}</div>
-            `;
+            card.innerHTML = `<button class="remove-btn" onclick="removeFromCalc('${target}', ${idx})">✕</button><img src="${imgSrc}" onerror="this.src='https://via.placeholder.com/40'"><div class="name">${u.name}</div><div class="val">💎 ${u.value}</div>`;
             return card;
         }
 
-        // 3. 티어 리스트 빌드
         function initTierList() {
             ['S', 'A', 'B', 'C', 'D'].forEach(tier => {
                 const container = document.getElementById(`tier-${tier}`);
-                const items = unitData.filter(u => u.tier === tier);
-                items.forEach(u => {
+                unitData.filter(u => u.tier === tier).forEach(u => {
                     const imgSrc = encodeURI(`./${u.img}`);
-                    container.innerHTML += `
-                        <div class="tier-unit-card">
-                            <img src="${imgSrc}" onerror="this.src='https://via.placeholder.com/45'">
-                            <div class="name">${u.name}</div>
-                        </div>
-                    `;
+                    container.innerHTML += `<div class="tier-unit-card"><img src="${imgSrc}" onerror="this.src='https://via.placeholder.com/45'"><div class="name">${u.name}</div></div>`;
                 });
             });
         }
 
-        // 초기화 실행
+        /* ----------------------------------
+           신규 기능: 로블록스 연동 및 Trade Ads
+           ---------------------------------- */
+        
+        // 로블록스 로그인 가짜 연동 처리
+        function mockRobloxLogin() {
+            // 실제 환경에서는 여기서 백엔드 OAuth 서버로 리다이렉트 됩니다.
+            // 여기서는 프론트엔드 UI 시뮬레이션을 위해 유저 데이터를 하드코딩합니다.
+            currentUser = {
+                username: "YourRobloxUser_123",
+                avatar: "https://tr.rbxcdn.com/15053a479bba760317e08cdce013143c/150/150/AvatarHeadshot/Png"
+            };
+
+            // 로그인 섹션 숨기고 대시보드 노출
+            document.getElementById('roblox-login-box').style.display = 'none';
+            document.getElementById('trade-ads-dashboard').style.display = 'flex';
+            
+            alert(`✅ 성공적으로 연결되었습니다: ${currentUser.username}`);
+            renderTradeAds();
+        }
+
+        // 거래 글 화면에 출력
+        function renderTradeAds() {
+            const feed = document.getElementById('ads-feed');
+            feed.innerHTML = '';
+
+            tradeAds.forEach((ad, index) => {
+                feed.innerHTML += `
+                    <div class="ad-card">
+                        <div class="ad-user-info">
+                            <img src="${ad.avatar}" class="ad-avatar" alt="avatar">
+                            <div>
+                                <div class="ad-username">${ad.username}</div>
+                                <div class="ad-time">${ad.time}</div>
+                            </div>
+                        </div>
+                        <div class="ad-content">
+                            ${ad.text}
+                        </div>
+                        <button class="trade-btn" onclick="alert('로블록스에서 ${ad.username}님에게 거래 요청을 보냅니다 (시뮬레이션)')">Trade in Game</button>
+                    </div>
+                `;
+            });
+        }
+
+        // 새 거래 글 등록
+        function submitTradeAd() {
+            const input = document.getElementById('adInput');
+            const text = input.value.trim();
+
+            if (!text) {
+                alert("내용을 입력해주세요!");
+                return;
+            }
+
+            // 배열 맨 앞에 추가
+            tradeAds.unshift({
+                username: currentUser.username,
+                avatar: currentUser.avatar,
+                text: text,
+                time: "Just now"
+            });
+
+            input.value = ''; // 입력창 초기화
+            renderTradeAds(); // 피드 재렌더링
+        }
+
+
+        // 페이지 로드시 초기화
         renderValueList();
         initTierList();
     </script>
