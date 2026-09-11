@@ -3,24 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NATD 가치표 & 거래 계산기</title>
+    <title>Noob Tower Defense Value Hub</title>
     <style>
         :root {
-            --bg-dark: #0f1117; 
-            --panel-bg: #161b22;
-            --card-bg: #21262d;
-            --border-color: #30363d;
-            --text-main: #f0f6fc;
-            --text-sub: #8b949e;
-
-            /* 등급별 색상 */
-            --rarity-common: #a6b1b7;
-            --rarity-uncommon: #2ecc71;
-            --rarity-rare: #3498db;
-            --rarity-epic: #9b59b6;
-            --rarity-legendary: #f1c40f;
-            --rarity-mythical: #e74c3c;
-            --rarity-exclusive: #ff4757;
+            --bg-main: #0b0c10;
+            --panel-bg: #14171f;
+            --card-bg: #1a1e29;
+            --border-color: #272c3d;
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+            --accent-green: #22c55e;
+            --accent-yellow: #eab308;
+            --accent-pink: #ec4899;
+            --accent-purple: #a855f7;
+            --accent-blue: #3b82f6;
+            --accent-red: #ef4444;
         }
 
         * {
@@ -31,352 +28,471 @@
         }
 
         body {
-            background-color: var(--bg-dark);
-            color: var(--text-main);
-            padding-bottom: 50px;
-        }
-
-        /* 네비게이션 헤더 */
-        header {
-            background-color: var(--panel-bg);
-            border-bottom: 1px solid var(--border-color);
-            padding: 15px 20px;
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            padding: 20px 10px;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            justify-content: center;
         }
 
-        .logo {
-            font-size: 22px;
-            font-weight: 800;
-            color: #ffffff;
+        .main-wrapper {
+            width: 100%;
+            max-width: 1280px;
             display: flex;
-            align-items: center;
-            gap: 8px;
+            flex-direction: column;
+            gap: 16px;
         }
 
-        .nav-tabs {
+        /* 상단 배지 바 */
+        .info-bar {
             display: flex;
             gap: 10px;
-        }
-
-        .nav-btn {
-            background: none;
-            border: 1px solid var(--border-color);
-            color: var(--text-sub);
-            padding: 10px 18px;
-            border-radius: 8px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .nav-btn:hover {
-            color: #fff;
-            border-color: #8b949e;
-        }
-
-        .nav-btn.active {
-            background-color: #238636;
-            border-color: #2e9e44;
-            color: #ffffff;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 25px auto;
-            padding: 0 15px;
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        /* ==================== 1. 가치표 페이지 (Value List) ==================== */
-        .filter-section {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 20px;
-            justify-content: space-between;
             align-items: center;
-        }
-
-        .search-input {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            padding: 10px 15px;
-            border-radius: 8px;
-            color: #fff;
-            width: 280px;
-            font-size: 14px;
-        }
-
-        .rarity-filters {
-            display: flex;
+            font-size: 13px;
+            color: var(--text-secondary);
             flex-wrap: wrap;
+        }
+
+        .info-pill {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            padding: 6px 12px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
             gap: 6px;
         }
 
-        .filter-chip {
-            background: var(--card-bg);
+        .dot-green {
+            width: 8px;
+            height: 8px;
+            background-color: var(--accent-green);
+            border-radius: 50%;
+        }
+
+        /* 메인 네비게이션 탭 */
+        .nav-tabs {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+        }
+
+        .nav-tab-btn {
+            background-color: var(--panel-bg);
             border: 1px solid var(--border-color);
-            color: var(--text-sub);
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 13px;
-            cursor: pointer;
+            color: var(--text-secondary);
+            padding: 10px 18px;
+            border-radius: 10px;
+            font-size: 14px;
             font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.15s ease;
         }
 
-        .filter-chip.active, .filter-chip:hover {
-            background-color: #30363d;
+        .nav-tab-btn.active, .nav-tab-btn:hover {
+            background-color: #262b3a;
             color: #fff;
+            border-color: #3b4259;
         }
 
-        .value-grid {
+        /* 탭 컨텐츠 구역 */
+        .tab-pane {
+            display: none;
+        }
+
+        .tab-pane.active {
+            display: block;
+        }
+
+        /* ================= 1. 가치표 (Value List) ================= */
+        .category-filters {
+            display: flex;
+            gap: 6px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            margin-bottom: 12px;
+        }
+
+        .filter-btn {
+            background-color: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .filter-btn.active {
+            background-color: #2d3446;
+            color: #fff;
+            border-color: #4a556e;
+        }
+
+        .search-container {
+            display: flex;
+            gap: 10px;
+            background-color: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 8px 14px;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .search-input {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 14px;
+            width: 100%;
+            outline: none;
+        }
+
+        .card-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 16px;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 14px;
         }
 
         .unit-card {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 15px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .unit-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
-        }
-
-        .unit-badge {
-            display: inline-block;
-            font-size: 11px;
-            font-weight: 800;
-            padding: 3px 8px;
-            border-radius: 4px;
-            text-transform: uppercase;
-            margin-bottom: 10px;
-        }
-
-        .unit-img {
-            width: 90px;
-            height: 90px;
-            object-fit: cover;
-            border-radius: 8px;
-            background-color: var(--panel-bg);
-            margin: 0 auto 10px;
+            border-radius: 14px;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .unit-title {
             font-size: 15px;
             font-weight: 700;
-            margin-bottom: 6px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            margin-bottom: 2px;
+            text-align: center;
         }
 
-        .unit-val {
-            font-size: 16px;
-            font-weight: 800;
-            color: #2ecc71;
+        .rarity-tag {
+            font-size: 11px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            text-transform: uppercase;
         }
 
-        /* 등급별 바이블 색상 설정 */
-        .badge-Common { background-color: var(--rarity-common); color: #000; }
-        .badge-Uncommon { background-color: var(--rarity-uncommon); color: #000; }
-        .badge-Rare { background-color: var(--rarity-rare); color: #fff; }
-        .badge-Epic { background-color: var(--rarity-epic); color: #fff; }
-        .badge-Legendary { background-color: var(--rarity-legendary); color: #000; }
-        .badge-Mythical { background-color: var(--rarity-mythical); color: #fff; }
-        .badge-Exclusive { background-color: var(--rarity-exclusive); color: #fff; }
+        .rarity-Exclusive { color: var(--accent-pink); }
+        .rarity-Mythical { color: #f43f5e; }
+        .rarity-Legendary { color: var(--accent-yellow); }
+        .rarity-Epic { color: var(--accent-purple); }
+        .rarity-Rare { color: var(--accent-blue); }
+        .rarity-Uncommon { color: var(--accent-green); }
+        .rarity-Common { color: var(--text-secondary); }
 
-        /* ==================== 2. 거래 계산기 페이지 (Trade Calculator) ==================== */
-        .trade-container {
+        .unit-img-wrapper {
+            width: 100%;
+            height: 100px;
+            background-color: #11131a;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 10px;
+            border: 1px solid #232736;
+        }
+
+        .unit-img-wrapper img {
+            max-width: 80%;
+            max-height: 80%;
+            object-fit: contain;
+        }
+
+        .stats-list {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            font-size: 12px;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-secondary);
+        }
+
+        .stat-val { font-weight: 700; color: #ffffff; }
+        .stat-val.stable { color: var(--accent-yellow); }
+        .stat-val.rising { color: var(--accent-green); }
+
+        /* ================= 2. 거래 계산기 (Trade Calculator) ================= */
+        .calc-wrapper {
             display: grid;
             grid-template-columns: 1fr 140px 1fr;
-            gap: 20px;
+            gap: 16px;
             align-items: start;
         }
 
-        .offer-box {
+        .calc-panel {
             background-color: var(--panel-bg);
             border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 20px;
-            min-height: 450px;
+            border-radius: 14px;
+            padding: 16px;
+            min-height: 420px;
             display: flex;
             flex-direction: column;
         }
 
-        .offer-header {
+        .calc-panel-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding-bottom: 10px;
             border-bottom: 1px solid var(--border-color);
-            padding-bottom: 12px;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
 
-        .offer-title {
-            font-size: 18px;
-            font-weight: 700;
-        }
-
-        .offer-value {
+        .calc-sum {
             font-size: 18px;
             font-weight: 800;
-            color: #2ecc71;
+            color: var(--accent-green);
         }
 
-        .add-btn {
-            background-color: #238636;
-            color: white;
-            border: none;
+        .add-unit-btn {
+            background: #222938;
+            border: 1px dashed var(--border-color);
+            color: #fff;
             padding: 10px;
             border-radius: 8px;
-            font-weight: 700;
             cursor: pointer;
-            margin-bottom: 15px;
-            transition: background 0.2s;
+            font-weight: 600;
+            margin-bottom: 12px;
         }
 
-        .add-btn:hover { background-color: #2ea043; }
+        .add-unit-btn:hover { background: #2d364a; }
 
-        .selected-units-grid {
+        .selected-list {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-            gap: 10px;
+            grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+            gap: 8px;
             flex: 1;
         }
 
-        .calc-item-card {
+        .selected-unit-mini {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: 8px;
-            padding: 8px;
+            padding: 6px;
             text-align: center;
             position: relative;
         }
 
-        .calc-item-card img {
-            width: 50px;
-            height: 50px;
-            object-fit: cover;
-            border-radius: 6px;
-        }
-
-        .calc-item-card .name {
-            font-size: 11px;
-            font-weight: bold;
-            margin: 4px 0 2px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .calc-item-card .val {
-            font-size: 11px;
-            color: #2ecc71;
-            font-weight: bold;
-        }
-
-        .remove-icon {
+        .selected-unit-mini img { width: 40px; height: 40px; object-fit: contain; }
+        .selected-unit-mini .name { font-size: 10px; font-weight: bold; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        .selected-unit-mini .val { font-size: 10px; color: var(--accent-green); font-weight: bold; }
+        
+        .remove-btn {
             position: absolute;
-            top: -5px;
-            right: -5px;
-            background: var(--rarity-mythical);
-            color: white;
+            top: -4px; right: -4px;
+            background: var(--accent-red);
+            color: #fff;
             border-radius: 50%;
-            width: 18px;
-            height: 18px;
-            font-size: 11px;
-            line-height: 18px;
+            width: 16px; height: 16px;
+            font-size: 10px;
+            line-height: 16px;
             cursor: pointer;
-            font-weight: bold;
+            border: none;
         }
 
-        /* VS 및 거래 결과 영역 */
-        .vs-section {
+        .vs-box {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 15px;
-            padding-top: 100px;
+            padding-top: 80px;
+            gap: 12px;
         }
 
-        .vs-badge {
-            font-size: 28px;
-            font-weight: 900;
-            color: var(--text-sub);
-        }
-
-        .trade-result {
-            padding: 12px 16px;
+        .result-badge {
+            padding: 10px 14px;
             border-radius: 8px;
             font-weight: 800;
-            font-size: 15px;
+            font-size: 14px;
             text-align: center;
             width: 100%;
         }
 
-        .result-fair { background: #313214; color: #f1c40f; border: 1px solid #f1c40f; }
-        .result-win { background: #132e19; color: #2ecc71; border: 1px solid #2ecc71; }
-        .result-lose { background: #3a171a; color: #e74c3c; border: 1px solid #e74c3c; }
+        .result-fair { background: #2d2a10; color: var(--accent-yellow); border: 1px solid var(--accent-yellow); }
+        .result-win { background: #0f2d18; color: var(--accent-green); border: 1px solid var(--accent-green); }
+        .result-lose { background: #331416; color: var(--accent-red); border: 1px solid var(--accent-red); }
 
-        /* 모달 팝업 (유닛 선택창) */
+        /* ================= 3. 트레이드 광고 (Trade Ads) ================= */
+        .ads-form {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .ads-input-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .ads-select, .ads-input {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: #fff;
+            padding: 10px;
+            border-radius: 8px;
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .post-ad-btn {
+            background: var(--accent-green);
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        .ads-list { display: flex; flex-direction: column; gap: 10px; }
+        .ad-item {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        /* ================= 4. 티어 리스트 (Tier Lists) ================= */
+        .tier-row {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            margin-bottom: 12px;
+            display: flex;
+            overflow: hidden;
+        }
+
+        .tier-label {
+            width: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            font-weight: 900;
+            color: #000;
+        }
+
+        .tier-S { background: #ff7f7f; }
+        .tier-A { background: #ffbf7f; }
+        .tier-B { background: #ffff7f; }
+        .tier-C { background: #7fff7f; }
+
+        .tier-items {
+            padding: 10px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            flex: 1;
+        }
+
+        .tier-unit-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 6px;
+            text-align: center;
+            width: 75px;
+        }
+
+        .tier-unit-card img { width: 45px; height: 45px; object-fit: contain; }
+        .tier-unit-card .name { font-size: 10px; font-weight: bold; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+
+        /* ================= 5. 쿠폰 코드 (Codes) & 디스코드 ================= */
+        .code-box {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .copy-btn {
+            background: #2b3245;
+            border: 1px solid var(--border-color);
+            color: #fff;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .discord-card {
+            background: linear-gradient(135deg, #5865F2, #404EED);
+            border-radius: 14px;
+            padding: 30px;
+            text-align: center;
+            color: #fff;
+        }
+
+        .discord-btn {
+            background: #fff;
+            color: #5865F2;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 800;
+            margin-top: 15px;
+            cursor: pointer;
+        }
+
+        /* 선택 모달 */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.75);
+            background: rgba(0,0,0,0.8);
             display: none;
             justify-content: center;
             align-items: center;
             z-index: 1000;
         }
 
-        .modal-content {
+        .modal-body {
             background: var(--panel-bg);
             border: 1px solid var(--border-color);
-            border-radius: 12px;
+            border-radius: 14px;
             width: 90%;
-            max-width: 700px;
+            max-width: 600px;
             max-height: 80vh;
+            padding: 16px;
             display: flex;
             flex-direction: column;
-            padding: 20px;
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
         }
 
         .modal-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
             gap: 10px;
             overflow-y: auto;
-            padding-right: 5px;
+            margin-top: 10px;
         }
 
         .modal-item {
@@ -388,199 +504,246 @@
             cursor: pointer;
         }
 
-        .modal-item:hover { border-color: #fff; }
-        .modal-item img { width: 55px; height: 55px; border-radius: 6px; }
-
-        @media (max-width: 850px) {
-            .trade-container { grid-template-columns: 1fr; }
-            .vs-section { padding-top: 0; }
+        @media (max-width: 768px) {
+            .calc-wrapper { grid-template-columns: 1fr; }
+            .vs-box { padding-top: 0; }
         }
     </style>
 </head>
 <body>
 
-    <!-- 헤더 / 상단 탭 -->
-    <header>
-        <div class="logo">💎 NATD Value Hub</div>
+    <div class="main-wrapper">
+        <!-- 상단 배지 정보 -->
+        <div class="info-bar">
+            <div class="info-pill"><span class="dot-green"></span> 20 tracked items</div>
+            <div class="info-pill">10 categories</div>
+            <div class="info-pill">Codes available</div>
+            <div class="info-pill">📄 What's changed?</div>
+        </div>
+
+        <!-- 메인 네비게이션 탭 -->
         <div class="nav-tabs">
-            <button class="nav-btn active" onclick="switchTab('valuelist')">📊 가치표</button>
-            <button class="nav-btn" onclick="switchTab('calculator')">⚖️ 거래 계산기</button>
-        </div>
-    </header>
-
-    <div class="container">
-        
-        <!-- ================= PAGE 1: 가치표 (Value List) ================= -->
-        <div id="valuelist" class="tab-content active">
-            <div class="filter-section">
-                <input type="text" id="searchBar" class="search-input" placeholder="유닛 이름 검색..." onkeyup="filterValueList()">
-                
-                <div class="rarity-filters">
-                    <button class="filter-chip active" onclick="filterRarity('ALL', this)">ALL</button>
-                    <button class="filter-chip" onclick="filterRarity('Common', this)">Common</button>
-                    <button class="filter-chip" onclick="filterRarity('Uncommon', this)">Uncommon</button>
-                    <button class="filter-chip" onclick="filterRarity('Rare', this)">Rare</button>
-                    <button class="filter-chip" onclick="filterRarity('Epic', this)">Epic</button>
-                    <button class="filter-chip" onclick="filterRarity('Legendary', this)">Legendary</button>
-                    <button class="filter-chip" onclick="filterRarity('Mythical', this)">Mythical</button>
-                    <button class="filter-chip" onclick="filterRarity('Exclusive', this)">Exclusive</button>
-                </div>
-            </div>
-
-            <div id="valueGrid" class="value-grid">
-                <!-- JS로 카드가 로드됩니다 -->
-            </div>
+            <button class="nav-tab-btn active" onclick="switchTab('valuelist', this)">Value List</button>
+            <button class="nav-tab-btn" onclick="switchTab('calculator', this)">Trade Calculator</button>
+            <button class="nav-tab-btn" onclick="switchTab('ads', this)">Trade Ads</button>
+            <button class="nav-tab-btn" onclick="switchTab('tierlist', this)">Tier Lists</button>
+            <button class="nav-tab-btn" onclick="switchTab('codes', this)">Codes</button>
+            <button class="nav-tab-btn" onclick="switchTab('discord', this)">Discord</button>
         </div>
 
-        <!-- ================= PAGE 2: 거래 계산기 (Trade Calculator) ================= -->
-        <div id="calculator" class="tab-content">
-            <div class="trade-container">
-                
-                <!-- 내 아이템 -->
-                <div class="offer-box">
-                    <div class="offer-header">
-                        <span class="offer-title">내 제안 (My Offer)</span>
-                        <span class="offer-value">💎 <span id="myTotal">0</span></span>
+        <!-- ================= TAB 1: Value List ================= -->
+        <div id="tab-valuelist" class="tab-pane active">
+            <div class="category-filters">
+                <button class="filter-btn active" onclick="setCategory('All', this)">All</button>
+                <button class="filter-btn" onclick="setCategory('Exclusive', this)">Exclusive</button>
+                <button class="filter-btn" onclick="setCategory('Mythical', this)">Mythical</button>
+                <button class="filter-btn" onclick="setCategory('Legendary', this)">Legendary</button>
+                <button class="filter-btn" onclick="setCategory('Epic', this)">Epic</button>
+                <button class="filter-btn" onclick="setCategory('Rare', this)">Rare</button>
+                <button class="filter-btn" onclick="setCategory('Uncommon', this)">Uncommon</button>
+                <button class="filter-btn" onclick="setCategory('Common', this)">Common</button>
+            </div>
+
+            <div class="search-container">
+                🔍 <input type="text" id="searchInput" class="search-input" placeholder="Search Noob Tower Defense items..." oninput="fastFilter()">
+            </div>
+
+            <div id="cardGrid" class="card-grid"></div>
+        </div>
+
+        <!-- ================= TAB 2: Trade Calculator ================= -->
+        <div id="tab-calculator" class="tab-pane">
+            <div class="calc-wrapper">
+                <div class="calc-panel">
+                    <div class="calc-panel-header">
+                        <span>My Offer</span>
+                        <span class="calc-sum">💎 <span id="mySum">0</span></span>
                     </div>
-                    <button class="add-btn" onclick="openPicker('my')">+ 유닛 추가하기</button>
-                    <div id="myOfferGrid" class="selected-units-grid"></div>
+                    <button class="add-unit-btn" onclick="openPicker('my')">+ Add Unit</button>
+                    <div id="myOfferGrid" class="selected-list"></div>
                 </div>
 
-                <!-- VS & 거래 결과 -->
-                <div class="vs-section">
-                    <div class="vs-badge">VS</div>
-                    <div id="tradeResult" class="trade-result result-fair">⚖️ 공정한 거래</div>
+                <div class="vs-box">
+                    <div style="font-size:28px; font-weight:900; color:var(--text-secondary);">VS</div>
+                    <div id="calcResult" class="result-badge result-fair">⚖️ FAIR TRADE</div>
                 </div>
 
-                <!-- 상대 아이템 -->
-                <div class="offer-box">
-                    <div class="offer-header">
-                        <span class="offer-title">상대 제안 (Their Offer)</span>
-                        <span class="offer-value">💎 <span id="theirTotal">0</span></span>
+                <div class="calc-panel">
+                    <div class="calc-panel-header">
+                        <span>Their Offer</span>
+                        <span class="calc-sum">💎 <span id="theirSum">0</span></span>
                     </div>
-                    <button class="add-btn" onclick="openPicker('their')">+ 유닛 추가하기</button>
-                    <div id="theirOfferGrid" class="selected-units-grid"></div>
+                    <button class="add-unit-btn" onclick="openPicker('their')">+ Add Unit</button>
+                    <div id="theirOfferGrid" class="selected-list"></div>
                 </div>
-
             </div>
         </div>
 
+        <!-- ================= TAB 3: Trade Ads ================= -->
+        <div id="tab-ads" class="tab-pane">
+            <div class="ads-form">
+                <h3 style="font-size:16px;">📢 Create Trade Ad</h3>
+                <div class="ads-input-group">
+                    <select id="adMyUnit" class="ads-select"></select>
+                    <span style="align-self:center;">➡️</span>
+                    <select id="adTheirUnit" class="ads-select"></select>
+                    <input type="text" id="adUser" class="ads-input" placeholder="Roblox Username">
+                    <button class="post-ad-btn" onclick="postAd()">Post Ad</button>
+                </div>
+            </div>
+            <div id="adsList" class="ads-list"></div>
+        </div>
+
+        <!-- ================= TAB 4: Tier Lists ================= -->
+        <div id="tab-tierlist" class="tab-pane">
+            <div class="tier-row"><div class="tier-label tier-S">S</div><div id="tier-S" class="tier-items"></div></div>
+            <div class="tier-row"><div class="tier-label tier-A">A</div><div id="tier-A" class="tier-items"></div></div>
+            <div class="tier-row"><div class="tier-label tier-B">B</div><div id="tier-B" class="tier-items"></div></div>
+            <div class="tier-row"><div class="tier-label tier-C">C</div><div id="tier-C" class="tier-items"></div></div>
+        </div>
+
+        <!-- ================= TAB 5: Codes ================= -->
+        <div id="tab-codes" class="tab-pane">
+            <div class="code-box">
+                <div><strong>NATD2026</strong> <span style="color:var(--text-secondary); font-size:12px;">- 500 Gems</span></div>
+                <button class="copy-btn" onclick="navigator.clipboard.writeText('NATD2026')">Copy</button>
+            </div>
+            <div class="code-box">
+                <div><strong>NOOBPOWER</strong> <span style="color:var(--text-secondary); font-size:12px;">- Free Rare Unit</span></div>
+                <button class="copy-btn" onclick="navigator.clipboard.writeText('NOOBPOWER')">Copy</button>
+            </div>
+        </div>
+
+        <!-- ================= TAB 6: Discord ================= -->
+        <div id="tab-discord" class="tab-pane">
+            <div class="discord-card">
+                <h2>Join Our Discord Community!</h2>
+                <p style="margin-top:8px; opacity:0.9;">Get real-time trade alerts, value updates, and giveaways.</p>
+                <button class="discord-btn" onclick="window.open('https://discord.com')">Join Discord</button>
+            </div>
+        </div>
     </div>
 
-    <!-- 유닛 선택 모달 팝업 -->
+    <!-- 유닛 선택 모달 -->
     <div id="unitModal" class="modal-overlay">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>유닛 추가</h3>
-                <button onclick="closePicker()" style="background:none; border:none; color:#fff; font-size:20px; cursor:pointer;">✕</button>
+        <div class="modal-body">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <h3>Select Unit</h3>
+                <button onclick="closePicker()" style="background:none; border:none; color:#fff; cursor:pointer;">✕</button>
             </div>
-            <div id="modalGrid" class="modal-grid">
-                <!-- 선택 가능한 유닛 목록 -->
-            </div>
+            <div id="modalGrid" class="modal-grid"></div>
         </div>
     </div>
 
     <script>
-        // 요청해주신 NATD 유닛 20종 정밀 데이터
+        // 20종 유닛 통합 정밀 데이터셋
         const unitData = [
-            // Common
-            { name: "Noob", rarity: "Common", value: 1, img: "NATD/Noob.png" },
-
-            // Uncommon
-            { name: "Soldier Noob", rarity: "Uncommon", value: 3, img: "NATD/Soldier Noob.png" },
-            { name: "Zombie Noob", rarity: "Uncommon", value: 3, img: "NATD/Zombie Noob.png" },
-
-            // Rare
-            { name: "Boxer Noob", rarity: "Rare", value: 6, img: "NATD/Boxer Noob.png" },
-            { name: "SledgeHammer Noob", rarity: "Rare", value: 7, img: "NATD/SledgeHammer Noob.png" },
-            { name: "Spear Noob", rarity: "Rare", value: 10, img: "NATD/Spear Noob.png" },
-
-            // Epic
-            { name: "Medic Noob", rarity: "Epic", value: 20, img: "NATD/Medic Noob.png" },
-            { name: "Knight Noob", rarity: "Epic", value: 40, img: "NATD/Knight Noob.png" },
-            { name: "Ninja Noob", rarity: "Epic", value: 70, img: "NATD/Ninja Noob.png" },
-            { name: "Shielder Noob", rarity: "Epic", value: 70, img: "NATD/Shielder Noob.png" },
-
-            // Legendary
-            { name: "Gunner Noob", rarity: "Legendary", value: 100, img: "NATD/Gunner Noob.png" },
-            { name: "Barbarian Noob", rarity: "Legendary", value: 150, img: "NATD/Barbarian Noob.png" },
-            { name: "Nature Noob", rarity: "Legendary", value: 250, img: "NATD/Nature Noob.png" },
-            { name: "Builder Noob", rarity: "Legendary", value: 300, img: "NATD/Builder Noob.png" },
-
-            // Mythical
-            { name: "Laser Noob", rarity: "Mythical", value: 800, img: "NATD/Laser Noob.png" },
-            { name: "Magical Noob", rarity: "Mythical", value: 1500, img: "NATD/Magical Noob.png" },
-            { name: "King Noob", rarity: "Mythical", value: 2000, img: "NATD/King Noob.png" },
-            { name: "Hologram Noob", rarity: "Mythical", value: 3000, img: "NATD/Hologram Noob.png" },
-
-            // Exclusive
-            { name: "Fairy Noob", rarity: "Exclusive", value: 250, img: "NATD/Fairy Noob.png" },
-            { name: "Mafia Noob", rarity: "Exclusive", value: 900, img: "NATD/Mafia Noob.png" }
+            { id: 1, name: "Hologram Noob", rarity: "Mythical", tier: "S", value: 3000, demand: "9/10", stability: "Rising", shinyVal: "15M", shinyDemand: "9.5/10", shinyStability: "Rising", img: "NATD/Hologram Noob.png" },
+            { id: 2, name: "King Noob", rarity: "Mythical", tier: "S", value: 2000, demand: "8.5/10", stability: "Stable", shinyVal: "8M", shinyDemand: "8.5/10", shinyStability: "Stable", img: "NATD/King Noob.png" },
+            { id: 3, name: "Magical Noob", rarity: "Mythical", tier: "S", value: 1500, demand: "8/10", stability: "Stable", shinyVal: "5M", shinyDemand: "8/10", shinyStability: "Stable", img: "NATD/Magical Noob.png" },
+            { id: 4, name: "Mafia Noob", rarity: "Exclusive", tier: "S", value: 900, demand: "8.5/10", stability: "Stable", shinyVal: "1.2M", shinyDemand: "9/10", shinyStability: "Rising", img: "NATD/Mafia Noob.png" },
+            { id: 5, name: "Laser Noob", rarity: "Mythical", tier: "S", value: 800, demand: "7.5/10", stability: "Slowly Rising", shinyVal: "3M", shinyDemand: "8/10", shinyStability: "Rising", img: "NATD/Laser Noob.png" },
+            { id: 6, name: "Builder Noob", rarity: "Legendary", tier: "S", value: 300, demand: "8/10", stability: "Stable", shinyVal: "N/A", shinyDemand: "N/A", shinyStability: "Stable", img: "NATD/Builder Noob.png" },
+            { id: 7, name: "Nature Noob", rarity: "Legendary", tier: "S", value: 250, demand: "7.5/10", stability: "Rising", shinyVal: "N/A", shinyDemand: "N/A", shinyStability: "Stable", img: "NATD/Nature Noob.png" },
+            { id: 8, name: "Fairy Noob", rarity: "Exclusive", tier: "S", value: 250, demand: "7/10", stability: "Stable", shinyVal: "N/A", shinyDemand: "N/A", shinyStability: "Stable", img: "NATD/Fairy Noob.png" },
+            { id: 9, name: "Barbarian Noob", rarity: "Legendary", tier: "A", value: 150, demand: "6.5/10", stability: "Stable", shinyVal: "N/A", shinyDemand: "N/A", shinyStability: "Stable", img: "NATD/Barbarian Noob.png" },
+            { id: 10, name: "Gunner Noob", rarity: "Legendary", tier: "A", value: 100, demand: "6/10", stability: "Stable", shinyVal: "N/A", shinyDemand: "N/A", shinyStability: "Stable", img: "NATD/Gunner Noob.png" },
+            { id: 11, name: "Ninja Noob", rarity: "Epic", tier: "A", value: 70, demand: "6/10", stability: "Stable", shinyVal: "N/A", shinyDemand: "N/A", shinyStability: "Stable", img: "NATD/Ninja Noob.png" },
+            { id: 12, name: "Shielder Noob", rarity: "Epic", tier: "A", value: 70, demand: "6/10", stability: "Stable", shinyVal: "N/A", shinyDemand: "N/A", shinyStability: "Stable", img: "NATD/Shielder Noob.png" },
+            { id: 13, name: "Knight Noob", rarity: "Epic", tier: "B", value: 40, demand: "5/10", stability: "Stable", shinyVal: "N/A", shinyDemand: "N/A", shinyStability: "Stable", img: "NATD/Knight Noob.png" },
+            { id: 14, name: "Medic Noob", rarity: "Epic", tier: "B", value: 20, demand: "4/10", stability: "Stable", shinyVal: "N/A", shinyDemand: "N/A", shinyStability: "Stable", img: "NATD/Medic Noob.png" },
+            { id: 15, name: "Spear Noob", rarity: "Rare", tier: "B", value: 10, demand: "4/10", stability: "Stable", shinyVal: "N/A", shinyDemand: "N/A", shinyStability: "Stable", img: "NATD/Spear Noob.png" },
+            { id: 16, name: "SledgeHammer Noob", rarity: "Rare", tier: "C", value: 7, demand: "3/10", stability: "Stable", shinyVal: "N/A", shinyDemand: "N/A", shinyStability: "Stable", img: "NATD/SledgeHammer Noob.png" },
+            { id: 17, name: "Boxer Noob", rarity: "Rare", tier: "C", value: 6, demand: "3/10", stability: "Stable", shinyVal: "N/A", shinyDemand: "N/A", shinyStability: "Stable", img: "NATD/Boxer Noob.png" },
+            { id: 18, name: "Soldier Noob", rarity: "Uncommon", tier: "C", value: 3, demand: "2/10", stability: "Stable", shinyVal: "N/A", shinyDemand: "N/A", shinyStability: "Stable", img: "NATD/Soldier Noob.png" },
+            { id: 19, name: "Zombie Noob", rarity: "Uncommon", tier: "C", value: 3, demand: "2/10", stability: "Stable", shinyVal: "N/A", shinyDemand: "N/A", shinyStability: "Stable", img: "NATD/Zombie Noob.png" },
+            { id: 20, name: "Noob", rarity: "Common", tier: "C", value: 1, demand: "1/10", stability: "Stable", shinyVal: "N/A", shinyDemand: "N/A", shinyStability: "Stable", img: "NATD/Noob.png" }
         ];
 
-        let currentCategory = 'ALL';
+        let selectedCategory = 'All';
         let myOffer = [];
         let theirOffer = [];
-        let activeTargetSide = 'my';
+        let pickerTarget = 'my';
+        let adsData = [
+            { user: "NoobMaster99", myUnit: "Hologram Noob", myVal: 3000, theirUnit: "King Noob", theirVal: 2000 }
+        ];
 
-        // 탭 전환 함수
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+        // 탭 전환 (DOM 변경 없이 CSS만 조작)
+        function switchTab(tabId, btn) {
+            document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+            document.querySelectorAll('.nav-tab-btn').forEach(b => b.classList.remove('active'));
             
-            document.getElementById(tabId).classList.add('active');
-            event.target.classList.add('active');
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+            btn.classList.add('active');
         }
 
-        // ================= 1. 가치표 랜더링 =================
-        function renderValueList() {
-            const grid = document.getElementById('valueGrid');
-            const searchText = document.getElementById('searchBar').value.toLowerCase();
+        // 1. 가치표 초기 빌드 (최초 1회만 생성하여 렉 예방)
+        function initValueList() {
+            const grid = document.getElementById('cardGrid');
             grid.innerHTML = '';
 
-            unitData.forEach(unit => {
-                const matchesCategory = currentCategory === 'ALL' || unit.rarity === currentCategory;
-                const matchesSearch = unit.name.toLowerCase().includes(searchText);
+            unitData.forEach((unit, idx) => {
+                const card = document.createElement('div');
+                card.className = 'unit-card';
+                card.id = `unit-card-${idx}`;
 
-                if (matchesCategory && matchesSearch) {
-                    const card = document.createElement('div');
-                    card.className = 'unit-card';
-                    card.innerHTML = `
-                        <div class="unit-badge badge-${unit.rarity}">${unit.rarity}</div>
-                        <img src="${unit.img}" class="unit-img" alt="${unit.name}" onerror="this.src='https://via.placeholder.com/90?text=NATD'">
-                        <div class="unit-title">${unit.name}</div>
-                        <div class="unit-val">💎 ${unit.value.toLocaleString()}</div>
-                    `;
-                    grid.appendChild(card);
-                }
+                card.innerHTML = `
+                    <div class="unit-title">${unit.name}</div>
+                    <div class="rarity-tag rarity-${unit.rarity}">${unit.rarity}</div>
+                    <div class="unit-img-wrapper">
+                        <img src="${unit.img}" alt="${unit.name}" loading="lazy" onerror="this.src='https://via.placeholder.com/90/11131a/ffffff?text=NATD'">
+                    </div>
+                    <div class="stats-list">
+                        <div class="stat-row"><span>Value</span> <span class="stat-val">💎 ${unit.value.toLocaleString()}</span></div>
+                        <div class="stat-row"><span>Demand</span> <span class="stat-val">${unit.demand}</span></div>
+                        <div class="stat-row"><span>Stability</span> <span class="stat-val ${unit.stability.includes('Rising') ? 'rising' : 'stable'}">${unit.stability}</span></div>
+                        <div class="stat-row"><span>Shiny Value</span> <span class="stat-val">${unit.shinyVal}</span></div>
+                        <div class="stat-row"><span>Shiny Demand</span> <span class="stat-val">${unit.shinyDemand}</span></div>
+                        <div class="stat-row"><span>Shiny Stability</span> <span class="stat-val ${unit.shinyStability.includes('Rising') ? 'rising' : 'stable'}">${unit.shinyStability}</span></div>
+                    </div>
+                `;
+                grid.appendChild(card);
             });
         }
 
-        function filterRarity(rarity, btn) {
-            currentCategory = rarity;
-            document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+        // 빠른 초고속 검색 필터
+        function fastFilter() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            unitData.forEach((unit, idx) => {
+                const card = document.getElementById(`unit-card-${idx}`);
+                const matchName = unit.name.toLowerCase().includes(query);
+                const matchCategory = selectedCategory === 'All' || unit.rarity === selectedCategory;
+
+                card.style.display = (matchName && matchCategory) ? 'flex' : 'none';
+            });
+        }
+
+        function setCategory(cat, btn) {
+            selectedCategory = cat;
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            renderValueList();
+            fastFilter();
         }
 
-        function filterValueList() {
-            renderValueList();
-        }
-
-        // ================= 2. 계산기 로직 =================
-        function openPicker(side) {
-            activeTargetSide = side;
+        // 2. 계산기 전용 선택 모달
+        function openPicker(target) {
+            pickerTarget = target;
             const modalGrid = document.getElementById('modalGrid');
             modalGrid.innerHTML = '';
 
             unitData.forEach(unit => {
                 const item = document.createElement('div');
                 item.className = 'modal-item';
-                item.onclick = () => addUnitToOffer(unit);
+                item.onclick = () => {
+                    if (pickerTarget === 'my') myOffer.push(unit);
+                    else theirOffer.push(unit);
+                    closePicker();
+                    updateCalculator();
+                };
                 item.innerHTML = `
-                    <img src="${unit.img}" onerror="this.src='https://via.placeholder.com/55?text=NATD'">
-                    <div style="font-size:11px; font-weight:bold; margin-top:4px;">${unit.name}</div>
-                    <div style="font-size:11px; color:#2ecc71;">💎 ${unit.value}</div>
+                    <img src="${unit.img}" style="width:40px; height:40px; object-fit:contain;" onerror="this.src='https://via.placeholder.com/40'">
+                    <div style="font-size:10px; font-weight:bold;">${unit.name}</div>
+                    <div style="font-size:10px; color:var(--accent-green);">💎 ${unit.value}</div>
                 `;
                 modalGrid.appendChild(item);
             });
@@ -588,85 +751,126 @@
             document.getElementById('unitModal').style.display = 'flex';
         }
 
-        function closePicker() {
-            document.getElementById('unitModal').style.display = 'none';
+        function closePicker() { document.getElementById('unitModal').style.display = 'none'; }
+
+        function removeFromCalc(target, idx) {
+            if (target === 'my') myOffer.splice(idx, 1);
+            else theirOffer.splice(idx, 1);
+            updateCalculator();
         }
 
-        function addUnitToOffer(unit) {
-            if (activeTargetSide === 'my') {
-                myOffer.push(unit);
-            } else {
-                theirOffer.push(unit);
-            }
-            closePicker();
-            updateTradeCalculator();
-        }
-
-        function removeUnitFromOffer(side, index) {
-            if (side === 'my') {
-                myOffer.splice(index, 1);
-            } else {
-                theirOffer.splice(index, 1);
-            }
-            updateTradeCalculator();
-        }
-
-        function updateTradeCalculator() {
+        function updateCalculator() {
             const myGrid = document.getElementById('myOfferGrid');
             const theirGrid = document.getElementById('theirOfferGrid');
-            
             myGrid.innerHTML = '';
             theirGrid.innerHTML = '';
 
-            let mySum = 0;
-            let theirSum = 0;
+            let mySum = 0, theirSum = 0;
 
-            myOffer.forEach((unit, index) => {
-                mySum += unit.value;
-                myGrid.appendChild(createCalcCard(unit, 'my', index));
+            myOffer.forEach((u, i) => {
+                mySum += u.value;
+                myGrid.appendChild(createMiniCard(u, 'my', i));
             });
 
-            theirOffer.forEach((unit, index) => {
-                theirSum += unit.value;
-                theirGrid.appendChild(createCalcCard(unit, 'their', index));
+            theirOffer.forEach((u, i) => {
+                theirSum += u.value;
+                theirGrid.appendChild(createMiniCard(u, 'their', i));
             });
 
-            document.getElementById('myTotal').innerText = mySum.toLocaleString();
-            document.getElementById('theirTotal').innerText = theirSum.toLocaleString();
+            document.getElementById('mySum').innerText = mySum.toLocaleString();
+            document.getElementById('theirSum').innerText = theirSum.toLocaleString();
 
-            // 손익 가치 판단 (WIN / FAIR / LOSE)
-            const resultBox = document.getElementById('tradeResult');
+            const res = document.getElementById('calcResult');
             const diff = mySum - theirSum;
 
             if (mySum === 0 && theirSum === 0) {
-                resultBox.className = 'trade-result result-fair';
-                resultBox.innerText = '⚖️ 공정한 거래';
-            } else if (Math.abs(diff) <= Math.max(mySum, theirSum) * 0.1) { // 10% 이내 차이면 공정
-                resultBox.className = 'trade-result result-fair';
-                resultBox.innerText = '⚖️ 공정한 거래';
-            } else if (diff < 0) { // 내 거래 가치가 더 작으면 이득
-                resultBox.className = 'trade-result result-win';
-                resultBox.innerText = `🎉 이득 (+${Math.abs(diff).toLocaleString()} 젬)`;
-            } else { // 내 거래 가치가 더 크면 손해
-                resultBox.className = 'trade-result result-lose';
-                resultBox.innerText = `🔻 손해 (-${diff.toLocaleString()} 젬)`;
+                res.className = 'result-badge result-fair';
+                res.innerText = '⚖️ FAIR TRADE';
+            } else if (Math.abs(diff) <= Math.max(mySum, theirSum) * 0.1) {
+                res.className = 'result-badge result-fair';
+                res.innerText = '⚖️ FAIR TRADE';
+            } else if (diff < 0) {
+                res.className = 'result-badge result-win';
+                res.innerText = `🎉 WIN (+${Math.abs(diff).toLocaleString()})`;
+            } else {
+                res.className = 'result-badge result-lose';
+                res.innerText = `🔻 LOSE (-${diff.toLocaleString()})`;
             }
         }
 
-        function createCalcCard(unit, side, index) {
+        function createMiniCard(u, target, idx) {
             const card = document.createElement('div');
-            card.className = 'calc-item-card';
+            card.className = 'selected-unit-mini';
             card.innerHTML = `
-                <div class="remove-icon" onclick="removeUnitFromOffer('${side}', ${index})">✕</div>
-                <img src="${unit.img}" onerror="this.src='https://via.placeholder.com/50?text=NATD'">
-                <div class="name">${unit.name}</div>
-                <div class="val">💎 ${unit.value.toLocaleString()}</div>
+                <button class="remove-btn" onclick="removeFromCalc('${target}', ${idx})">✕</button>
+                <img src="${u.img}" onerror="this.src='https://via.placeholder.com/40'">
+                <div class="name">${u.name}</div>
+                <div class="val">💎 ${u.value}</div>
             `;
             return card;
         }
 
+        // 3. 트레이드 광고 시스템
+        function initAdsForm() {
+            const mySelect = document.getElementById('adMyUnit');
+            const theirSelect = document.getElementById('adTheirUnit');
+
+            unitData.forEach(u => {
+                mySelect.innerHTML += `<option value="${u.name}">${u.name} (💎${u.value})</option>`;
+                theirSelect.innerHTML += `<option value="${u.name}">${u.name} (💎${u.value})</option>`;
+            });
+            renderAds();
+        }
+
+        function postAd() {
+            const user = document.getElementById('adUser').value || 'Anonymous';
+            const myUnitName = document.getElementById('adMyUnit').value;
+            const theirUnitName = document.getElementById('adTheirUnit').value;
+
+            const myU = unitData.find(u => u.name === myUnitName);
+            const theirU = unitData.find(u => u.name === theirUnitName);
+
+            adsData.unshift({ user, myUnit: myU.name, myVal: myU.value, theirUnit: theirU.name, theirVal: theirU.value });
+            renderAds();
+            document.getElementById('adUser').value = '';
+        }
+
+        function renderAds() {
+            const list = document.getElementById('adsList');
+            list.innerHTML = '';
+            adsData.forEach(ad => {
+                const item = document.createElement('div');
+                item.className = 'ad-item';
+                item.innerHTML = `
+                    <div><strong>👤 ${ad.user}</strong></div>
+                    <div style="font-size:13px;">Offering: <b style="color:var(--accent-green);">${ad.myUnit}</b> (💎${ad.myVal})</div>
+                    <div style="font-size:13px;">Looking For: <b style="color:var(--accent-yellow);">${ad.theirUnit}</b> (💎${ad.theirVal})</div>
+                    <button class="copy-btn" onclick="navigator.clipboard.writeText('${ad.user}')">Copy User</button>
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        // 4. 티어 리스트 자동 빌드
+        function initTierList() {
+            ['S', 'A', 'B', 'C'].forEach(tier => {
+                const container = document.getElementById(`tier-${tier}`);
+                const items = unitData.filter(u => u.tier === tier);
+                items.forEach(u => {
+                    container.innerHTML += `
+                        <div class="tier-unit-card">
+                            <img src="${u.img}" onerror="this.src='https://via.placeholder.com/45'">
+                            <div class="name">${u.name}</div>
+                        </div>
+                    `;
+                });
+            });
+        }
+
         // 초기화 실행
-        renderValueList();
+        initValueList();
+        initAdsForm();
+        initTierList();
     </script>
 </body>
 </html>
