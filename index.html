@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Noob Tower Defense Value Hub</title>
     <style>
-        :root { 
+        :root {
             --bg-main: #0b0c10;
             --panel-bg: #14171f;
             --card-bg: #1a1e29;
@@ -213,7 +213,7 @@
             width: 100%;
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 6px;
             font-size: 12px;
         }
 
@@ -636,28 +636,28 @@
     </div>
 
     <script>
-        // 20종 유닛 통합 정밀 데이터셋
+        // HTML 파일과 동일한 위치에 있는 이미지 파일명 사용
         const unitData = [
-            { id: 1, name: "Hologram Noob", rarity: "Mythical", tier: "S", value: 3000, demand: "9/10", stability: "Rising", shinyVal: "15M", shinyDemand: "9.5/10", shinyStability: "Rising", img: "NATD/Hologram Noob.png" },
-            { id: 2, name: "King Noob", rarity: "Mythical", tier: "S", value: 2000, demand: "8.5/10", stability: "Stable", shinyVal: "8M", shinyDemand: "8.5/10", shinyStability: "Stable", img: "NATD/King Noob.png" },
-            { id: 3, name: "Magical Noob", rarity: "Mythical", tier: "S", value: 1500, demand: "8/10", stability: "Stable", shinyVal: "5M", shinyDemand: "8/10", shinyStability: "Stable", img: "NATD/Magical Noob.png" },
-            { id: 4, name: "Mafia Noob", rarity: "Exclusive", tier: "S", value: 900, demand: "8.5/10", stability: "Stable", shinyVal: "1.2M", shinyDemand: "9/10", shinyStability: "Rising", img: "NATD/Mafia Noob.png" },
-            { id: 5, name: "Laser Noob", rarity: "Mythical", tier: "S", value: 800, demand: "7.5/10", stability: "Slowly Rising", shinyVal: "3M", shinyDemand: "8/10", shinyStability: "Rising", img: "NATD/Laser Noob.png" },
-            { id: 6, name: "Builder Noob", rarity: "Legendary", tier: "S", value: 300, demand: "8/10", stability: "Stable", shinyVal: "N/A", shinyDemand: "N/A", shinyStability: "Stable", img: "NATD/Builder Noob.png" },
-            { id: 7, name: "Nature Noob", rarity: "Legendary", tier: "S", value: 250, demand: "7.5/10", stability: "Rising", shinyVal: "N/A", shinyDemand: "N/A", shinyStability: "Stable", img: "NATD/Nature Noob.png" },
-            { id: 8, name: "Fairy Noob", rarity: "Exclusive", tier: "S", value: 250, demand: "7/10", stability: "Stable", shinyVal: "N/A", shinyDemand: "N/A", shinyStability: "Stable", img: "NATD/Fairy Noob.png" },
-            { id: 9, name: "Barbarian Noob", rarity: "Legendary", tier: "A", value: 150, demand: "6.5/10", stability: "Stable", shinyVal: "N/A", shinyDemand: "N/A", shinyStability: "Stable", img: "NATD/Barbarian Noob.png" },
-            { id: 10, name: "Gunner Noob", rarity: "Legendary", tier: "A", value: 100, demand: "6/10", stability: "Stable", shinyVal: "N/A", shinyDemand: "N/A", shinyStability: "Stable", img: "NATD/Gunner Noob.png" },
-            { id: 11, name: "Ninja Noob", rarity: "Epic", tier: "A", value: 70, demand: "6/10", stability: "Stable", shinyVal: "N/A", shinyDemand: "N/A", shinyStability: "Stable", img: "NATD/Ninja Noob.png" },
-            { id: 12, name: "Shielder Noob", rarity: "Epic", tier: "A", value: 70, demand: "6/10", stability: "Stable", shinyVal: "N/A", shinyDemand: "N/A", shinyStability: "Stable", img: "NATD/Shielder Noob.png" },
-            { id: 13, name: "Knight Noob", rarity: "Epic", tier: "B", value: 40, demand: "5/10", stability: "Stable", shinyVal: "N/A", shinyDemand: "N/A", shinyStability: "Stable", img: "NATD/Knight Noob.png" },
-            { id: 14, name: "Medic Noob", rarity: "Epic", tier: "B", value: 20, demand: "4/10", stability: "Stable", shinyVal: "N/A", shinyDemand: "N/A", shinyStability: "Stable", img: "NATD/Medic Noob.png" },
-            { id: 15, name: "Spear Noob", rarity: "Rare", tier: "B", value: 10, demand: "4/10", stability: "Stable", shinyVal: "N/A", shinyDemand: "N/A", shinyStability: "Stable", img: "NATD/Spear Noob.png" },
-            { id: 16, name: "SledgeHammer Noob", rarity: "Rare", tier: "C", value: 7, demand: "3/10", stability: "Stable", shinyVal: "N/A", shinyDemand: "N/A", shinyStability: "Stable", img: "NATD/SledgeHammer Noob.png" },
-            { id: 17, name: "Boxer Noob", rarity: "Rare", tier: "C", value: 6, demand: "3/10", stability: "Stable", shinyVal: "N/A", shinyDemand: "N/A", shinyStability: "Stable", img: "NATD/Boxer Noob.png" },
-            { id: 18, name: "Soldier Noob", rarity: "Uncommon", tier: "C", value: 3, demand: "2/10", stability: "Stable", shinyVal: "N/A", shinyDemand: "N/A", shinyStability: "Stable", img: "NATD/Soldier Noob.png" },
-            { id: 19, name: "Zombie Noob", rarity: "Uncommon", tier: "C", value: 3, demand: "2/10", stability: "Stable", shinyVal: "N/A", shinyDemand: "N/A", shinyStability: "Stable", img: "NATD/Zombie Noob.png" },
-            { id: 20, name: "Noob", rarity: "Common", tier: "C", value: 1, demand: "1/10", stability: "Stable", shinyVal: "N/A", shinyDemand: "N/A", shinyStability: "Stable", img: "NATD/Noob.png" }
+            { id: 1, name: "Hologram Noob", rarity: "Mythical", tier: "S", value: 3000, demand: "9/10", stability: "Rising", img: "Hologram Noob.png" },
+            { id: 2, name: "King Noob", rarity: "Mythical", tier: "S", value: 2000, demand: "8.5/10", stability: "Stable", img: "King Noob.png" },
+            { id: 3, name: "Magical Noob", rarity: "Mythical", tier: "S", value: 1500, demand: "8/10", stability: "Stable", img: "Magical Noob.png" },
+            { id: 4, name: "Mafia Noob", rarity: "Exclusive", tier: "S", value: 900, demand: "8.5/10", stability: "Stable", img: "Mafia Noob.png" },
+            { id: 5, name: "Laser Noob", rarity: "Mythical", tier: "S", value: 800, demand: "7.5/10", stability: "Slowly Rising", img: "Laser Noob.png" },
+            { id: 6, name: "Builder Noob", rarity: "Legendary", tier: "S", value: 300, demand: "8/10", stability: "Stable", img: "Builder Noob.png" },
+            { id: 7, name: "Nature Noob", rarity: "Legendary", tier: "S", value: 250, demand: "7.5/10", stability: "Rising", img: "Nature Noob.png" },
+            { id: 8, name: "Fairy Noob", rarity: "Exclusive", tier: "S", value: 250, demand: "7/10", stability: "Stable", img: "Fairy Noob.png" },
+            { id: 9, name: "Barbarian Noob", rarity: "Legendary", tier: "A", value: 150, demand: "6.5/10", stability: "Stable", img: "Barbarian Noob.png" },
+            { id: 10, name: "Gunner Noob", rarity: "Legendary", tier: "A", value: 100, demand: "6/10", stability: "Stable", img: "Gunner Noob.png" },
+            { id: 11, name: "Ninja Noob", rarity: "Epic", tier: "A", value: 70, demand: "6/10", stability: "Stable", img: "Ninja Noob.png" },
+            { id: 12, name: "Shielder Noob", rarity: "Epic", tier: "A", value: 70, demand: "6/10", stability: "Stable", img: "Shielder Noob.png" },
+            { id: 13, name: "Knight Noob", rarity: "Epic", tier: "B", value: 40, demand: "5/10", stability: "Stable", img: "Knight Noob.png" },
+            { id: 14, name: "Medic Noob", rarity: "Epic", tier: "B", value: 20, demand: "4/10", stability: "Stable", img: "Medic Noob.png" },
+            { id: 15, name: "Spear Noob", rarity: "Rare", tier: "B", value: 10, demand: "4/10", stability: "Stable", img: "Spear Noob.png" },
+            { id: 16, name: "SledgeHammer Noob", rarity: "Rare", tier: "C", value: 7, demand: "3/10", stability: "Stable", img: "SledgeHammer Noob.png" },
+            { id: 17, name: "Boxer Noob", rarity: "Rare", tier: "C", value: 6, demand: "3/10", stability: "Stable", img: "Boxer Noob.png" },
+            { id: 18, name: "Soldier Noob", rarity: "Uncommon", tier: "C", value: 3, demand: "2/10", stability: "Stable", img: "Soldier Noob.png" },
+            { id: 19, name: "Zombie Noob", rarity: "Uncommon", tier: "C", value: 3, demand: "2/10", stability: "Stable", img: "Zombie Noob.png" },
+            { id: 20, name: "Noob", rarity: "Common", tier: "C", value: 1, demand: "1/10", stability: "Stable", img: "Noob.png" }
         ];
 
         let selectedCategory = 'All';
@@ -668,7 +668,7 @@
             { user: "NoobMaster99", myUnit: "Hologram Noob", myVal: 3000, theirUnit: "King Noob", theirVal: 2000 }
         ];
 
-        // 탭 전환 (DOM 변경 없이 CSS만 조작)
+        // 탭 전환
         function switchTab(tabId, btn) {
             document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
             document.querySelectorAll('.nav-tab-btn').forEach(b => b.classList.remove('active'));
@@ -677,7 +677,7 @@
             btn.classList.add('active');
         }
 
-        // 1. 가치표 초기 빌드 (최초 1회만 생성하여 렉 예방)
+        // 1. 가치표 초기 빌드
         function initValueList() {
             const grid = document.getElementById('cardGrid');
             grid.innerHTML = '';
@@ -697,16 +697,13 @@
                         <div class="stat-row"><span>Value</span> <span class="stat-val">💎 ${unit.value.toLocaleString()}</span></div>
                         <div class="stat-row"><span>Demand</span> <span class="stat-val">${unit.demand}</span></div>
                         <div class="stat-row"><span>Stability</span> <span class="stat-val ${unit.stability.includes('Rising') ? 'rising' : 'stable'}">${unit.stability}</span></div>
-                        <div class="stat-row"><span>Shiny Value</span> <span class="stat-val">${unit.shinyVal}</span></div>
-                        <div class="stat-row"><span>Shiny Demand</span> <span class="stat-val">${unit.shinyDemand}</span></div>
-                        <div class="stat-row"><span>Shiny Stability</span> <span class="stat-val ${unit.shinyStability.includes('Rising') ? 'rising' : 'stable'}">${unit.shinyStability}</span></div>
                     </div>
                 `;
                 grid.appendChild(card);
             });
         }
 
-        // 빠른 초고속 검색 필터
+        // 검색 필터링
         function fastFilter() {
             const query = document.getElementById('searchInput').value.toLowerCase();
             unitData.forEach((unit, idx) => {
@@ -725,7 +722,7 @@
             fastFilter();
         }
 
-        // 2. 계산기 전용 선택 모달
+        // 2. 계산기 선택 모달
         function openPicker(target) {
             pickerTarget = target;
             const modalGrid = document.getElementById('modalGrid');
@@ -810,7 +807,7 @@
             return card;
         }
 
-        // 3. 트레이드 광고 시스템
+        // 3. 트레이드 광고
         function initAdsForm() {
             const mySelect = document.getElementById('adMyUnit');
             const theirSelect = document.getElementById('adTheirUnit');
@@ -851,7 +848,7 @@
             });
         }
 
-        // 4. 티어 리스트 자동 빌드
+        // 4. 티어 리스트
         function initTierList() {
             ['S', 'A', 'B', 'C'].forEach(tier => {
                 const container = document.getElementById(`tier-${tier}`);
