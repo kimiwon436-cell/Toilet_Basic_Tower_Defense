@@ -3,29 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NATD 가치 계산기 (Value Calculator)</title>
+    <title>NATD 가치 계산기</title>
     <style>
         :root {
             --bg-color: #121212;
             --panel-bg: #1e1e1e;
+            --card-bg: #2c2c2c;
             --text-color: #ffffff;
             --border-color: #333333;
             
-            /* 등급별 색상 */
-            --common: #B0BEC5;    /* 회색 */
-            --uncommon: #4CAF50;  /* 초록 */
-            --rare: #2196F3;      /* 파랑 */
-            --epic: #9C27B0;      /* 보라 */
-            --legendary: #FFC107; /* 노랑/금색 */
-            --mythical: #F44336;  /* 빨강 */
-            --exclusive: #FF4081; /* 핑크 */
+            /* 등급별 색상 정의 */
+            --common: #B0BEC5;    /* Common - 회색 */
+            --uncommon: #4CAF50;  /* Uncommon - 초록 */
+            --rare: #2196F3;      /* Rare - 파랑 */
+            --epic: #9C27B0;      /* Epic - 보라 */
+            --legendary: #FFC107; /* Legendary - 금색/노랑 */
+            --mythical: #F44336;  /* Mythical - 빨강 */
+            --exclusive: #FF4081; /* Exclusive - 핑크 */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
-            margin: 0;
             padding: 20px;
             display: flex;
             flex-direction: column;
@@ -33,8 +39,9 @@
         }
 
         h1 {
-            text-align: center;
             margin-bottom: 20px;
+            font-size: 28px;
+            text-align: center;
         }
 
         .container {
@@ -44,55 +51,55 @@
             max-width: 1200px;
         }
 
-        /* 왼쪽 패널: 유닛 목록 */
+        /* 왼쪽 유닛 리스트 */
         .unit-list-panel {
             flex: 2;
             background-color: var(--panel-bg);
-            border-radius: 10px;
+            border-radius: 12px;
             padding: 20px;
             border: 1px solid var(--border-color);
-            height: 80vh;
+            height: 85vh;
             overflow-y: auto;
         }
 
-        /* 오른쪽 패널: 계산기 영역 */
+        /* 오른쪽 계산기 패널 */
         .calculator-panel {
             flex: 1;
             background-color: var(--panel-bg);
-            border-radius: 10px;
+            border-radius: 12px;
             padding: 20px;
             border: 1px solid var(--border-color);
             display: flex;
             flex-direction: column;
-            height: 80vh;
+            height: 85vh;
         }
 
         .search-bar {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             margin-bottom: 20px;
-            border-radius: 5px;
+            border-radius: 8px;
             border: 1px solid var(--border-color);
-            background-color: #2c2c2c;
+            background-color: var(--card-bg);
             color: white;
-            box-sizing: border-box;
+            font-size: 15px;
         }
 
         .grid-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 12px;
         }
 
-        /* 유닛 카드 디자인 */
+        /* 유닛 카드 스타일 */
         .unit-card {
-            background-color: #2c2c2c;
+            background-color: var(--card-bg);
             border: 2px solid var(--border-color);
             border-radius: 8px;
             padding: 10px;
             text-align: center;
             cursor: pointer;
-            transition: transform 0.1s, border-color 0.2s;
+            transition: transform 0.15s ease, border-color 0.15s ease;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -100,23 +107,23 @@
         }
 
         .unit-card:hover {
-            transform: translateY(-3px);
-            border-color: white;
+            transform: translateY(-4px);
+            border-color: #ffffff;
         }
 
         .unit-card img {
-            width: 80px;
-            height: 80px;
+            width: 75px;
+            height: 75px;
             object-fit: cover;
             background-color: #1a1a1a;
-            border-radius: 5px;
-            margin-bottom: 10px;
+            border-radius: 6px;
+            margin-bottom: 8px;
         }
 
         .unit-name {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: bold;
-            margin-bottom: 5px;
+            margin-bottom: 4px;
             word-break: keep-all;
         }
 
@@ -128,31 +135,31 @@
 
         .unit-rarity {
             font-size: 11px;
-            padding: 3px 6px;
+            padding: 2px 6px;
             border-radius: 4px;
-            margin-bottom: 5px;
-            text-transform: uppercase;
+            margin-bottom: 6px;
             font-weight: bold;
+            text-transform: uppercase;
             color: white;
         }
 
-        /* 등급별 백그라운드 색상 적용 */
-        .Common { background-color: var(--common); color: black; }
+        /* 등급별 라벨 색상 */
+        .Common { background-color: var(--common); color: #111; }
         .Uncommon { background-color: var(--uncommon); }
         .Rare { background-color: var(--rare); }
         .Epic { background-color: var(--epic); }
-        .Legendary { background-color: var(--legendary); color: black; }
+        .Legendary { background-color: var(--legendary); color: #111; }
         .Mythical { background-color: var(--mythical); }
         .Exclusive { background-color: var(--exclusive); }
 
-        /* 계산기 영역 디자인 */
+        /* 선택 목록 UI */
         .calc-header {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: bold;
             margin-bottom: 15px;
-            text-align: center;
-            border-bottom: 2px solid var(--border-color);
             padding-bottom: 10px;
+            border-bottom: 2px solid var(--border-color);
+            text-align: center;
         }
 
         .selected-list {
@@ -161,16 +168,16 @@
             margin-bottom: 15px;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
         }
 
         .selected-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: #2c2c2c;
-            padding: 10px;
-            border-radius: 5px;
+            background-color: var(--card-bg);
+            padding: 10px 12px;
+            border-radius: 6px;
             border-left: 5px solid gray;
         }
 
@@ -186,8 +193,8 @@
             background-color: var(--mythical);
             color: white;
             border: none;
-            border-radius: 3px;
-            padding: 5px 10px;
+            border-radius: 4px;
+            padding: 4px 8px;
             cursor: pointer;
             font-weight: bold;
         }
@@ -197,32 +204,32 @@
         }
 
         .total-box {
-            background-color: #333;
+            background-color: #252525;
             padding: 15px;
-            border-radius: 5px;
+            border-radius: 8px;
             text-align: center;
-            font-size: 22px;
+            font-size: 20px;
             font-weight: bold;
             color: var(--legendary);
+            border: 1px solid var(--border-color);
         }
 
         .clear-btn {
             width: 100%;
             padding: 10px;
-            background-color: #555;
+            background-color: #424242;
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 6px;
             margin-top: 10px;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 15px;
         }
 
         .clear-btn:hover {
-            background-color: #777;
+            background-color: #616161;
         }
 
-        /* 반응형 */
         @media (max-width: 768px) {
             .container { flex-direction: column; }
             .unit-list-panel, .calculator-panel { height: auto; max-height: 50vh; }
@@ -231,64 +238,60 @@
 </head>
 <body>
 
-    <h1>💎 NATD 거래 가치 계산기</h1>
+    <h1>💎 NATD 가치 계산기</h1>
 
     <div class="container">
-        <!-- 왼쪽 패널: 유닛 선택창 -->
+        <!-- 유닛 선택 목록 -->
         <div class="unit-list-panel">
             <input type="text" id="searchInput" class="search-bar" placeholder="유닛 이름 검색..." onkeyup="filterUnits()">
-            <div id="unitGrid" class="grid-container">
-                <!-- 자바스크립트로 유닛 생성됨 -->
-            </div>
+            <div id="unitGrid" class="grid-container"></div>
         </div>
 
-        <!-- 오른쪽 패널: 계산된 유닛 & 총합 -->
+        <!-- 선택된 유닛 및 가치 계산 -->
         <div class="calculator-panel">
-            <div class="calc-header">선택된 유닛 목록</div>
-            <div id="selectedList" class="selected-list">
-                <!-- 선택한 유닛이 여기에 추가됨 -->
-            </div>
+            <div class="calc-header">선택한 유닛</div>
+            <div id="selectedList" class="selected-list"></div>
             
             <div class="total-box">
                 총 가치: <span id="totalValue">0</span> 젬
             </div>
-            <button class="clear-btn" onclick="clearCalculator()">초기화 (Clear All)</button>
+            <button class="clear-btn" onclick="clearCalculator()">전체 초기화</button>
         </div>
     </div>
 
     <script>
-        // 요청하신 20종 유닛 데이터 설정 (분류, 가치, 이미지 경로 정확히 매칭)
+        // 요청하신 NATD 유닛 20종 데이터
         const unitData = [
             // Common
             { name: "Noob", rarity: "Common", value: 1, img: "NATD/Noob.png" },
-            
+
             // Uncommon
             { name: "Soldier Noob", rarity: "Uncommon", value: 3, img: "NATD/Soldier Noob.png" },
             { name: "Zombie Noob", rarity: "Uncommon", value: 3, img: "NATD/Zombie Noob.png" },
-            
+
             // Rare
             { name: "Boxer Noob", rarity: "Rare", value: 6, img: "NATD/Boxer Noob.png" },
             { name: "SledgeHammer Noob", rarity: "Rare", value: 7, img: "NATD/SledgeHammer Noob.png" },
             { name: "Spear Noob", rarity: "Rare", value: 10, img: "NATD/Spear Noob.png" },
-            
+
             // Epic
             { name: "Knight Noob", rarity: "Epic", value: 40, img: "NATD/Knight Noob.png" },
             { name: "Medic Noob", rarity: "Epic", value: 20, img: "NATD/Medic Noob.png" },
             { name: "Ninja Noob", rarity: "Epic", value: 70, img: "NATD/Ninja Noob.png" },
             { name: "Shielder Noob", rarity: "Epic", value: 70, img: "NATD/Shielder Noob.png" },
-            
+
             // Legendary
             { name: "Barbarian Noob", rarity: "Legendary", value: 150, img: "NATD/Barbarian Noob.png" },
             { name: "Builder Noob", rarity: "Legendary", value: 300, img: "NATD/Builder Noob.png" },
             { name: "Gunner Noob", rarity: "Legendary", value: 100, img: "NATD/Gunner Noob.png" },
             { name: "Nature Noob", rarity: "Legendary", value: 250, img: "NATD/Nature Noob.png" },
-            
+
             // Mythical
             { name: "Hologram Noob", rarity: "Mythical", value: 3000, img: "NATD/Hologram Noob.png" },
             { name: "King Noob", rarity: "Mythical", value: 2000, img: "NATD/King Noob.png" },
             { name: "Laser Noob", rarity: "Mythical", value: 800, img: "NATD/Laser Noob.png" },
             { name: "Magical Noob", rarity: "Mythical", value: 1500, img: "NATD/Magical Noob.png" },
-            
+
             // Exclusive
             { name: "Fairy Noob", rarity: "Exclusive", value: 250, img: "NATD/Fairy Noob.png" },
             { name: "Mafia Noob", rarity: "Exclusive", value: 900, img: "NATD/Mafia Noob.png" }
@@ -296,7 +299,7 @@
 
         let selectedUnits = [];
 
-        // 왼쪽 패널에 유닛 목록 렌더링
+        // 유닛 카드 화면에 표시
         function renderUnits(filterText = "") {
             const grid = document.getElementById('unitGrid');
             grid.innerHTML = '';
@@ -304,12 +307,11 @@
             unitData.forEach(unit => {
                 if (unit.name.toLowerCase().includes(filterText.toLowerCase())) {
                     const card = document.createElement('div');
-                    card.className = `unit-card`;
-                    // 카드 클릭 시 계산기에 추가
+                    card.className = 'unit-card';
                     card.onclick = () => addUnitToCalc(unit);
 
                     card.innerHTML = `
-                        <img src="${unit.img}" alt="${unit.name}" onerror="this.src='https://via.placeholder.com/80?text=No+Image'">
+                        <img src="${unit.img}" alt="${unit.name}" onerror="this.src='https://via.placeholder.com/75?text=NATD'">
                         <div class="unit-rarity ${unit.rarity}">${unit.rarity}</div>
                         <div class="unit-name">${unit.name}</div>
                         <div class="unit-value">💎 ${unit.value.toLocaleString()}</div>
@@ -319,19 +321,19 @@
             });
         }
 
-        // 검색 필터링 기능
+        // 유닛 검색
         function filterUnits() {
             const text = document.getElementById('searchInput').value;
             renderUnits(text);
         }
 
-        // 유닛을 오른쪽 계산기에 추가
+        // 계산기에 유닛 추가
         function addUnitToCalc(unit) {
             selectedUnits.push(unit);
             updateCalcView();
         }
 
-        // 유닛을 계산기에서 제거
+        // 선택 유닛 삭제
         function removeUnit(index) {
             selectedUnits.splice(index, 1);
             updateCalcView();
@@ -343,7 +345,7 @@
             updateCalcView();
         }
 
-        // 오른쪽 패널 (계산기 영역) UI 업데이트
+        // 선택 목록 및 총합 업데이트
         function updateCalcView() {
             const list = document.getElementById('selectedList');
             const totalDisplay = document.getElementById('totalValue');
@@ -359,19 +361,18 @@
                 
                 item.innerHTML = `
                     <div>
-                        <strong>${unit.name}</strong> <br>
-                        <span style="font-size:12px; color:#ccc;">💎 ${unit.value.toLocaleString()} 젬</span>
+                        <strong>${unit.name}</strong><br>
+                        <span style="font-size:12px; color:#aaa;">💎 ${unit.value.toLocaleString()} 젬</span>
                     </div>
-                    <button class="remove-btn" onclick="removeUnit(${index})">X</button>
+                    <button class="remove-btn" onclick="removeUnit(${index})">✕</button>
                 `;
                 list.appendChild(item);
             });
 
-            // 총합 업데이트
             totalDisplay.innerText = total.toLocaleString();
         }
 
-        // 최초 실행
+        // 페이지 로드시 유닛 목록 렌더링
         renderUnits();
     </script>
 </body>
