@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Noob Tower Defense Value Hub</title>
-    <style> 
+    <style>
         :root {
             --bg-main: #0b0c10;
             --panel-bg: #14171f;
@@ -530,27 +530,27 @@
     </div>
 
     <script>
-        // 파일명 그대로 사용 (경로 인식 오류 방지를 위해 코드 하단에서 ./ 를 명시적으로 추가함)
+        // 화면 이름(name)은 띄어쓰기 유지, 파일명(img)은 언더바(_) 적용
         const unitData = [
-            { id: 1, name: "Hologram Noob", rarity: "Mythical", tier: "S", value: 3000, demand: "9/10", stability: "Rising", img: "Hologram Noob.png" },
-            { id: 2, name: "King Noob", rarity: "Mythical", tier: "S", value: 2000, demand: "8.5/10", stability: "Stable", img: "King Noob.png" },
-            { id: 3, name: "Magical Noob", rarity: "Mythical", tier: "S", value: 1500, demand: "8/10", stability: "Stable", img: "Magical Noob.png" },
-            { id: 4, name: "Mafia Noob", rarity: "Exclusive", tier: "S", value: 900, demand: "8.5/10", stability: "Stable", img: "Mafia Noob.png" },
-            { id: 5, name: "Laser Noob", rarity: "Mythical", tier: "S", value: 800, demand: "7.5/10", stability: "Slowly Rising", img: "Laser Noob.png" },
-            { id: 6, name: "Builder Noob", rarity: "Legendary", tier: "S", value: 300, demand: "8/10", stability: "Stable", img: "Builder Noob.png" },
-            { id: 7, name: "Nature Noob", rarity: "Legendary", tier: "S", value: 250, demand: "7.5/10", stability: "Rising", img: "Nature Noob.png" },
-            { id: 8, name: "Fairy Noob", rarity: "Exclusive", tier: "S", value: 250, demand: "7/10", stability: "Stable", img: "Fairy Noob.png" },
-            { id: 9, name: "Barbarian Noob", rarity: "Legendary", tier: "A", value: 150, demand: "6.5/10", stability: "Stable", img: "Barbarian Noob.png" },
-            { id: 10, name: "Gunner Noob", rarity: "Legendary", tier: "A", value: 100, demand: "6/10", stability: "Stable", img: "Gunner Noob.png" },
-            { id: 11, name: "Ninja Noob", rarity: "Epic", tier: "A", value: 70, demand: "6/10", stability: "Stable", img: "Ninja Noob.png" },
-            { id: 12, name: "Shielder Noob", rarity: "Epic", tier: "A", value: 70, demand: "6/10", stability: "Stable", img: "Shielder Noob.png" },
-            { id: 13, name: "Knight Noob", rarity: "Epic", tier: "B", value: 40, demand: "5/10", stability: "Stable", img: "Knight Noob.png" },
-            { id: 14, name: "Medic Noob", rarity: "Epic", tier: "B", value: 20, demand: "4/10", stability: "Stable", img: "Medic Noob.png" },
-            { id: 15, name: "Spear Noob", rarity: "Rare", tier: "B", value: 10, demand: "4/10", stability: "Stable", img: "Spear Noob.png" },
-            { id: 16, name: "SledgeHammer Noob", rarity: "Rare", tier: "C", value: 7, demand: "3/10", stability: "Stable", img: "SledgeHammer Noob.png" },
-            { id: 17, name: "Boxer Noob", rarity: "Rare", tier: "C", value: 6, demand: "3/10", stability: "Stable", img: "Boxer Noob.png" },
-            { id: 18, name: "Soldier Noob", rarity: "Uncommon", tier: "C", value: 3, demand: "2/10", stability: "Stable", img: "Soldier Noob.png" },
-            { id: 19, name: "Zombie Noob", rarity: "Uncommon", tier: "C", value: 3, demand: "2/10", stability: "Stable", img: "Zombie Noob.png" },
+            { id: 1, name: "Hologram Noob", rarity: "Mythical", tier: "S", value: 3000, demand: "9/10", stability: "Rising", img: "Hologram_Noob.png" },
+            { id: 2, name: "King Noob", rarity: "Mythical", tier: "S", value: 2000, demand: "8.5/10", stability: "Stable", img: "King_Noob.png" },
+            { id: 3, name: "Magical Noob", rarity: "Mythical", tier: "S", value: 1500, demand: "8/10", stability: "Stable", img: "Magical_Noob.png" },
+            { id: 4, name: "Mafia Noob", rarity: "Exclusive", tier: "S", value: 900, demand: "8.5/10", stability: "Stable", img: "Mafia_Noob.png" },
+            { id: 5, name: "Laser Noob", rarity: "Mythical", tier: "S", value: 800, demand: "7.5/10", stability: "Slowly Rising", img: "Laser_Noob.png" },
+            { id: 6, name: "Builder Noob", rarity: "Legendary", tier: "S", value: 300, demand: "8/10", stability: "Stable", img: "Builder_Noob.png" },
+            { id: 7, name: "Nature Noob", rarity: "Legendary", tier: "S", value: 250, demand: "7.5/10", stability: "Rising", img: "Nature_Noob.png" },
+            { id: 8, name: "Fairy Noob", rarity: "Exclusive", tier: "S", value: 250, demand: "7/10", stability: "Stable", img: "Fairy_Noob.png" },
+            { id: 9, name: "Barbarian Noob", rarity: "Legendary", tier: "A", value: 150, demand: "6.5/10", stability: "Stable", img: "Barbarian_Noob.png" },
+            { id: 10, name: "Gunner Noob", rarity: "Legendary", tier: "A", value: 100, demand: "6/10", stability: "Stable", img: "Gunner_Noob.png" },
+            { id: 11, name: "Ninja Noob", rarity: "Epic", tier: "A", value: 70, demand: "6/10", stability: "Stable", img: "Ninja_Noob.png" },
+            { id: 12, name: "Shielder Noob", rarity: "Epic", tier: "A", value: 70, demand: "6/10", stability: "Stable", img: "Shielder_Noob.png" },
+            { id: 13, name: "Knight Noob", rarity: "Epic", tier: "B", value: 40, demand: "5/10", stability: "Stable", img: "Knight_Noob.png" },
+            { id: 14, name: "Medic Noob", rarity: "Epic", tier: "B", value: 20, demand: "4/10", stability: "Stable", img: "Medic_Noob.png" },
+            { id: 15, name: "Spear Noob", rarity: "Rare", tier: "B", value: 10, demand: "4/10", stability: "Stable", img: "Spear_Noob.png" },
+            { id: 16, name: "SledgeHammer Noob", rarity: "Rare", tier: "C", value: 7, demand: "3/10", stability: "Stable", img: "SledgeHammer_Noob.png" },
+            { id: 17, name: "Boxer Noob", rarity: "Rare", tier: "C", value: 6, demand: "3/10", stability: "Stable", img: "Boxer_Noob.png" },
+            { id: 18, name: "Soldier Noob", rarity: "Uncommon", tier: "C", value: 3, demand: "2/10", stability: "Stable", img: "Soldier_Noob.png" },
+            { id: 19, name: "Zombie Noob", rarity: "Uncommon", tier: "C", value: 3, demand: "2/10", stability: "Stable", img: "Zombie_Noob.png" },
             { id: 20, name: "Noob", rarity: "Common", tier: "C", value: 1, demand: "1/10", stability: "Stable", img: "Noob.png" }
         ];
 
@@ -568,7 +568,7 @@
             btn.classList.add('active');
         }
 
-        // 1. 가치표 빌드 (이미지 경로에 강제로 './' 현재폴더 명시 적용)
+        // 1. 가치표 빌드
         function initValueList() {
             const grid = document.getElementById('cardGrid');
             grid.innerHTML = '';
@@ -578,14 +578,12 @@
                 card.className = 'unit-card';
                 card.id = `unit-card-${idx}`;
 
-                // 이미지 경로에 ./ 추가 및 띄어쓰기 인코딩
                 const imgSrc = encodeURI(`./${unit.img}`);
 
                 card.innerHTML = `
                     <div class="unit-title">${unit.name}</div>
                     <div class="rarity-tag rarity-${unit.rarity}">${unit.rarity}</div>
                     <div class="unit-img-wrapper">
-                        <!-- 에러 발생 시 파일명 오류 알림 이미지로 변경됨 -->
                         <img src="${imgSrc}" alt="${unit.name}" loading="lazy" onerror="this.src='https://via.placeholder.com/120/11131a/ef4444?text=File+Not+Found'">
                     </div>
                     <div class="stats-list">
