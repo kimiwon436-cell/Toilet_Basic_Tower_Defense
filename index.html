@@ -3,264 +3,485 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NATD 가치 계산기</title>
+    <title>NATD 가치표 & 거래 계산기</title>
     <style>
         :root {
-            --bg-color: #121212;
-            --panel-bg: #1e1e1e;
-            --card-bg: #2c2c2c;
-            --text-color: #ffffff;
-            --border-color: #333333;
-            
-            /* 등급별 색상 정의 */
-            --common: #B0BEC5;    /* Common - 회색 */
-            --uncommon: #4CAF50;  /* Uncommon - 초록 */
-            --rare: #2196F3;      /* Rare - 파랑 */
-            --epic: #9C27B0;      /* Epic - 보라 */
-            --legendary: #FFC107; /* Legendary - 금색/노랑 */
-            --mythical: #F44336;  /* Mythical - 빨강 */
-            --exclusive: #FF4081; /* Exclusive - 핑크 */
+            --bg-dark: #0f1117;
+            --panel-bg: #161b22;
+            --card-bg: #21262d;
+            --border-color: #30363d;
+            --text-main: #f0f6fc;
+            --text-sub: #8b949e;
+
+            /* 등급별 색상 */
+            --rarity-common: #a6b1b7;
+            --rarity-uncommon: #2ecc71;
+            --rarity-rare: #3498db;
+            --rarity-epic: #9b59b6;
+            --rarity-legendary: #f1c40f;
+            --rarity-mythical: #e74c3c;
+            --rarity-exclusive: #ff4757;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         }
 
         body {
-            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            padding-bottom: 50px;
         }
 
-        h1 {
-            margin-bottom: 20px;
-            font-size: 28px;
-            text-align: center;
+        /* 네비게이션 헤더 */
+        header {
+            background-color: var(--panel-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 800;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-btn {
+            background: none;
+            border: 1px solid var(--border-color);
+            color: var(--text-sub);
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .nav-btn:hover {
+            color: #fff;
+            border-color: #8b949e;
+        }
+
+        .nav-btn.active {
+            background-color: #238636;
+            border-color: #2e9e44;
+            color: #ffffff;
         }
 
         .container {
-            display: flex;
-            gap: 20px;
-            width: 100%;
             max-width: 1200px;
+            margin: 25px auto;
+            padding: 0 15px;
         }
 
-        /* 왼쪽 유닛 리스트 */
-        .unit-list-panel {
-            flex: 2;
-            background-color: var(--panel-bg);
-            border-radius: 12px;
-            padding: 20px;
-            border: 1px solid var(--border-color);
-            height: 85vh;
-            overflow-y: auto;
+        .tab-content {
+            display: none;
         }
 
-        /* 오른쪽 계산기 패널 */
-        .calculator-panel {
-            flex: 1;
-            background-color: var(--panel-bg);
-            border-radius: 12px;
-            padding: 20px;
-            border: 1px solid var(--border-color);
+        .tab-content.active {
+            display: block;
+        }
+
+        /* ==================== 1. 가치표 페이지 (Value List) ==================== */
+        .filter-section {
             display: flex;
-            flex-direction: column;
-            height: 85vh;
-        }
-
-        .search-bar {
-            width: 100%;
-            padding: 12px;
+            flex-wrap: wrap;
+            gap: 10px;
             margin-bottom: 20px;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .search-input {
             background-color: var(--card-bg);
-            color: white;
-            font-size: 15px;
+            border: 1px solid var(--border-color);
+            padding: 10px 15px;
+            border-radius: 8px;
+            color: #fff;
+            width: 280px;
+            font-size: 14px;
         }
 
-        .grid-container {
+        .rarity-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .filter-chip {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-sub);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .filter-chip.active, .filter-chip:hover {
+            background-color: #30363d;
+            color: #fff;
+        }
+
+        .value-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-            gap: 12px;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 16px;
         }
 
-        /* 유닛 카드 스타일 */
         .unit-card {
             background-color: var(--card-bg);
-            border: 2px solid var(--border-color);
-            border-radius: 8px;
-            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 15px;
             text-align: center;
-            cursor: pointer;
-            transition: transform 0.15s ease, border-color 0.15s ease;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
 
         .unit-card:hover {
             transform: translateY(-4px);
-            border-color: #ffffff;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
         }
 
-        .unit-card img {
-            width: 75px;
-            height: 75px;
-            object-fit: cover;
-            background-color: #1a1a1a;
-            border-radius: 6px;
-            margin-bottom: 8px;
-        }
-
-        .unit-name {
-            font-size: 13px;
-            font-weight: bold;
-            margin-bottom: 4px;
-            word-break: keep-all;
-        }
-
-        .unit-value {
-            font-size: 13px;
-            color: #4CAF50;
-            font-weight: bold;
-        }
-
-        .unit-rarity {
+        .unit-badge {
+            display: inline-block;
             font-size: 11px;
-            padding: 2px 6px;
+            font-weight: 800;
+            padding: 3px 8px;
             border-radius: 4px;
-            margin-bottom: 6px;
-            font-weight: bold;
             text-transform: uppercase;
-            color: white;
+            margin-bottom: 10px;
         }
 
-        /* 등급별 라벨 색상 */
-        .Common { background-color: var(--common); color: #111; }
-        .Uncommon { background-color: var(--uncommon); }
-        .Rare { background-color: var(--rare); }
-        .Epic { background-color: var(--epic); }
-        .Legendary { background-color: var(--legendary); color: #111; }
-        .Mythical { background-color: var(--mythical); }
-        .Exclusive { background-color: var(--exclusive); }
-
-        /* 선택 목록 UI */
-        .calc-header {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid var(--border-color);
-            text-align: center;
+        .unit-img {
+            width: 90px;
+            height: 90px;
+            object-fit: cover;
+            border-radius: 8px;
+            background-color: var(--panel-bg);
+            margin: 0 auto 10px;
         }
 
-        .selected-list {
-            flex: 1;
-            overflow-y: auto;
-            margin-bottom: 15px;
+        .unit-title {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .unit-val {
+            font-size: 16px;
+            font-weight: 800;
+            color: #2ecc71;
+        }
+
+        /* 등급별 바이블 색상 설정 */
+        .badge-Common { background-color: var(--rarity-common); color: #000; }
+        .badge-Uncommon { background-color: var(--rarity-uncommon); color: #000; }
+        .badge-Rare { background-color: var(--rarity-rare); color: #fff; }
+        .badge-Epic { background-color: var(--rarity-epic); color: #fff; }
+        .badge-Legendary { background-color: var(--rarity-legendary); color: #000; }
+        .badge-Mythical { background-color: var(--rarity-mythical); color: #fff; }
+        .badge-Exclusive { background-color: var(--rarity-exclusive); color: #fff; }
+
+        /* ==================== 2. 거래 계산기 페이지 (Trade Calculator) ==================== */
+        .trade-container {
+            display: grid;
+            grid-template-columns: 1fr 140px 1fr;
+            gap: 20px;
+            align-items: start;
+        }
+
+        .offer-box {
+            background-color: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            min-height: 450px;
             display: flex;
             flex-direction: column;
-            gap: 8px;
         }
 
-        .selected-item {
+        .offer-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: var(--card-bg);
-            padding: 10px 12px;
-            border-radius: 6px;
-            border-left: 5px solid gray;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 12px;
+            margin-bottom: 15px;
         }
 
-        .selected-item.Common { border-left-color: var(--common); }
-        .selected-item.Uncommon { border-left-color: var(--uncommon); }
-        .selected-item.Rare { border-left-color: var(--rare); }
-        .selected-item.Epic { border-left-color: var(--epic); }
-        .selected-item.Legendary { border-left-color: var(--legendary); }
-        .selected-item.Mythical { border-left-color: var(--mythical); }
-        .selected-item.Exclusive { border-left-color: var(--exclusive); }
+        .offer-title {
+            font-size: 18px;
+            font-weight: 700;
+        }
 
-        .remove-btn {
-            background-color: var(--mythical);
+        .offer-value {
+            font-size: 18px;
+            font-weight: 800;
+            color: #2ecc71;
+        }
+
+        .add-btn {
+            background-color: #238636;
             color: white;
             border: none;
-            border-radius: 4px;
-            padding: 4px 8px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .remove-btn:hover {
-            background-color: #d32f2f;
-        }
-
-        .total-box {
-            background-color: #252525;
-            padding: 15px;
-            border-radius: 8px;
-            text-align: center;
-            font-size: 20px;
-            font-weight: bold;
-            color: var(--legendary);
-            border: 1px solid var(--border-color);
-        }
-
-        .clear-btn {
-            width: 100%;
             padding: 10px;
-            background-color: #424242;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            margin-top: 10px;
+            border-radius: 8px;
+            font-weight: 700;
             cursor: pointer;
+            margin-bottom: 15px;
+            transition: background 0.2s;
+        }
+
+        .add-btn:hover { background-color: #2ea043; }
+
+        .selected-units-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 10px;
+            flex: 1;
+        }
+
+        .calc-item-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 8px;
+            text-align: center;
+            position: relative;
+        }
+
+        .calc-item-card img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 6px;
+        }
+
+        .calc-item-card .name {
+            font-size: 11px;
+            font-weight: bold;
+            margin: 4px 0 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .calc-item-card .val {
+            font-size: 11px;
+            color: #2ecc71;
+            font-weight: bold;
+        }
+
+        .remove-icon {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--rarity-mythical);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 11px;
+            line-height: 18px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* VS 및 거래 결과 영역 */
+        .vs-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            padding-top: 100px;
+        }
+
+        .vs-badge {
+            font-size: 28px;
+            font-weight: 900;
+            color: var(--text-sub);
+        }
+
+        .trade-result {
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-weight: 800;
             font-size: 15px;
+            text-align: center;
+            width: 100%;
         }
 
-        .clear-btn:hover {
-            background-color: #616161;
+        .result-fair { background: #313214; color: #f1c40f; border: 1px solid #f1c40f; }
+        .result-win { background: #132e19; color: #2ecc71; border: 1px solid #2ecc71; }
+        .result-lose { background: #3a171a; color: #e74c3c; border: 1px solid #e74c3c; }
+
+        /* 모달 팝업 (유닛 선택창) */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.75);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
         }
 
-        @media (max-width: 768px) {
-            .container { flex-direction: column; }
-            .unit-list-panel, .calculator-panel { height: auto; max-height: 50vh; }
+        .modal-content {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            width: 90%;
+            max-width: 700px;
+            max-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .modal-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+            gap: 10px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        .modal-item {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 8px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .modal-item:hover { border-color: #fff; }
+        .modal-item img { width: 55px; height: 55px; border-radius: 6px; }
+
+        @media (max-width: 850px) {
+            .trade-container { grid-template-columns: 1fr; }
+            .vs-section { padding-top: 0; }
         }
     </style>
 </head>
 <body>
 
-    <h1>💎 NATD 가치 계산기</h1>
+    <!-- 헤더 / 상단 탭 -->
+    <header>
+        <div class="logo">💎 NATD Value Hub</div>
+        <div class="nav-tabs">
+            <button class="nav-btn active" onclick="switchTab('valuelist')">📊 가치표</button>
+            <button class="nav-btn" onclick="switchTab('calculator')">⚖️ 거래 계산기</button>
+        </div>
+    </header>
 
     <div class="container">
-        <!-- 유닛 선택 목록 -->
-        <div class="unit-list-panel">
-            <input type="text" id="searchInput" class="search-bar" placeholder="유닛 이름 검색..." onkeyup="filterUnits()">
-            <div id="unitGrid" class="grid-container"></div>
+        
+        <!-- ================= PAGE 1: 가치표 (Value List) ================= -->
+        <div id="valuelist" class="tab-content active">
+            <div class="filter-section">
+                <input type="text" id="searchBar" class="search-input" placeholder="유닛 이름 검색..." onkeyup="filterValueList()">
+                
+                <div class="rarity-filters">
+                    <button class="filter-chip active" onclick="filterRarity('ALL', this)">ALL</button>
+                    <button class="filter-chip" onclick="filterRarity('Common', this)">Common</button>
+                    <button class="filter-chip" onclick="filterRarity('Uncommon', this)">Uncommon</button>
+                    <button class="filter-chip" onclick="filterRarity('Rare', this)">Rare</button>
+                    <button class="filter-chip" onclick="filterRarity('Epic', this)">Epic</button>
+                    <button class="filter-chip" onclick="filterRarity('Legendary', this)">Legendary</button>
+                    <button class="filter-chip" onclick="filterRarity('Mythical', this)">Mythical</button>
+                    <button class="filter-chip" onclick="filterRarity('Exclusive', this)">Exclusive</button>
+                </div>
+            </div>
+
+            <div id="valueGrid" class="value-grid">
+                <!-- JS로 카드가 로드됩니다 -->
+            </div>
         </div>
 
-        <!-- 선택된 유닛 및 가치 계산 -->
-        <div class="calculator-panel">
-            <div class="calc-header">선택한 유닛</div>
-            <div id="selectedList" class="selected-list"></div>
-            
-            <div class="total-box">
-                총 가치: <span id="totalValue">0</span> 젬
+        <!-- ================= PAGE 2: 거래 계산기 (Trade Calculator) ================= -->
+        <div id="calculator" class="tab-content">
+            <div class="trade-container">
+                
+                <!-- 내 아이템 -->
+                <div class="offer-box">
+                    <div class="offer-header">
+                        <span class="offer-title">내 제안 (My Offer)</span>
+                        <span class="offer-value">💎 <span id="myTotal">0</span></span>
+                    </div>
+                    <button class="add-btn" onclick="openPicker('my')">+ 유닛 추가하기</button>
+                    <div id="myOfferGrid" class="selected-units-grid"></div>
+                </div>
+
+                <!-- VS & 거래 결과 -->
+                <div class="vs-section">
+                    <div class="vs-badge">VS</div>
+                    <div id="tradeResult" class="trade-result result-fair">⚖️ 공정한 거래</div>
+                </div>
+
+                <!-- 상대 아이템 -->
+                <div class="offer-box">
+                    <div class="offer-header">
+                        <span class="offer-title">상대 제안 (Their Offer)</span>
+                        <span class="offer-value">💎 <span id="theirTotal">0</span></span>
+                    </div>
+                    <button class="add-btn" onclick="openPicker('their')">+ 유닛 추가하기</button>
+                    <div id="theirOfferGrid" class="selected-units-grid"></div>
+                </div>
+
             </div>
-            <button class="clear-btn" onclick="clearCalculator()">전체 초기화</button>
+        </div>
+
+    </div>
+
+    <!-- 유닛 선택 모달 팝업 -->
+    <div id="unitModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>유닛 추가</h3>
+                <button onclick="closePicker()" style="background:none; border:none; color:#fff; font-size:20px; cursor:pointer;">✕</button>
+            </div>
+            <div id="modalGrid" class="modal-grid">
+                <!-- 선택 가능한 유닛 목록 -->
+            </div>
         </div>
     </div>
 
     <script>
-        // 요청하신 NATD 유닛 20종 데이터
+        // 요청해주신 NATD 유닛 20종 정밀 데이터
         const unitData = [
             // Common
             { name: "Noob", rarity: "Common", value: 1, img: "NATD/Noob.png" },
@@ -275,105 +496,177 @@
             { name: "Spear Noob", rarity: "Rare", value: 10, img: "NATD/Spear Noob.png" },
 
             // Epic
-            { name: "Knight Noob", rarity: "Epic", value: 40, img: "NATD/Knight Noob.png" },
             { name: "Medic Noob", rarity: "Epic", value: 20, img: "NATD/Medic Noob.png" },
+            { name: "Knight Noob", rarity: "Epic", value: 40, img: "NATD/Knight Noob.png" },
             { name: "Ninja Noob", rarity: "Epic", value: 70, img: "NATD/Ninja Noob.png" },
             { name: "Shielder Noob", rarity: "Epic", value: 70, img: "NATD/Shielder Noob.png" },
 
             // Legendary
-            { name: "Barbarian Noob", rarity: "Legendary", value: 150, img: "NATD/Barbarian Noob.png" },
-            { name: "Builder Noob", rarity: "Legendary", value: 300, img: "NATD/Builder Noob.png" },
             { name: "Gunner Noob", rarity: "Legendary", value: 100, img: "NATD/Gunner Noob.png" },
+            { name: "Barbarian Noob", rarity: "Legendary", value: 150, img: "NATD/Barbarian Noob.png" },
             { name: "Nature Noob", rarity: "Legendary", value: 250, img: "NATD/Nature Noob.png" },
+            { name: "Builder Noob", rarity: "Legendary", value: 300, img: "NATD/Builder Noob.png" },
 
             // Mythical
-            { name: "Hologram Noob", rarity: "Mythical", value: 3000, img: "NATD/Hologram Noob.png" },
-            { name: "King Noob", rarity: "Mythical", value: 2000, img: "NATD/King Noob.png" },
             { name: "Laser Noob", rarity: "Mythical", value: 800, img: "NATD/Laser Noob.png" },
             { name: "Magical Noob", rarity: "Mythical", value: 1500, img: "NATD/Magical Noob.png" },
+            { name: "King Noob", rarity: "Mythical", value: 2000, img: "NATD/King Noob.png" },
+            { name: "Hologram Noob", rarity: "Mythical", value: 3000, img: "NATD/Hologram Noob.png" },
 
             // Exclusive
             { name: "Fairy Noob", rarity: "Exclusive", value: 250, img: "NATD/Fairy Noob.png" },
             { name: "Mafia Noob", rarity: "Exclusive", value: 900, img: "NATD/Mafia Noob.png" }
         ];
 
-        let selectedUnits = [];
+        let currentCategory = 'ALL';
+        let myOffer = [];
+        let theirOffer = [];
+        let activeTargetSide = 'my';
 
-        // 유닛 카드 화면에 표시
-        function renderUnits(filterText = "") {
-            const grid = document.getElementById('unitGrid');
+        // 탭 전환 함수
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // ================= 1. 가치표 랜더링 =================
+        function renderValueList() {
+            const grid = document.getElementById('valueGrid');
+            const searchText = document.getElementById('searchBar').value.toLowerCase();
             grid.innerHTML = '';
 
             unitData.forEach(unit => {
-                if (unit.name.toLowerCase().includes(filterText.toLowerCase())) {
+                const matchesCategory = currentCategory === 'ALL' || unit.rarity === currentCategory;
+                const matchesSearch = unit.name.toLowerCase().includes(searchText);
+
+                if (matchesCategory && matchesSearch) {
                     const card = document.createElement('div');
                     card.className = 'unit-card';
-                    card.onclick = () => addUnitToCalc(unit);
-
                     card.innerHTML = `
-                        <img src="${unit.img}" alt="${unit.name}" onerror="this.src='https://via.placeholder.com/75?text=NATD'">
-                        <div class="unit-rarity ${unit.rarity}">${unit.rarity}</div>
-                        <div class="unit-name">${unit.name}</div>
-                        <div class="unit-value">💎 ${unit.value.toLocaleString()}</div>
+                        <div class="unit-badge badge-${unit.rarity}">${unit.rarity}</div>
+                        <img src="${unit.img}" class="unit-img" alt="${unit.name}" onerror="this.src='https://via.placeholder.com/90?text=NATD'">
+                        <div class="unit-title">${unit.name}</div>
+                        <div class="unit-val">💎 ${unit.value.toLocaleString()}</div>
                     `;
                     grid.appendChild(card);
                 }
             });
         }
 
-        // 유닛 검색
-        function filterUnits() {
-            const text = document.getElementById('searchInput').value;
-            renderUnits(text);
+        function filterRarity(rarity, btn) {
+            currentCategory = rarity;
+            document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+            btn.classList.add('active');
+            renderValueList();
         }
 
-        // 계산기에 유닛 추가
-        function addUnitToCalc(unit) {
-            selectedUnits.push(unit);
-            updateCalcView();
+        function filterValueList() {
+            renderValueList();
         }
 
-        // 선택 유닛 삭제
-        function removeUnit(index) {
-            selectedUnits.splice(index, 1);
-            updateCalcView();
-        }
+        // ================= 2. 계산기 로직 =================
+        function openPicker(side) {
+            activeTargetSide = side;
+            const modalGrid = document.getElementById('modalGrid');
+            modalGrid.innerHTML = '';
 
-        // 전체 초기화
-        function clearCalculator() {
-            selectedUnits = [];
-            updateCalcView();
-        }
-
-        // 선택 목록 및 총합 업데이트
-        function updateCalcView() {
-            const list = document.getElementById('selectedList');
-            const totalDisplay = document.getElementById('totalValue');
-            
-            list.innerHTML = '';
-            let total = 0;
-
-            selectedUnits.forEach((unit, index) => {
-                total += unit.value;
-                
+            unitData.forEach(unit => {
                 const item = document.createElement('div');
-                item.className = `selected-item ${unit.rarity}`;
-                
+                item.className = 'modal-item';
+                item.onclick = () => addUnitToOffer(unit);
                 item.innerHTML = `
-                    <div>
-                        <strong>${unit.name}</strong><br>
-                        <span style="font-size:12px; color:#aaa;">💎 ${unit.value.toLocaleString()} 젬</span>
-                    </div>
-                    <button class="remove-btn" onclick="removeUnit(${index})">✕</button>
+                    <img src="${unit.img}" onerror="this.src='https://via.placeholder.com/55?text=NATD'">
+                    <div style="font-size:11px; font-weight:bold; margin-top:4px;">${unit.name}</div>
+                    <div style="font-size:11px; color:#2ecc71;">💎 ${unit.value}</div>
                 `;
-                list.appendChild(item);
+                modalGrid.appendChild(item);
             });
 
-            totalDisplay.innerText = total.toLocaleString();
+            document.getElementById('unitModal').style.display = 'flex';
         }
 
-        // 페이지 로드시 유닛 목록 렌더링
-        renderUnits();
+        function closePicker() {
+            document.getElementById('unitModal').style.display = 'none';
+        }
+
+        function addUnitToOffer(unit) {
+            if (activeTargetSide === 'my') {
+                myOffer.push(unit);
+            } else {
+                theirOffer.push(unit);
+            }
+            closePicker();
+            updateTradeCalculator();
+        }
+
+        function removeUnitFromOffer(side, index) {
+            if (side === 'my') {
+                myOffer.splice(index, 1);
+            } else {
+                theirOffer.splice(index, 1);
+            }
+            updateTradeCalculator();
+        }
+
+        function updateTradeCalculator() {
+            const myGrid = document.getElementById('myOfferGrid');
+            const theirGrid = document.getElementById('theirOfferGrid');
+            
+            myGrid.innerHTML = '';
+            theirGrid.innerHTML = '';
+
+            let mySum = 0;
+            let theirSum = 0;
+
+            myOffer.forEach((unit, index) => {
+                mySum += unit.value;
+                myGrid.appendChild(createCalcCard(unit, 'my', index));
+            });
+
+            theirOffer.forEach((unit, index) => {
+                theirSum += unit.value;
+                theirGrid.appendChild(createCalcCard(unit, 'their', index));
+            });
+
+            document.getElementById('myTotal').innerText = mySum.toLocaleString();
+            document.getElementById('theirTotal').innerText = theirSum.toLocaleString();
+
+            // 손익 가치 판단 (WIN / FAIR / LOSE)
+            const resultBox = document.getElementById('tradeResult');
+            const diff = mySum - theirSum;
+
+            if (mySum === 0 && theirSum === 0) {
+                resultBox.className = 'trade-result result-fair';
+                resultBox.innerText = '⚖️ 공정한 거래';
+            } else if (Math.abs(diff) <= Math.max(mySum, theirSum) * 0.1) { // 10% 이내 차이면 공정
+                resultBox.className = 'trade-result result-fair';
+                resultBox.innerText = '⚖️ 공정한 거래';
+            } else if (diff < 0) { // 내 거래 가치가 더 작으면 이득
+                resultBox.className = 'trade-result result-win';
+                resultBox.innerText = `🎉 이득 (+${Math.abs(diff).toLocaleString()} 젬)`;
+            } else { // 내 거래 가치가 더 크면 손해
+                resultBox.className = 'trade-result result-lose';
+                resultBox.innerText = `🔻 손해 (-${diff.toLocaleString()} 젬)`;
+            }
+        }
+
+        function createCalcCard(unit, side, index) {
+            const card = document.createElement('div');
+            card.className = 'calc-item-card';
+            card.innerHTML = `
+                <div class="remove-icon" onclick="removeUnitFromOffer('${side}', ${index})">✕</div>
+                <img src="${unit.img}" onerror="this.src='https://via.placeholder.com/50?text=NATD'">
+                <div class="name">${unit.name}</div>
+                <div class="val">💎 ${unit.value.toLocaleString()}</div>
+            `;
+            return card;
+        }
+
+        // 초기화 실행
+        renderValueList();
     </script>
 </body>
 </html>
