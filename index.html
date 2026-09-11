@@ -3,555 +3,376 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Toilet Basic Tower Defense - Value & Stats</title>
+    <title>NATD 가치 계산기 (Value Calculator)</title>
     <style>
-        /* --- 기본 스타일 (Dark Theme + White Text) --- */
+        :root {
+            --bg-color: #121212;
+            --panel-bg: #1e1e1e;
+            --text-color: #ffffff;
+            --border-color: #333333;
+            
+            /* 등급별 색상 */
+            --common: #B0BEC5;    /* 회색 */
+            --uncommon: #4CAF50;  /* 초록 */
+            --rare: #2196F3;      /* 파랑 */
+            --epic: #9C27B0;      /* 보라 */
+            --legendary: #FFC107; /* 노랑/금색 */
+            --mythical: #F44336;  /* 빨강 */
+            --exclusive: #FF4081; /* 핑크 */
+        }
+
         body {
-            background-color: #0a0a1a; /* 배경: 어두운 남색 */
-            color: #ffffff; /* 텍스트: 흰색 */
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
             margin: 0;
-            padding: 0;
+            padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-height: 100vh;
         }
 
-        /* --- 네비게이션바 --- */
-        .nav-bar {
-            background-color: #14142b;
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .container {
+            display: flex;
+            gap: 20px;
             width: 100%;
-            padding: 10px 20px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            max-width: 1200px;
+        }
+
+        /* 왼쪽 패널: 유닛 목록 */
+        .unit-list-panel {
+            flex: 2;
+            background-color: var(--panel-bg);
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            height: 80vh;
+            overflow-y: auto;
+        }
+
+        /* 오른쪽 패널: 계산기 영역 */
+        .calculator-panel {
+            flex: 1;
+            background-color: var(--panel-bg);
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            height: 80vh;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border: 1px solid var(--border-color);
+            background-color: #2c2c2c;
+            color: white;
+            box-sizing: border-box;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 15px;
+        }
+
+        /* 유닛 카드 디자인 */
+        .unit-card {
+            background-color: #2c2c2c;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.1s, border-color 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .unit-card:hover {
+            transform: translateY(-3px);
+            border-color: white;
+        }
+
+        .unit-card img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            background-color: #1a1a1a;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .unit-name {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            word-break: keep-all;
+        }
+
+        .unit-value {
+            font-size: 13px;
+            color: #4CAF50;
+            font-weight: bold;
+        }
+
+        .unit-rarity {
+            font-size: 11px;
+            padding: 3px 6px;
+            border-radius: 4px;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            font-weight: bold;
+            color: white;
+        }
+
+        /* 등급별 백그라운드 색상 적용 */
+        .Common { background-color: var(--common); color: black; }
+        .Uncommon { background-color: var(--uncommon); }
+        .Rare { background-color: var(--rare); }
+        .Epic { background-color: var(--epic); }
+        .Legendary { background-color: var(--legendary); color: black; }
+        .Mythical { background-color: var(--mythical); }
+        .Exclusive { background-color: var(--exclusive); }
+
+        /* 계산기 영역 디자인 */
+        .calc-header {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: center;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .selected-list {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .selected-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-sizing: border-box;
-            border-bottom: 1px solid #333;
-        }
-        
-        .nav-left { display: flex; gap: 10px; align-items: center; }
-        .nav-right { display: flex; gap: 10px; align-items: center; }
-
-        .nav-btn {
-            background-color: #2c2c44; color: #ffffff; border: 1px solid #555;
-            padding: 8px 16px; border-radius: 20px; cursor: pointer;
-            font-size: 14px; font-weight: bold; transition: all 0.3s;
-        }
-        .nav-btn:hover { background-color: #444; color: #fff; }
-        .nav-btn.active { background-color: #007bff; color: white; border-color: #007bff; }
-
-        .link-btn {
-            text-decoration: none; padding: 8px 16px; border-radius: 20px;
-            font-size: 14px; font-weight: bold; color: white; display: flex;
-            align-items: center; gap: 6px; transition: 0.2s; border: none;
-        }
-        .link-btn:hover { transform: translateY(-2px); }
-        .btn-discord { background-color: #5865F2; }
-        .btn-game { background-color: #00b06f; }
-
-        /* --- 메인 컨테이너 --- */
-        .container { width: 95%; max-width: 1200px; margin-top: 20px; padding-bottom: 80px; }
-        .view-section { display: none; }
-        .view-section.active { display: block; animation: fadeIn 0.3s; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        h1 { text-align: center; margin-bottom: 10px; font-size: 28px; color: #ffffff; }
-
-        /* 🔥 정렬 버튼 바 */
-        .sort-bar {
-            display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;
-            margin-bottom: 25px; padding: 10px; background: #14142b;
-            border-radius: 12px; border: 1px solid #333;
-        }
-        .sort-btn {
-            background: #2c2c44; color: #ffffff; border: 1px solid #555;
-            padding: 8px 16px; border-radius: 8px; cursor: pointer;
-            font-size: 13px; font-weight: bold; transition: 0.2s;
-            display: flex; align-items: center; gap: 5px;
-        }
-        .sort-btn:hover { color: #fff; border-color: #777; }
-        .sort-btn.active { background: #007bff; color: white; border-color: #007bff; box-shadow: 0 0 8px rgba(0,123,255,0.4); }
-        
-        .reverse-btn { background: #444; color: #fff; }
-        .reverse-btn:hover { background: #555; }
-
-        /* --- 유닛 카드 그리드 --- */
-        .unit-grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px;
-        }
-        .unit-card {
-            background-color: #14142b; border-radius: 8px; overflow: hidden;
-            border: 1px solid #333; box-shadow: 0 4px 6px rgba(0,0,0,0.5);
-            transition: transform 0.2s; cursor: pointer; position: relative;
-        }
-        .unit-card:hover { transform: translateY(-5px); border-color: #777; }
-
-        .card-image {
-            height: 140px; background-color: #000; position: relative;
-            display: flex; align-items: center; justify-content: center; overflow: hidden;
-        }
-        .card-image img { width: 100%; height: 100%; object-fit: contain; }
-
-        /* 태그 스타일 */
-        .unit-tags { position: absolute; top: 6px; left: 6px; display: flex; flex-direction: column; gap: 3px; }
-        .tag {
-            padding: 2px 5px; border-radius: 3px; font-size: 9px; font-weight: 800;
-            text-transform: uppercase; text-shadow: 1px 1px 2px rgba(0,0,0,0.8); width: fit-content;
-        }
-        .tag.common { background: #b0bec5; color: #000; }
-        .tag.uncommon { background: #66bb6a; color: #000; }
-        .tag.rare { background: #29b6f6; color: #000; }
-        .tag.epic { background: #ab47bc; color: #fff; }
-        .tag.legendary { background: #ffca28; color: #000; }
-        .tag.mythical { background: #ef5350; color: #fff; }
-        .tag.absolute { background: #000080; color: #fff; border: 1px solid #fff; box-shadow: 0 0 5px #00f; }
-        .tag.exclusive { background: #ff69b4; color: #fff; border: 1px solid #ff1493; }
-        .tag.crate { background: #ff69b4; color: #fff; border: 1px solid #ff1493; }
-
-        .tier-badge {
-            position: absolute; top: 6px; right: 6px;
-            width: 28px; height: 28px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-weight: 900; font-size: 14px; 
-            box-shadow: 0 4px 8px rgba(0,0,0,0.6);
-            border: 2px solid rgba(255,255,255,0.3);
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-            z-index: 10;
+            background-color: #2c2c2c;
+            padding: 10px;
+            border-radius: 5px;
+            border-left: 5px solid gray;
         }
 
-        .tier-S { background: linear-gradient(135deg, #FFD700 0%, #FF8C00 50%, #FF0080 100%); color: #fff; border-color: #fff; box-shadow: 0 0 10px rgba(255, 215, 0, 0.7); animation: pulseGlow 2s infinite; }
-        .tier-A { background: linear-gradient(135deg, #ff416c, #ff4b2b); color: #fff; }
-        .tier-B { background: linear-gradient(135deg, #36D1DC, #5B86E5); color: #fff; }
-        .tier-C { background: #555; color: #ddd; }
-        .tier-none { display: none; }
+        .selected-item.Common { border-left-color: var(--common); }
+        .selected-item.Uncommon { border-left-color: var(--uncommon); }
+        .selected-item.Rare { border-left-color: var(--rare); }
+        .selected-item.Epic { border-left-color: var(--epic); }
+        .selected-item.Legendary { border-left-color: var(--legendary); }
+        .selected-item.Mythical { border-left-color: var(--mythical); }
+        .selected-item.Exclusive { border-left-color: var(--exclusive); }
 
-        @keyframes pulseGlow {
-            0% { box-shadow: 0 0 5px rgba(255, 215, 0, 0.5); }
-            50% { box-shadow: 0 0 15px rgba(255, 215, 0, 0.9); }
-            100% { box-shadow: 0 0 5px rgba(255, 215, 0, 0.5); }
+        .remove-btn {
+            background-color: var(--mythical);
+            color: white;
+            border: none;
+            border-radius: 3px;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-weight: bold;
         }
 
-        .card-info { padding: 8px; text-align: center; }
-        .unit-name { margin-bottom: 4px; font-size: 13px; font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #ffffff; }
-        .price-text { margin: 0; font-size: 12px; color: #00e5ff; font-weight: bold; }
-
-        /* --- 모달 --- */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85); z-index: 999;
-            display: none; justify-content: center; align-items: center;
+        .remove-btn:hover {
+            background-color: #d32f2f;
         }
-        .modal-content {
-            background: #1e1e2f; width: 90%; max-width: 450px; max-height: 90vh;
-            border-radius: 12px; padding: 20px; overflow-y: auto;
-            border: 1px solid #444; position: relative;
-            color: #ffffff;
+
+        .total-box {
+            background-color: #333;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 22px;
+            font-weight: bold;
+            color: var(--legendary);
         }
-        .close-modal {
-            position: absolute; top: 15px; right: 15px; width: 30px; height: 30px;
-            background-color: rgba(255, 50, 50, 0.8); color: white; 
-            font-size: 20px; font-weight: bold; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer; z-index: 1001; transition: 0.2s; padding-bottom: 2px;
+
+        .clear-btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #555;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin-top: 10px;
+            cursor: pointer;
+            font-size: 16px;
         }
-        .close-modal:hover { background-color: #ff0000; transform: scale(1.1); }
 
-        .stat-header { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; margin-top: 10px; border-bottom: 1px solid #444; padding-bottom: 15px; }
-        .stat-img-wrapper { position: relative; width: 80px; height: 80px; border-radius: 8px; background: #000; border: 1px solid #555; flex-shrink: 0; }
-        .stat-img-wrapper img { width: 100%; height: 100%; object-fit: contain; }
-        .stat-title h2 { margin: 0; font-size: 18px; color: #fff; }
-        .stat-meta { display: flex; gap: 8px; margin-top: 5px; }
-        
-        .type-badge { padding: 3px 6px; border-radius: 3px; font-size: 11px; font-weight: bold; color: white; }
-        .type-AOE { background-color: #ff4d4d; }
-        .type-Splash { background-color: #00d2ff; color: #000; }
-        .type-Single { background-color: #555; }
-        .type-Farm { background-color: #28a745; }
-        .type-Crate { background-color: #ff69b4; }
-
-        .info-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
-        .info-table th, .info-table td { padding: 8px; text-align: center; border-bottom: 1px solid #333; font-size: 13px; color: #ffffff; }
-        .info-table th { background-color: #14142b; color: #ffffff; font-weight: normal; }
-        .info-table td { color: #ffffff; }
-        .hidden-row { display: none; }
-
-        .more-btn {
-            width: 100%; padding: 10px; background-color: #333; color: #fff;
-            border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.2s; font-size: 13px;
+        .clear-btn:hover {
+            background-color: #777;
         }
-        .more-btn:hover { background-color: #444; }
 
-        .sign-calc-box { margin-top: 20px; padding: 15px; background-color: #14142b; border-radius: 8px; border: 1px solid #444; }
-        .sign-header { font-size: 14px; font-weight: bold; margin-bottom: 10px; color: #ffca28; }
-        .sign-controls { display: flex; gap: 10px; margin-bottom: 10px; }
-        .sign-select { padding: 6px; border-radius: 5px; background: #2c2c44; color: white; border: 1px solid #555; flex: 1; font-size: 12px; }
-        .sign-result { font-size: 16px; color: #00e5ff; font-weight: bold; text-align: right; }
-
-        /* 거래 계산기 스타일 */
-        .trade-container { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; }
-        .trade-box { flex: 1; min-width: 280px; background: #1e1e2f; border-radius: 12px; padding: 15px; border: 2px solid #333; display: flex; flex-direction: column; }
-        .trade-slots { background: #12121a; border-radius: 8px; min-height: 200px; padding: 8px; display: grid; grid-template-columns: repeat(3, 1fr); grid-auto-rows: 70px; gap: 8px; margin-bottom: 15px; }
-        .mini-card { background: #2a2a40; border-radius: 6px; position: relative; cursor: pointer; border: 1px solid #444; overflow: hidden; }
-        .mini-card img { width: 100%; height: 100%; object-fit: cover; }
-        .mini-val { position: absolute; bottom: 0; width: 100%; background: rgba(0,0,0,0.8); font-size: 9px; text-align: center; color: #00e5ff; }
-        .signed-badge-overlay { position: absolute; top: 0; left: 0; background: linear-gradient(45deg, #FFD700, #ff8c00); color: black; font-size: 9px; font-weight: bold; padding: 2px 5px; border-bottom-right-radius: 6px; }
-        .add-btn { background: #28a745; color: white; border: none; padding: 10px; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: auto; }
-        
-        .result-panel { background: #252535; margin-top: 20px; padding: 15px; border-radius: 10px; text-align: center; display: none; }
-        .status-badge { padding: 6px 15px; border-radius: 15px; font-size: 16px; font-weight: bold; display: inline-block; margin-bottom: 8px; }
-        .win { background: #28a745; color: white; } .fair { background: #ffc107; color: black; } .loss { background: #dc3545; color: white; }
-
+        /* 반응형 */
         @media (max-width: 768px) {
-            .nav-bar { padding: 10px; }
-            .card-image { height: 120px; }
+            .container { flex-direction: column; }
+            .unit-list-panel, .calculator-panel { height: auto; max-height: 50vh; }
         }
     </style>
 </head>
 <body>
 
-    <nav class="nav-bar">
-        <div class="nav-left">
-            <button class="nav-btn active" onclick="switchMode('list')">📜 Value</button>
-            <button class="nav-btn" onclick="switchMode('trade')">⚖️ Calc</button>
-        </div>
-        <div class="nav-right">
-            <a href="https://discord.gg/eV2QWsDCVt" target="_blank" class="link-btn btn-discord">💬</a>
-            <a href="https://www.roblox.com/ko/games/86606841278895/Toilet-Basic-Tower-Defense" target="_blank" class="link-btn btn-game">🎮</a>
-        </div>
-    </nav>
+    <h1>💎 NATD 거래 가치 계산기</h1>
 
     <div class="container">
-        <div id="view-list" class="view-section active">
-            <h1 id="page-title">🔥 Toilet Basic Tower Defense 🔥</h1>
+        <!-- 왼쪽 패널: 유닛 선택창 -->
+        <div class="unit-list-panel">
+            <input type="text" id="searchInput" class="search-bar" placeholder="유닛 이름 검색..." onkeyup="filterUnits()">
+            <div id="unitGrid" class="grid-container">
+                <!-- 자바스크립트로 유닛 생성됨 -->
+            </div>
+        </div>
+
+        <!-- 오른쪽 패널: 계산된 유닛 & 총합 -->
+        <div class="calculator-panel">
+            <div class="calc-header">선택된 유닛 목록</div>
+            <div id="selectedList" class="selected-list">
+                <!-- 선택한 유닛이 여기에 추가됨 -->
+            </div>
             
-            <div class="sort-bar">
-                <button class="sort-btn active" onclick="setSort('rarity')">⭐ Rarity</button>
-                <button class="sort-btn" onclick="setSort('type')">🎯 Type</button>
-                <button class="sort-btn" onclick="setSort('value')">💎 Value</button>
-                <button class="sort-btn reverse-btn" onclick="toggleReverse()">🔄 Reverse</button>
+            <div class="total-box">
+                총 가치: <span id="totalValue">0</span> 젬
             </div>
-
-            <div class="unit-grid" id="value-list-grid"></div>
-        </div>
-
-        <div id="view-trade" class="view-section">
-            <h1>⚖️ Trade Calculator</h1>
-            <div class="trade-container">
-                <div class="trade-box">
-                    <div style="text-align:center; color:#4facfe; font-weight:bold; margin-bottom:10px;">Your Offer</div>
-                    <div class="trade-slots" id="slots-me"></div>
-                    <div style="text-align:center; background:#000; padding:10px; border-radius:8px;">
-                        <div style="color:#ffffff; font-size:12px;">Total Value</div>
-                        <div style="color:#00e5ff; font-size:20px; font-weight:bold;" id="total-me">0</div>
-                    </div>
-                    <button class="add-btn" onclick="openSelector('me')">+ Add Unit</button>
-                </div>
-                <div class="trade-box">
-                    <div style="text-align:center; color:#ff6b6b; font-weight:bold; margin-bottom:10px;">Other Offer</div>
-                    <div class="trade-slots" id="slots-partner"></div>
-                    <div style="text-align:center; background:#000; padding:10px; border-radius:8px;">
-                        <div style="color:#ffffff; font-size:12px;">Total Value</div>
-                        <div style="color:#00e5ff; font-size:20px; font-weight:bold;" id="total-partner">0</div>
-                    </div>
-                    <button class="add-btn" onclick="openSelector('partner')">+ Add Unit</button>
-                </div>
-            </div>
-            <div class="result-panel" id="result-panel">
-                <div id="result-badge" class="status-badge">Fair</div>
-                <div id="result-text" style="color:#ccc;">Diff: 0</div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal-overlay" id="selector-modal">
-        <div class="modal-content">
-            <span class="close-modal" onclick="closeSelector()">×</span>
-            <h2 style="text-align:center;">Select Item</h2>
-            <div style="text-align:center; margin-bottom:20px; background:#14142b; padding:10px; border-radius:8px; border:1px solid #444;">
-                <label for="trade-sign-select" style="color:#ffca28; font-weight:bold; margin-right:10px;">✍️ Signature:</label>
-                <select id="trade-sign-select" style="padding:6px; border-radius:5px; background:#2c2c44; color:white; border:1px solid #555;">
-                    <option value="1">Unsigned (x1)</option>
-                    <option value="1.5">Partner (x1.5)</option>
-                    <option value="2">Developer (x2)</option>
-                    <option value="3">Co-Owner (x3)</option>
-                    <option value="4">CEO (x4)</option>
-                </select>
-            </div>
-            <div class="unit-grid" id="modal-grid"></div>
-        </div>
-    </div>
-
-    <div class="modal-overlay" id="stat-modal">
-        <div class="modal-content">
-            <span class="close-modal" onclick="closeStatModal()">×</span>
-            <div class="stat-header">
-                <div class="stat-img-wrapper">
-                    <img src="" id="detail-img">
-                    <div id="modal-tier-badge" class="tier-badge">S</div>
-                </div>
-                <div class="stat-title">
-                    <h2 id="detail-name">Unit Name</h2>
-                    <div class="stat-meta">
-                        <span id="detail-type" class="type-badge">AOE</span>
-                    </div>
-                </div>
-            </div>
-            <table class="info-table">
-                <thead id="stat-table-head"></thead>
-                <tbody id="stat-table-body"></tbody>
-            </table>
-            <button class="more-btn" id="more-stats-btn" onclick="toggleMoreStats()">🔽 Show More Levels</button>
-            <div class="sign-calc-box" id="sign-calc-container">
-                <div class="sign-header">✍️ Signed Value Calculator</div>
-                <div class="sign-controls">
-                    <select id="signer-role" class="sign-select" onchange="updateSignValue()">
-                        <option value="1">Unsigned / None (x1)</option>
-                        <option value="1.5">Partner (x1.5)</option>
-                        <option value="2">Developer (x2)</option>
-                        <option value="3">Co-Owner (x3)</option>
-                        <option value="4">CEO (x4)</option>
-                    </select>
-                </div>
-                <div class="sign-result">Est. Value: <span id="sign-val-display">0</span></div>
-            </div>
+            <button class="clear-btn" onclick="clearCalculator()">초기화 (Clear All)</button>
         </div>
     </div>
 
     <script>
-        // =========================================================
-        // [DATA] 유닛 데이터
-        // =========================================================
+        // 요청하신 20종 유닛 데이터 설정 (분류, 가치, 이미지 경로 정확히 매칭)
         const unitData = [
-            { name: "Cameragirl", rarity: "common", value: 1, img: "Cameragirl.png", tier: "C", type: "Single", category:"unit", stats: [{ lv:1, dmg:5, cool:1, range:10, price:100 }, { lv:2, dmg:10, cool:0.8, range:15, price:200 }] },
-            { name: "Cameraman", rarity: "common", value: 1, img: "Cameraman.png", tier: "C", type: "Single", category:"unit", stats: [{ lv:1, dmg:20, cool:1, range:15, price:100 }, { lv:2, dmg:30, cool:0.5, range:20, price:200 }] },
-            { name: "Speakerman", rarity: "common", value: 1, img: "Speakerman.png", tier: "C", type: "AOE", category:"unit", stats: [{ lv:1, dmg:10, cool:1, range:15, price:100 }, { lv:2, dmg:30, cool:0.4, range:15, price:250 }] },
-            { name: "Tvman", rarity: "common", value: 1, img: "Tvman.png", tier: "C", type: "AOE", category:"unit", stats: [{ lv:1, dmg:20, cool:0.8, range:10, price:200 }, { lv:2, dmg:40, cool:0.6, range:15, price:300 }, { lv:3, dmg:60, cool:0.4, range:20, price:350 }] },
-            { name: "Large Cameraman", rarity: "uncommon", value: 5, img: "Large Cameraman.png", tier: "C", type: "Single", category:"unit", stats: [{ lv:1, dmg:30, cool:0.7, range:15, price:200 }, { lv:2, dmg:50, cool:0.5, range:25, price:400 }, { lv:3, dmg:100, cool:0.4, range:30, price:600 }] },
-            { name: "Tree Cameraman", rarity: "rare", value: 5, img: "Tree Cameraman.png", tier: "B", type: "Splash", category:"unit", stats: [{ lv:1, dmg:150, cool:1.5, range:15, price:200 }, { lv:2, dmg:400, cool:1.3, range:25, price:300 }, { lv:3, dmg:500, cool:1, range:30, price:600 }] },
-            { name: "Large Tvman", rarity: "rare", value: 6, img: "Large Tvman.png", tier: "B", type: "AOE", category:"unit", stats: [{ lv:1, dmg:30, cool:1, range:15, price:300 }, { lv:2, dmg:65, cool:0.5, range:25, price:450 }, { lv:3, dmg:85, cool:0.4, range:30, price:800 }] },
-            { name: "Large Speakerman", rarity: "rare", value: 8, img: "Large Speakerman.png", tier: "B", type: "AOE", category:"unit", stats: [{ lv:1, dmg:50, cool:1, range:20, price:200 }, { lv:2, dmg:80, cool:0.5, range:25, price:350 }, { lv:3, dmg:150, cool:0.3, range:30, price:500 }] },
-            { name: "Santa Speakerman", rarity: "epic", value: 10, img: "Santa Speakerman.png", tier: "B", type: "Splash", category:"unit", stats: [{ lv:1, dmg:300, cool:1.7, range:20, price:300 }, { lv:2, dmg:600, cool:1.4, range:25, price:600 }, { lv:3, dmg:800, cool:1.2, range:30, price:1100 }, { lv:4, dmg:1200, cool:1, range:35, price:2000 }] },
-            { name: "Camerawoman", rarity: "epic", value: 10, img: "Camerawoman.png", tier: "B", type: "Single", category:"unit", stats: [{ lv:1, dmg:40, cool:0.5, range:20, price:350 }, { lv:2, dmg:60, cool:0.5, range:25, price:400 }, { lv:3, dmg:85, cool:0.4, range:30, price:650 }, { lv:4, dmg:95, cool:0.2, range:30, price:1000 }] },
-            { name: "Dark Speakerman", rarity: "epic", value: 16, img: "Dark Speakerman.png", tier: "A", type: "Single", category:"unit", stats: [{ lv:1, dmg:150, cool:1, range:20, price:200 }, { lv:2, dmg:200, cool:0.5, range:25, price:500 }, { lv:3, dmg:300, cool:0.3, range:30, price:850 }, { lv:4, dmg:400, cool:0.2, range:35, price:1300 }] },
-            { name: "Titan Cameraman", rarity: "legendary", value: 18, img: "Titan Cameraman.png", tier: "B", type: "Single", category:"unit", stats: [{ lv:1, dmg:800, cool:1, range:30, price:1750 }, { lv:2, dmg:1400, cool:0.5, range:35, price:3000 }, { lv:3, dmg:2000, cool:0.2, range:40, price:5500 }] },
-            { name: "Titan Tvman", rarity: "legendary", value: 18, img: "Titan Tvman.png", tier: "B", type: "AOE", category:"unit", stats: [{ lv:1, dmg:550, cool:1, range:20, price:1100 }, { lv:2, dmg:750, cool:0.5, range:25, price:2500 }, { lv:3, dmg:1300, cool:0.2, range:35, price:4500 }] },
-            { name: "Dark Speakerman(Jetpack)", rarity: "legendary", value: 18, img: "Dark Speakerman(Jetpack).png", tier: "B", type: "Single", category:"unit", stats: [{ lv:1, dmg:250, cool:1, range:25, price:500 }, { lv:2, dmg:350, cool:0.75, range:30, price:750 }, { lv:3, dmg:800, cool:0.5, range:35, price:1300 }] },
-            { name: "Tvwoman", rarity: "legendary", value: 20, img: "Tvwoman.png", tier: "B", type: "AOE", category:"unit", stats: [{ lv:1, dmg:100, cool:0.6, range:25, price:250 }, { lv:2, dmg:250, cool:0.3, range:30, price:700 }, { lv:3, dmg:400, cool:0.2, range:35, price:1200 }] },
-            { name: "Speakerwoman", rarity: "legendary", value: 35, img: "Speakerwoman.png", tier: "A", type: "AOE", category:"unit", stats: [{ lv:1, dmg:200, cool:1, range:25, price:250 }, { lv:2, dmg:300, cool:0.5, range:30, price:600 }, { lv:3, dmg:450, cool:0.2, range:35, price:1200 }] },
-            { name: "Ninja Cameraman", rarity: "legendary", value: 50, img: "Ninja Cameraman.png", tier: "A", type: "Single", category:"unit", stats: [{ lv:1, dmg:250, cool:0.5, range:20, price:300 }, { lv:2, dmg:500, cool:0.4, range:30, price:450 }, { lv:3, dmg:750, cool:0.2, range:35, price:900 }] },
-            { name: "Rudolf Tvman", rarity: "legendary", value: 50, img: "Rudolf Tvman.png", tier: "A", type: "Farm", category:"unit", stats: [{ lv:1, dmg:100, cool:0, range:0, price:150 }, { lv:2, dmg:250, cool:0, range:0, price:450 }, { lv:3, dmg:400, cool:0, range:0, price:1000 }, { lv:4, dmg:600, cool:0, range:0, price:1500 }] },
-            { name: "Titan Cinemaman", rarity: "mythical", value: 1500, img: "Titan Cinemaman.png", tier: "A", type: "AOE", category:"unit", stats: [{ lv:1, dmg:1000, cool:0.5, range:25, price:2000 }, { lv:2, dmg:2500, cool:0.3, range:30, price:7000 }, { lv:3, dmg:3500, cool:0.2, range:35, price:9500 }, { lv:4, dmg:4000, cool:0.2, range:40, price:13500 }] },
-            { name: "Upgrade Titan Speakerman", rarity: "mythical", value: 1500, img: "Upgrade Titan Speakerman.png", tier: "A", type: "Splash", category:"unit", stats: [{ lv:1, dmg:1500, cool:1.1, range:30, price:1500 }, { lv:2, dmg:3500, cool:0.8, range:40, price:5000 }, { lv:3, dmg:5000, cool:0.5, range:45, price:10000 }, { lv:4, dmg:6000, cool:0.4, range:50, price:12000 }] },
-            { name: "Upgrade Titan Cameraman", rarity: "mythical", value: 2000, img: "Upgrade Titan Cameraman.png", tier: "A", type: "AOE", category:"unit", stats: [{ lv:1, dmg:2500, cool:0.5, range:35, price:2000 }, { lv:2, dmg:3500, cool:0.4, range:40, price:7000 }, { lv:3, dmg:5500, cool:0.3, range:45, price:10000 }, { lv:4, dmg:7500, cool:0.2, range:55, price:15000 }] },
+            // Common
+            { name: "Noob", rarity: "Common", value: 1, img: "NATD/Noob.png" },
             
-            { name: "Gingerbread Titan Speakerman 1.0", rarity: "mythical", value: 37000, img: "Gingerbread Titan Speakerman 1.0.png", tier: "S", type: "AOE", category:"unit", stats: [{ lv:1, dmg:2500, cool:1, range:20, price:1500 }, { lv:2, dmg:4500, cool:0.6, range:35, price:7500 }, { lv:3, dmg:6000, cool:0.4, range:40, price:10000 }, { lv:4, dmg:7500, cool:0.2, range:45, price:12000 }] },
-
-            { name: "Upgrade Titan Tvman", rarity: "absolute", value: 35000, img: "Upgrade Titan Tvman.png", tier: "S", type: "AOE", category:"unit", stats: [{ lv:1, dmg:2500, cool:1, range:35, price:2500 }, { lv:2, dmg:5000, cool:0.5, range:40, price:5500 }, { lv:3, dmg:7500, cool:0.3, range:45, price:10000 }, { lv:4, dmg:8500, cool:0.2, range:50, price:12000 }, { lv:5, dmg:9500, cool:0.2, range:60, price:16000 }] },
-            { name: "Injured Upgrade Titan Speakerman", rarity: "exclusive", value: 35, img: "Injured Upgrade Titan Speakerman.png", tier: "A", type: "Splash", category:"unit", stats: [{ lv:1, dmg:1500, cool:1, range:35, price:2000 }, { lv:2, dmg:2000, cool:0.7, range:45, price:6000 }, { lv:3, dmg:3500, cool:0.4, range:50, price:8500 }] },
-            { name: "Saw Titan Cameraman", rarity: "exclusive", value: 35, img: "Saw Titan Cameraman.png", tier: "B", type: "Single", category:"unit", stats: [{ lv:1, dmg:1000, cool:1, range:20, price:1500 }, { lv:2, dmg:1500, cool:0.5, range:30, price:5000 }, { lv:3, dmg:2500, cool:0.3, range:35, price:7500 }] },
-            { name: "Poison Titan Cameraman", rarity: "exclusive", value: 70, img: "Poison Titan Cameraman.png", tier: "A", type: "Splash", category:"unit", stats: [{ lv:1, dmg:1000, cool:1, range:25, price:1500 }, { lv:2, dmg:2000, cool:0.5, range:35, price:6500 }, { lv:3, dmg:3500, cool:0.25, range:40, price:11000 }] },
+            // Uncommon
+            { name: "Soldier Noob", rarity: "Uncommon", value: 3, img: "NATD/Soldier Noob.png" },
+            { name: "Zombie Noob", rarity: "Uncommon", value: 3, img: "NATD/Zombie Noob.png" },
             
-            { name: "Scientist Cameraman", rarity: "exclusive", value: 700, img: "Scientist Cameraman.png", tier: "S", type: "Farm", category:"unit", stats: [{ lv:1, dmg:200, cool:0, range:0, price:200 }, { lv:2, dmg:600, cool:0, range:0, price:200 }, { lv:3, dmg:800, cool:0, range:0, price:600 }, { lv:4, dmg:1000, cool:0, range:0, price:1000 }] },
-
-            { name: "Jetpack Cameraman", rarity: "exclusive", value: 1750, img: "Jetpack Cameraman.png", tier: "A", type: "Single", category:"unit", stats: [{ lv:1, dmg:1500, cool:1.5, range:40, price:400 }, { lv:2, dmg:2500, cool:1.2, range:45, price:3000 }, { lv:3, dmg:4000, cool:1, range:50, price:5000 }] },
-            { name: "Titan Speakerman", rarity: "exclusive", value: 3500, img: "Titan Speakerman.png", tier: "A", type: "Single", category:"unit", stats: [{ lv:1, dmg:1500, cool:1.5, range:30, price:1500 }, { lv:2, dmg:2000, cool:1, range:35, price:3500 }, { lv:3, dmg:3500, cool:0.5, range:40, price:5500 }] },
+            // Rare
+            { name: "Boxer Noob", rarity: "Rare", value: 6, img: "NATD/Boxer Noob.png" },
+            { name: "SledgeHammer Noob", rarity: "Rare", value: 7, img: "NATD/SledgeHammer Noob.png" },
+            { name: "Spear Noob", rarity: "Rare", value: 10, img: "NATD/Spear Noob.png" },
             
-            { name: "Flamethrower Cameraman", rarity: "exclusive", value: 3500, img: "Flamethrower Cameraman.png", tier: "S", type: "Single", category:"unit", stats: [{ lv:1, dmg:150, cool:1, range:20, price:300 }, { lv:2, dmg:300, cool:0.85, range:25, price:1500 }, { lv:3, dmg:650, cool:0.3, range:35, price:4000 }, { lv:4, dmg:750, cool:0.2, range:40, price:5500 }] },
-
-            { name: "Hyper Titan Speakerman", rarity: "exclusive", value: 26250, img: "Hyper Titan Speakerman.png", tier: "S", type: "AOE", category:"unit", stats: [{ lv:1, dmg:2000, cool:1, range:30, price:3000 }, { lv:2, dmg:3500, cool:0.6, range:35, price:6500 }, { lv:3, dmg:5500, cool:0.4, range:40, price:12000 }, { lv:4, dmg:7000, cool:0.35, range:45, price:14000 }] },
-            { name: "Astro Titan Cameraman", rarity: "exclusive", value: 87500, img: "Astro Titan Cameraman.png", tier: "S", type: "Splash", category:"unit", stats: [{ lv:1, dmg:2500, cool:1, range:30, price:2500 }, { lv:2, dmg:4500, cool:0.8, range:35, price:6500 }, { lv:3, dmg:7000, cool:0.6, range:45, price:11000 }, { lv:4, dmg:8500, cool:0.4, range:55, price:13000 }, { lv:5, dmg:9500, cool:0.2, range:60, price:17500 }] },
-            { name: "Christmas Crate", rarity: "crate", value: 70, img: "Christmas Crate.png", category: "crate", type: "Crate", contains: [{ name: "Tree Cameraman", prob: "50%" }, { name: "Santa Speakerman", prob: "34%" }, { name: "Rudolf Tvman", prob: "15.5%" }, { name: "Gingerbread Titan Speakerman 1.0", prob: "0.5%" }] },
-            { name: "TITAN SPEAKERMAN CRATE", rarity: "crate", value: 150, img: "TITAN SPEAKERMAN CRATE.png", category: "crate", type: "Crate", contains: [{ name: "Injured Upgrade Titan Speakerman", prob: "99%" }, { name: "Hyper Titan Speakerman", prob: "1%" }] },
-            { name: "TITAN CAMERAMAN CRATE", rarity: "crate", value: 200, img: "TITAN CAMERAMAN CRATE.png", category: "crate", type: "Crate", contains: [{ name: "Saw Titan Cameraman", prob: "60%" }, { name: "Poison Titan Cameraman", prob: "39.9%" }, { name: "Astro Titan Cameraman", prob: "0.1%" }] }
+            // Epic
+            { name: "Knight Noob", rarity: "Epic", value: 40, img: "NATD/Knight Noob.png" },
+            { name: "Medic Noob", rarity: "Epic", value: 20, img: "NATD/Medic Noob.png" },
+            { name: "Ninja Noob", rarity: "Epic", value: 70, img: "NATD/Ninja Noob.png" },
+            { name: "Shielder Noob", rarity: "Epic", value: 70, img: "NATD/Shielder Noob.png" },
+            
+            // Legendary
+            { name: "Barbarian Noob", rarity: "Legendary", value: 150, img: "NATD/Barbarian Noob.png" },
+            { name: "Builder Noob", rarity: "Legendary", value: 300, img: "NATD/Builder Noob.png" },
+            { name: "Gunner Noob", rarity: "Legendary", value: 100, img: "NATD/Gunner Noob.png" },
+            { name: "Nature Noob", rarity: "Legendary", value: 250, img: "NATD/Nature Noob.png" },
+            
+            // Mythical
+            { name: "Hologram Noob", rarity: "Mythical", value: 3000, img: "NATD/Hologram Noob.png" },
+            { name: "King Noob", rarity: "Mythical", value: 2000, img: "NATD/King Noob.png" },
+            { name: "Laser Noob", rarity: "Mythical", value: 800, img: "NATD/Laser Noob.png" },
+            { name: "Magical Noob", rarity: "Mythical", value: 1500, img: "NATD/Magical Noob.png" },
+            
+            // Exclusive
+            { name: "Fairy Noob", rarity: "Exclusive", value: 250, img: "NATD/Fairy Noob.png" },
+            { name: "Mafia Noob", rarity: "Exclusive", value: 900, img: "NATD/Mafia Noob.png" }
         ];
 
-        // --- 전역 변수 ---
-        let currentSortMode = 'rarity'; 
-        let isDescending = false; 
-        let tradeState = { me: [], partner: [] };
-        let currentSelectorSide = null;
-        let currentViewingUnitIndex = -1;
+        let selectedUnits = [];
 
-        const rarityOrder = { "common": 1, "uncommon": 2, "rare": 3, "epic": 4, "legendary": 5, "mythical": 6, "absolute": 7, "exclusive": 8, "crate": 9 };
-        const typeOrder = { "Single": 1, "Farm": 2, "Splash": 3, "AOE": 4, "Crate": 5 };
-
-        window.onload = function() { sortAndRender(); };
-
-        function switchMode(mode) {
-            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-            if(mode === 'list') document.querySelector('.nav-btn:nth-child(1)').classList.add('active');
-            else document.querySelector('.nav-btn:nth-child(2)').classList.add('active');
-            document.querySelectorAll('.view-section').forEach(view => view.classList.remove('active'));
-            document.getElementById('view-' + mode).classList.add('active');
-        }
-
-        function setSort(mode) {
-            currentSortMode = mode;
-            document.querySelectorAll('.sort-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-            isDescending = (mode === 'value');
-            sortAndRender();
-        }
-
-        function toggleReverse() { isDescending = !isDescending; sortAndRender(); }
-
-        function sortAndRender() {
-            unitData.sort((a, b) => {
-                let diff = 0;
-                if (currentSortMode === 'rarity') {
-                    diff = rarityOrder[a.rarity] - rarityOrder[b.rarity];
-                    if (diff === 0) diff = a.value - b.value;
-                } else if (currentSortMode === 'type') {
-                    diff = (typeOrder[a.type] || 0) - (typeOrder[b.type] || 0);
-                    if (diff === 0) diff = a.value - b.value;
-                } else if (currentSortMode === 'value') {
-                    diff = a.value - b.value;
-                }
-                return isDescending ? -diff : diff;
-            });
-            renderValueList();
-        }
-
-        function renderValueList() {
-            const grid = document.getElementById('value-list-grid');
+        // 왼쪽 패널에 유닛 목록 렌더링
+        function renderUnits(filterText = "") {
+            const grid = document.getElementById('unitGrid');
             grid.innerHTML = '';
-            unitData.forEach((unit, index) => {
-                const card = document.createElement('div');
-                card.className = 'unit-card';
-                const tierClass = unit.category === 'crate' ? 'tier-none' : (unit.tier ? 'tier-' + unit.tier : 'tier-none');
-                const tierHtml = unit.category === 'crate' ? '' : `<div class="${tierClass} tier-badge">${unit.tier}</div>`;
-                card.innerHTML = `
-                    <div class="card-image">
-                        <img src="${unit.img}" onerror="this.src='https://via.placeholder.com/150?text=${unit.name}'">
-                        <div class="unit-tags"><span class="tag ${unit.rarity}">${unit.rarity}</span></div>
-                        ${tierHtml}
-                    </div>
-                    <div class="card-info">
+
+            unitData.forEach(unit => {
+                if (unit.name.toLowerCase().includes(filterText.toLowerCase())) {
+                    const card = document.createElement('div');
+                    card.className = `unit-card`;
+                    // 카드 클릭 시 계산기에 추가
+                    card.onclick = () => addUnitToCalc(unit);
+
+                    card.innerHTML = `
+                        <img src="${unit.img}" alt="${unit.name}" onerror="this.src='https://via.placeholder.com/80?text=No+Image'">
+                        <div class="unit-rarity ${unit.rarity}">${unit.rarity}</div>
                         <div class="unit-name">${unit.name}</div>
-                        <div class="price-box"><p class="price-text">💎 ${unit.value.toLocaleString()}</p></div>
-                    </div>
-                `;
-                card.onclick = () => openStatModal(index);
-                grid.appendChild(card);
-            });
-        }
-
-        function openStatModal(index) {
-            currentViewingUnitIndex = index; const unit = unitData[index];
-            const modal = document.getElementById('stat-modal');
-            document.getElementById('detail-img').src = unit.img;
-            document.getElementById('detail-name').innerText = unit.name;
-            const tBadge = document.getElementById('modal-tier-badge');
-            const typeBadge = document.getElementById('detail-type');
-            typeBadge.className = 'type-badge type-' + (unit.type || 'Single');
-            typeBadge.innerText = unit.type || 'Single';
-
-            if (unit.category === 'crate') {
-                tBadge.style.display = 'none'; document.getElementById('sign-calc-container').style.display = 'none';
-                document.getElementById('more-stats-btn').style.display = 'none';
-                document.getElementById('stat-table-head').innerHTML = `<tr><th>Unit Name</th><th>Prob%</th><th>Rarity</th><th>Value</th></tr>`;
-                const tbody = document.getElementById('stat-table-body'); tbody.innerHTML = '';
-                unit.contains.forEach(item => {
-                    const targetUnit = unitData.find(u => u.name === item.name);
-                    const r = targetUnit ? targetUnit.rarity : "?"; const v = targetUnit ? targetUnit.value.toLocaleString() : "?";
-                    const row = document.createElement('tr');
-                    row.innerHTML = `<td style="text-align:left; padding-left:10px;">${item.name}</td><td style="color:#ffca28; font-weight:bold;">${item.prob}</td><td><span class="tag ${r}" style="font-size:8px;">${r}</span></td><td style="color:#00e5ff;">💎${v}</td>`;
-                    tbody.appendChild(row);
-                });
-            } else {
-                tBadge.style.display = 'flex'; tBadge.className = 'tier-badge tier-' + (unit.tier || 'none'); tBadge.innerText = unit.tier || '?';
-                document.getElementById('sign-calc-container').style.display = 'block'; document.getElementById('signer-role').value = "1";
-                updateSignValue();
-                const isFarm = unit.type === 'Farm';
-                document.getElementById('stat-table-head').innerHTML = isFarm ? '<tr><th>Lv</th><th>Income</th><th>Price</th></tr>' : '<tr><th>Lv</th><th>Dmg</th><th>Cool</th><th>Range</th><th>Price</th></tr>';
-                const tbody = document.getElementById('stat-table-body'); tbody.innerHTML = '';
-                if (unit.stats) {
-                    unit.stats.forEach((s, idx) => {
-                        const row = document.createElement('tr'); if (idx > 0) row.classList.add('hidden-row');
-                        row.innerHTML = isFarm ? `<td>${s.lv}</td><td style="color:#28a745; font-weight:bold;">+$${s.dmg.toLocaleString()}</td><td style="color:#ffff00;">$${s.price.toLocaleString()}</td>` : `<td>${s.lv}</td><td style="color:#ff6b6b; font-weight:bold;">${s.dmg.toLocaleString()}</td><td>${s.cool}s</td><td>${s.range}</td><td style="color:#ffff00;">$${s.price.toLocaleString()}</td>`;
-                        tbody.appendChild(row);
-                    });
-                    document.getElementById('more-stats-btn').style.display = unit.stats.length > 1 ? 'block' : 'none';
-                    document.getElementById('more-stats-btn').innerText = "🔽 Show More Levels";
+                        <div class="unit-value">💎 ${unit.value.toLocaleString()}</div>
+                    `;
+                    grid.appendChild(card);
                 }
-            }
-            modal.style.display = 'flex';
+            });
         }
 
-        function closeStatModal() { document.getElementById('stat-modal').style.display = 'none'; currentViewingUnitIndex = -1; }
-
-        function updateSignValue() {
-            if (currentViewingUnitIndex === -1) return;
-            const unit = unitData[currentViewingUnitIndex]; if (unit.category === 'crate') return;
-            const roleMult = parseFloat(document.getElementById('signer-role').value);
-            document.getElementById('sign-val-display').innerText = "💎 " + (unit.value * roleMult).toLocaleString();
+        // 검색 필터링 기능
+        function filterUnits() {
+            const text = document.getElementById('searchInput').value;
+            renderUnits(text);
         }
 
-        function toggleMoreStats() {
-            const hiddenRows = document.querySelectorAll('.hidden-row');
-            if (hiddenRows.length > 0) {
-                hiddenRows.forEach(row => { row.classList.remove('hidden-row'); row.classList.add('shown-row'); });
-                document.getElementById('more-stats-btn').innerText = "🔼 Hide Levels";
-            } else {
-                document.querySelectorAll('.shown-row').forEach(row => { row.classList.remove('shown-row'); row.classList.add('hidden-row'); });
-                document.getElementById('more-stats-btn').innerText = "🔽 Show More Levels";
-            }
+        // 유닛을 오른쪽 계산기에 추가
+        function addUnitToCalc(unit) {
+            selectedUnits.push(unit);
+            updateCalcView();
         }
 
-        // --- 거래 계산기 로직 ---
-        function openSelector(side) {
-            currentSelectorSide = side; document.getElementById('selector-modal').style.display = 'flex';
-            const grid = document.getElementById('modal-grid'); grid.innerHTML = '';
-            document.getElementById('trade-sign-select').value = "1";
-            unitData.forEach((unit, index) => {
-                const card = document.createElement('div'); card.className = 'unit-card';
-                const tierClass = unit.category === 'crate' ? 'tier-none' : (unit.tier ? 'tier-' + unit.tier : 'tier-none');
-                card.innerHTML = `
-                    <div class="card-image" style="height:120px;">
-                        <img src="${unit.img}" onerror="this.src='https://via.placeholder.com/150'">
-                        <div class="unit-tags"><span class="tag ${unit.rarity}">${unit.rarity}</span></div>
-                        <div class="${tierClass} tier-badge" style="width:24px; height:24px; font-size:12px; top:4px; right:4px;">${unit.tier}</div>
+        // 유닛을 계산기에서 제거
+        function removeUnit(index) {
+            selectedUnits.splice(index, 1);
+            updateCalcView();
+        }
+
+        // 전체 초기화
+        function clearCalculator() {
+            selectedUnits = [];
+            updateCalcView();
+        }
+
+        // 오른쪽 패널 (계산기 영역) UI 업데이트
+        function updateCalcView() {
+            const list = document.getElementById('selectedList');
+            const totalDisplay = document.getElementById('totalValue');
+            
+            list.innerHTML = '';
+            let total = 0;
+
+            selectedUnits.forEach((unit, index) => {
+                total += unit.value;
+                
+                const item = document.createElement('div');
+                item.className = `selected-item ${unit.rarity}`;
+                
+                item.innerHTML = `
+                    <div>
+                        <strong>${unit.name}</strong> <br>
+                        <span style="font-size:12px; color:#ccc;">💎 ${unit.value.toLocaleString()} 젬</span>
                     </div>
-                    <div class="card-info"><div class="unit-name" style="font-size:12px;">${unit.name}</div><div class="price-text">💎 ${unit.value.toLocaleString()}</div></div>
+                    <button class="remove-btn" onclick="removeUnit(${index})">X</button>
                 `;
-                card.onclick = () => addItemToTrade(index); grid.appendChild(card);
+                list.appendChild(item);
             });
+
+            // 총합 업데이트
+            totalDisplay.innerText = total.toLocaleString();
         }
-        function closeSelector() { document.getElementById('selector-modal').style.display = 'none'; }
-        function addItemToTrade(index) {
-            const unit = unitData[index]; const roleMult = parseFloat(document.getElementById('trade-sign-select').value);
-            let signLabel = "";
-            if(roleMult === 1.5) signLabel = "Partner"; else if(roleMult === 2) signLabel = "Developer";
-            else if(roleMult === 3) signLabel = "Co-Owner"; else if(roleMult === 4) signLabel = "CEO";
-            tradeState[currentSelectorSide].push({ ...unit, id: Date.now(), finalValue: unit.value * roleMult, signLabel: signLabel });
-            updateTradeUI(); closeSelector();
-        }
-        function removeItem(side, id) { tradeState[side] = tradeState[side].filter(i => i.id !== id); updateTradeUI(); }
-        function updateTradeUI() { renderSlots('me'); renderSlots('partner'); calcResult(); }
-        function renderSlots(side) {
-            const container = document.getElementById(`slots-${side}`); let total = 0; container.innerHTML = '';
-            tradeState[side].forEach(item => {
-                total += item.finalValue; const slot = document.createElement('div'); slot.className = 'mini-card';
-                let badgeHtml = item.signLabel ? `<div class="signed-badge-overlay">${item.signLabel}</div>` : "";
-                slot.innerHTML = `<img src="${item.img}" onerror="this.src='https://via.placeholder.com/150'">${badgeHtml}<div class="mini-val">💎 ${item.finalValue.toLocaleString()}</div>`;
-                slot.onclick = () => removeItem(side, item.id); container.appendChild(slot);
-            });
-            document.getElementById(`total-${side}`).innerText = total.toLocaleString();
-        }
-        function calcResult() {
-            const me = tradeState.me.reduce((a,b) => a + b.finalValue, 0); const partner = tradeState.partner.reduce((a,b) => a + b.finalValue, 0);
-            const panel = document.getElementById('result-panel'); if(me===0 && partner===0) { panel.style.display='none'; return; }
-            panel.style.display='block'; const badge = document.getElementById('result-badge'); const txt = document.getElementById('result-text');
-            const diff = partner - me;
-            if(diff > 0) { badge.innerText="WIN"; badge.className="status-badge win"; txt.innerText=`+${diff.toLocaleString()} Gems Gain`; }
-            else if(diff < 0) { badge.innerText="LOSS"; badge.className="status-badge loss"; txt.innerText=`${Math.abs(diff).toLocaleString()} Gems Loss`; }
-            else { badge.innerText="FAIR"; badge.className="status-badge fair"; txt.innerText="Perfectly Fair"; }
-        }
+
+        // 최초 실행
+        renderUnits();
     </script>
 </body>
 </html>
