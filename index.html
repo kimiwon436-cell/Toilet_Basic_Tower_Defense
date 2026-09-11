@@ -134,6 +134,12 @@
             border-color: #4a556e;
         }
 
+        .controls-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
         .search-container {
             display: flex;
             gap: 10px;
@@ -142,7 +148,7 @@
             border-radius: 10px;
             padding: 8px 14px;
             align-items: center;
-            margin-bottom: 12px;
+            flex: 1;
         }
 
         .search-input {
@@ -151,6 +157,18 @@
             color: #fff;
             font-size: 14px;
             width: 100%;
+            outline: none;
+        }
+
+        .sort-select {
+            background-color: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 0 14px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
             outline: none;
         }
 
@@ -453,8 +471,16 @@
                 <button class="filter-btn" onclick="setCategory('Common', this)">Common</button>
             </div>
 
-            <div class="search-container">
-                🔍 <input type="text" id="searchInput" class="search-input" placeholder="Search Noob Tower Defense items..." oninput="fastFilter()">
+            <div class="controls-row">
+                <div class="search-container">
+                    🔍 <input type="text" id="searchInput" class="search-input" placeholder="Search Noob Tower Defense items..." oninput="renderValueList()">
+                </div>
+                <select id="sortSelect" class="sort-select" onchange="renderValueList()">
+                    <option value="value-desc">💎 가치순 (높은 순)</option>
+                    <option value="value-asc">💎 가치 역순 (낮은 순)</option>
+                    <option value="rarity-desc">⭐ 등급순 (높은 등급)</option>
+                    <option value="rarity-asc">⭐ 등급 역순 (낮은 등급)</option>
+                </select>
             </div>
 
             <div id="cardGrid" class="card-grid"></div>
@@ -536,7 +562,6 @@
     </div>
 
     <script>
-        // 낮은 등급(Common)부터 높은 등급순으로 정렬된 데이터
         const unitData = [
             { id: 20, name: "Noob", rarity: "Common", tier: "C", value: 1, demand: "1/10", stability: "Stable", img: "Noob.png" },
             { id: 19, name: "Zombie Noob", rarity: "Uncommon", tier: "C", value: 3, demand: "2/10", stability: "Stable", img: "Zombie_Noob.png" },
@@ -560,6 +585,16 @@
             { id: 1, name: "Hologram Noob", rarity: "Mythical", tier: "S", value: 3000, demand: "9/10", stability: "Rising", img: "Hologram_Noob.png" }
         ];
 
+        const rarityWeight = {
+            "Common": 1,
+            "Uncommon": 2,
+            "Rare": 3,
+            "Epic": 4,
+            "Legendary": 5,
+            "Mythical": 6,
+            "Exclusive": 7
+        };
+
         let selectedCategory = 'All';
         let myOffer = [];
         let theirOffer = [];
@@ -574,15 +609,39 @@
             btn.classList.add('active');
         }
 
-        // 1. 가치표 빌드
-        function initValueList() {
+        // 1. 가치표 빌드 및 정렬/검색 처리
+        function renderValueList() {
             const grid = document.getElementById('cardGrid');
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const sortVal = document.getElementById('sortSelect').value;
+            
             grid.innerHTML = '';
 
-            unitData.forEach((unit, idx) => {
+            // 필터링
+            let filtered = unitData.filter(unit => {
+                const matchName = unit.name.toLowerCase().includes(query);
+                const matchCategory = selectedCategory === 'All' || unit.rarity === selectedCategory;
+                return matchName && matchCategory;
+            });
+
+            // 정렬
+            filtered.sort((a, b) => {
+                if (sortVal === 'value-desc') {
+                    return b.value - a.value;
+                } else if (sortVal === 'value-asc') {
+                    return a.value - b.value;
+                } else if (sortVal === 'rarity-desc') {
+                    return rarityWeight[b.rarity] - rarityWeight[a.rarity];
+                } else if (sortVal === 'rarity-asc') {
+                    return rarityWeight[a.rarity] - rarityWeight[b.rarity];
+                }
+                return 0;
+            });
+
+            // 렌더링
+            filtered.forEach(unit => {
                 const card = document.createElement('div');
                 card.className = 'unit-card';
-                card.id = `unit-card-${idx}`;
 
                 const imgSrc = encodeURI(`./${unit.img}`);
 
@@ -602,23 +661,11 @@
             });
         }
 
-        // 빠른 검색 필터
-        function fastFilter() {
-            const query = document.getElementById('searchInput').value.toLowerCase();
-            unitData.forEach((unit, idx) => {
-                const card = document.getElementById(`unit-card-${idx}`);
-                const matchName = unit.name.toLowerCase().includes(query);
-                const matchCategory = selectedCategory === 'All' || unit.rarity === selectedCategory;
-
-                card.style.display = (matchName && matchCategory) ? 'flex' : 'none';
-            });
-        }
-
         function setCategory(cat, btn) {
             selectedCategory = cat;
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            fastFilter();
+            renderValueList();
         }
 
         // 2. 계산기 선택 모달
@@ -727,7 +774,7 @@
         }
 
         // 초기화 실행
-        initValueList();
+        renderValueList();
         initTierList();
     </script>
 </body>
