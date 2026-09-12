@@ -356,87 +356,86 @@
         .result-lose { background: #331416; color: var(--accent-red); border: 1px solid var(--accent-red); }
 
         /* ================= 3. Trade Ads 전용 스타일 (서버 연동형) ================= */
-        .roblox-btn {
-            background-color: #ffffff;
-            color: #000000;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-top: 15px;
-            transition: 0.2s;
-        }
-        .roblox-btn:hover { background-color: #e5e5e5; }
-        .roblox-btn img { width: 24px; height: 24px; }
-
-        .ad-dashboard {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .ad-card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 10px;
-        }
-
-        .ad-user-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            min-width: 140px;
-        }
-
-        .ad-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            border: 2px solid var(--border-color);
-            object-fit: cover;
-        }
-
-        .ad-username { font-size: 13px; font-weight: 700; }
-        .ad-time { font-size: 10px; color: var(--text-secondary); }
-
-        .ad-body {
-            flex: 1;
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            background: #11131a;
-            padding: 8px;
-            border-radius: 8px;
-            flex-wrap: wrap;
-        }
-
-        .trade-btn {
-            background-color: var(--accent-blue);
-            color: #fff;
-            border: none;
-            padding: 8px 14px;
-            border-radius: 8px;
-            font-weight: 700;
-            cursor: pointer;
-            text-decoration: none;
-            font-size: 13px;
-            display: inline-block;
-            text-align: center;
-        }
-        .trade-btn.profile { background-color: #334155; }
-        .trade-btn:hover { background-color: #2563eb; }
-
+                .roblox-btn {
+                    background-color: #ffffff;
+                    color: #000000;
+                    border: none;
+                    padding: 12px 24px;
+                    border-radius: 8px;
+                    font-size: 16px;
+                    font-weight: 700;
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    margin-top: 15px;
+                    transition: 0.2s;
+                }
+                .roblox-btn:hover { background-color: #e5e5e5; }
+                .roblox-btn img { width: 24px; height: 24px; }
+        
+                .ad-dashboard {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 16px;
+                }
+        
+                .ad-card {
+                    background-color: var(--card-bg);
+                    border: 1px solid var(--border-color);
+                    border-radius: 12px;
+                    padding: 16px;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    gap: 12px;
+                    margin-bottom: 10px;
+                }
+        
+                .ad-user-info {
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    min-width: 140px;
+                }
+        
+                .ad-avatar {
+                    width: 40px;
+                    height: 40px;
+                    border-radius: 50%;
+                    border: 2px solid var(--border-color);
+                    object-fit: cover;
+                }
+        
+                .ad-username { font-size: 13px; font-weight: 700; }
+                .ad-time { font-size: 10px; color: var(--text-secondary); }
+        
+                .ad-body {
+                    flex: 1;
+                    display: flex;
+                    gap: 10px;
+                    align-items: center;
+                    background: #11131a;
+                    padding: 8px;
+                    border-radius: 8px;
+                    flex-wrap: wrap;
+                }
+        
+                .trade-btn {
+                    background-color: var(--accent-blue);
+                    color: #fff;
+                    border: none;
+                    padding: 8px 14px;
+                    border-radius: 8px;
+                    font-weight: 700;
+                    cursor: pointer;
+                    text-decoration: none;
+                    font-size: 13px;
+                    display: inline-block;
+                    text-align: center;
+                }
+                .trade-btn.profile { background-color: #334155; }
+                .trade-btn:hover { background-color: #2563eb; }
         /* ================= 4. 티어 리스트 (Tier Lists) ================= */
         .tier-row {
             background: var(--panel-bg);
@@ -607,14 +606,14 @@
             <div id="roblox-login-box" class="coming-soon-box">
                 <div class="coming-soon-icon">🔗</div>
                 <div>Connect Roblox Account</div>
-                <div class="coming-soon-desc">안전한 실시간 거래 매칭을 위해 로블록스 계정 프로필 정보를 연동해주세요.</div>
-                <div style="display: flex; flex-direction: column; gap: 8px; width: 100%; max-width: 320px; margin-top: 10px;">
-                    <input type="text" id="rbxUser" class="search-input" style="background:#11131a; border:1px solid var(--border-color); padding:10px; border-radius:8px;" placeholder="로블록스 닉네임 입력">
-                    <input type="text" id="rbxProfileLink" class="search-input" style="background:#11131a; border:1px solid var(--border-color); padding:10px; border-radius:8px;" placeholder="프로필 URL 입력 (예: https://www.roblox.com/users/...)">
+                <div class="coming-soon-desc">Roblox의 공식 OAuth 2.0 인증으로 계정을 안전하게 연결합니다.</div>
+                <div style="font-size:12px; color:var(--text-secondary); max-width:520px; line-height:1.6;">
+                    Roblox 계정 비밀번호를 이 사이트에 입력하지 않습니다. Roblox 인증 화면에서 직접 로그인하고,
+                    허용한 범위(openid, profile)의 정보만 전달받습니다.
                 </div>
                 <button class="roblox-btn" onclick="connectRobloxAccount()">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Roblox_player_icon_black.svg" alt="Roblox">
-                    연동 완료 후 시작하기
+                    Continue with Roblox
                 </button>
             </div>
 
@@ -727,7 +726,15 @@
         let adOffer = [];
         let adRequest = [];
         let pickerTarget = 'my';
-        let currentUser = null; // 로블록스 로그인 유저 정보
+        let currentUser = null;
+        let robloxAccessToken = null;
+        let robloxTokenExpiresAt = 0;
+
+        // 더미 거래 데이터 (게시판 확인용)
+        let tradeAds = [
+            { username: "RobloxKing_99", avatar: "https://tr.rbxcdn.com/38c6edcb50633730ff4cf39ac8859840/150/150/AvatarHeadshot/Png", text: "Trading King Noob and Laser Noob! Looking for Hologram Noob. W/L?", time: "2 mins ago" },
+            { username: "ProTrader123", avatar: "https://tr.rbxcdn.com/a42b102878ce65293dae21184ff5d901/150/150/AvatarHeadshot/Png", text: "Anyone have Fairy Noob? Offering 300 gems worth of units.", time: "15 mins ago" }
+        ];
 
         // 탭 전환
         function switchTab(tabId, btn) {
@@ -816,18 +823,15 @@
         }
 
         function closePicker() { document.getElementById('unitModal').style.display = 'none'; }
-        
-        function removeFromCalc(target, idx) { 
-            if (target === 'my') myOffer.splice(idx, 1); 
-            else theirOffer.splice(idx, 1); 
-            updateCalculator(); 
-        }
+        function removeFromCalc(target, idx) { target === 'my' ? myOffer.splice(idx, 1) : theirOffer.splice(idx, 1); updateCalculator(); }
+
 
         function removeFromAd(target, idx) {
             if (target === 'ad-offer') adOffer.splice(idx, 1);
             else if (target === 'ad-request') adRequest.splice(idx, 1);
             updateAdPreviews();
         }
+
 
         function updateCalculator() {
             const myGrid = document.getElementById('myOfferGrid');
@@ -850,6 +854,14 @@
             }
         }
 
+        function createMiniCard(u, target, idx) {
+            const card = document.createElement('div'); card.className = 'selected-unit-mini';
+            const imgSrc = encodeURI(`./${u.img}`);
+            card.innerHTML = `<button class="remove-btn" onclick="removeFromCalc('${target}', ${idx})">✕</button><img src="${imgSrc}" onerror="this.src='https://via.placeholder.com/40'"><div class="name">${u.name}</div><div class="val">💎 ${u.value}</div>`;
+            return card;
+        }
+
+
         function updateAdPreviews() {
             const offerContainer = document.getElementById('adOfferPreview');
             const requestContainer = document.getElementById('adRequestPreview');
@@ -862,13 +874,6 @@
             adRequest.forEach((u, i) => {
                 requestContainer.appendChild(createAdMiniCard(u, 'ad-request', i));
             });
-        }
-
-        function createMiniCard(u, target, idx) {
-            const card = document.createElement('div'); card.className = 'selected-unit-mini';
-            const imgSrc = encodeURI(`./${u.img}`);
-            card.innerHTML = `<button class="remove-btn" onclick="removeFromCalc('${target}', ${idx})">✕</button><img src="${imgSrc}" onerror="this.src='https://via.placeholder.com/40'"><div class="name">${u.name}</div><div class="val">💎 ${u.value}</div>`;
-            return card;
         }
 
         function createAdMiniCard(u, target, idx) {
@@ -889,117 +894,320 @@
         }
 
         /* ----------------------------------
-           신규 기능: 로블록스 연동 및 Trade Ads (서버 연동형)
+           신규 기능: Roblox OAuth 2.0 + Trade Ads
            ---------------------------------- */
-        
-        function connectRobloxAccount() {
-            const username = document.getElementById('rbxUser').value.trim();
-            const profileUrl = document.getElementById('rbxProfileLink').value.trim();
 
-            if (!username || !profileUrl) {
-                alert("로블록스 닉네임과 프로필 URL을 모두 입력해주세요!");
+        // Roblox Creator Dashboard > OAuth 2.0 Apps에서 발급받은 Client ID를 입력하세요.
+        // 이 값은 공개 클라이언트(PKCE)용이므로 client_secret을 브라우저에 넣지 않습니다.
+        const ROBLOX_CLIENT_ID = 'YOUR_ROBLOX_CLIENT_ID';
+
+        // Creator Dashboard에 등록한 Redirect URI와 정확히 일치해야 합니다.
+        // 기본값은 현재 페이지 URL입니다. 파일(file://)로 열지 말고 HTTPS/localhost에서 실행하세요.
+        const ROBLOX_REDIRECT_URI =
+            window.location.origin + window.location.pathname;
+
+        const ROBLOX_AUTHORIZE_URL = 'https://apis.roblox.com/oauth/v1/authorize';
+        const ROBLOX_TOKEN_URL = 'https://apis.roblox.com/oauth/v1/token';
+        const ROBLOX_USERINFO_URL = 'https://apis.roblox.com/oauth/v1/userinfo';
+        const ROBLOX_SCOPES = 'openid profile';
+
+        function randomString(length = 64) {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~';
+            const array = new Uint8Array(length);
+            crypto.getRandomValues(array);
+            let result = '';
+            for (const value of array) result += chars[value % chars.length];
+            return result;
+        }
+
+        function base64UrlEncode(buffer) {
+            let binary = '';
+            const bytes = new Uint8Array(buffer);
+            const chunkSize = 0x8000;
+            for (let i = 0; i < bytes.length; i += chunkSize) {
+                binary += String.fromCharCode(...bytes.subarray(i, i + chunkSize));
+            }
+            return btoa(binary)
+                .replace(/\+/g, '-')
+                .replace(/\//g, '_')
+                .replace(/=+$/g, '');
+        }
+
+        async function sha256Base64Url(value) {
+            const data = new TextEncoder().encode(value);
+            const digest = await crypto.subtle.digest('SHA-256', data);
+            return base64UrlEncode(digest);
+        }
+
+        function showAdsDashboard() {
+            document.getElementById('roblox-login-box').style.display = 'none';
+            document.getElementById('trade-ads-dashboard').style.display = 'flex';
+            document.getElementById('currentUserName').innerText = currentUser?.username || 'Roblox User';
+            loadTradeAds();
+        }
+
+        function showAdsLogin() {
+            document.getElementById('roblox-login-box').style.display = 'flex';
+            document.getElementById('trade-ads-dashboard').style.display = 'none';
+        }
+
+        async function connectRobloxAccount() {
+            if (!ROBLOX_CLIENT_ID || ROBLOX_CLIENT_ID === 'YOUR_ROBLOX_CLIENT_ID') {
+                alert('먼저 HTML의 ROBLOX_CLIENT_ID에 Roblox OAuth 2.0 Client ID를 입력해주세요.');
                 return;
             }
 
-            currentUser = {
-                username: username,
-                profileUrl: profileUrl,
-                avatar: "https://tr.rbxcdn.com/15053a479bba760317e08cdce013143c/150/150/AvatarHeadshot/Png"
-            };
+            if (window.location.protocol === 'file:') {
+                alert('Roblox OAuth는 file:// 주소에서 사용할 수 없습니다. HTTPS 또는 localhost 서버에서 실행해주세요.');
+                return;
+            }
 
-            document.getElementById('roblox-login-box').style.display = 'none';
-            document.getElementById('trade-ads-dashboard').style.display = 'flex';
-            document.getElementById('currentUserName').innerText = username;
-            
-            loadTradeAds();
+            const state = randomString(48);
+            const codeVerifier = randomString(96);
+            const codeChallenge = await sha256Base64Url(codeVerifier);
+
+            sessionStorage.setItem('roblox_oauth_state', state);
+            sessionStorage.setItem('roblox_oauth_code_verifier', codeVerifier);
+
+            const params = new URLSearchParams({
+                client_id: ROBLOX_CLIENT_ID,
+                redirect_uri: ROBLOX_REDIRECT_URI,
+                scope: ROBLOX_SCOPES,
+                response_type: 'code',
+                state,
+                code_challenge: codeChallenge,
+                code_challenge_method: 'S256'
+            });
+
+            window.location.href = `${ROBLOX_AUTHORIZE_URL}?${params.toString()}`;
+        }
+
+        async function handleRobloxCallback() {
+            const params = new URLSearchParams(window.location.search);
+            const code = params.get('code');
+            const state = params.get('state');
+            const error = params.get('error');
+            const errorDescription = params.get('error_description');
+
+            if (!code && !error) return;
+
+            if (error) {
+                alert(`Roblox 인증이 취소되었거나 실패했습니다.\n${errorDescription || error}`);
+                window.history.replaceState({}, document.title, window.location.pathname);
+                return;
+            }
+
+            const savedState = sessionStorage.getItem('roblox_oauth_state');
+            const codeVerifier = sessionStorage.getItem('roblox_oauth_code_verifier');
+
+            if (!state || !savedState || state !== savedState || !codeVerifier) {
+                alert('Roblox 인증 상태 검증에 실패했습니다. 다시 로그인해주세요.');
+                sessionStorage.removeItem('roblox_oauth_state');
+                sessionStorage.removeItem('roblox_oauth_code_verifier');
+                window.history.replaceState({}, document.title, window.location.pathname);
+                return;
+            }
+
+            try {
+                const body = new URLSearchParams({
+                    client_id: ROBLOX_CLIENT_ID,
+                    grant_type: 'authorization_code',
+                    code,
+                    code_verifier: codeVerifier
+                });
+
+                const tokenResponse = await fetch(ROBLOX_TOKEN_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body
+                });
+
+                if (!tokenResponse.ok) {
+                    throw new Error(`Token exchange failed: ${tokenResponse.status}`);
+                }
+
+                const tokenData = await tokenResponse.json();
+                robloxAccessToken = tokenData.access_token;
+                robloxTokenExpiresAt = Date.now() + ((tokenData.expires_in || 900) * 1000);
+
+                const userResponse = await fetch(ROBLOX_USERINFO_URL, {
+                    headers: {
+                        Authorization: `Bearer ${robloxAccessToken}`
+                    }
+                });
+
+                if (!userResponse.ok) {
+                    throw new Error(`User info request failed: ${userResponse.status}`);
+                }
+
+                const user = await userResponse.json();
+
+                currentUser = {
+                    id: user.sub,
+                    username: user.preferred_username || user.nickname || user.name || 'Roblox User',
+                    displayName: user.name || user.nickname || user.preferred_username || 'Roblox User',
+                    profileUrl: user.profile || `https://www.roblox.com/users/${encodeURIComponent(user.sub)}/profile`,
+                    avatar: user.picture || ''
+                };
+
+                sessionStorage.removeItem('roblox_oauth_state');
+                sessionStorage.removeItem('roblox_oauth_code_verifier');
+                window.history.replaceState({}, document.title, window.location.pathname);
+
+                showAdsDashboard();
+            } catch (error) {
+                console.error(error);
+                alert('Roblox 계정 인증에 실패했습니다. OAuth Client ID와 Redirect URI 설정을 확인해주세요.');
+                sessionStorage.removeItem('roblox_oauth_state');
+                sessionStorage.removeItem('roblox_oauth_code_verifier');
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+        }
+
+        function isRobloxAccessTokenValid() {
+            return Boolean(robloxAccessToken && Date.now() < robloxTokenExpiresAt - 30000);
+        }
+
+        function escapeHtml(value) {
+            return String(value ?? '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
         }
 
         // 서버에서 거래 글 불러오기 (Node.js API 연동)
         async function loadTradeAds() {
+            const feed = document.getElementById('ads-feed');
+            if (!feed) return;
+
             try {
-                const res = await fetch('http://localhost:3000/api/trades');
+                const res = await fetch('/api/trades');
+                if (!res.ok) throw new Error(`GET /api/trades ${res.status}`);
+
                 const trades = await res.json();
-                const feed = document.getElementById('ads-feed');
                 feed.innerHTML = '';
 
+                if (!Array.isArray(trades) || trades.length === 0) {
+                    feed.innerHTML = '<div style="text-align:center; color:var(--text-secondary); padding:20px;">아직 등록된 거래 글이 없습니다.</div>';
+                    return;
+                }
+
                 trades.forEach(ad => {
-                    const offerHtml = ad.offerUnits && ad.offerUnits.length > 0 
-                        ? ad.offerUnits.map(u => `<div class="selected-unit-mini" style="width:50px;"><img src="./${u.img}" style="width:25px;height:25px;"><div class="name">${u.name}</div></div>`).join('') 
+                    const offerHtml = ad.offerUnits && ad.offerUnits.length > 0
+                        ? ad.offerUnits.map(u => `
+                            <div class="selected-unit-mini" style="width:50px;">
+                                <img src="./${encodeURI(u.img || '')}" style="width:25px;height:25px;" onerror="this.style.display='none'">
+                                <div class="name">${escapeHtml(u.name)}</div>
+                            </div>
+                          `).join('')
                         : '<span style="font-size:12px; color:var(--text-secondary);">없음</span>';
-                        
-                    const requestHtml = ad.requestUnits && ad.requestUnits.length > 0 
-                        ? ad.requestUnits.map(u => `<div class="selected-unit-mini" style="width:50px;"><img src="./${u.img}" style="width:25px;height:25px;"><div class="name">${u.name}</div></div>`).join('') 
+
+                    const requestHtml = ad.requestUnits && ad.requestUnits.length > 0
+                        ? ad.requestUnits.map(u => `
+                            <div class="selected-unit-mini" style="width:50px;">
+                                <img src="./${encodeURI(u.img || '')}" style="width:25px;height:25px;" onerror="this.style.display='none'">
+                                <div class="name">${escapeHtml(u.name)}</div>
+                            </div>
+                          `).join('')
                         : '<span style="font-size:12px; color:var(--text-secondary);">아무거나</span>';
+
+                    const profileUrl = escapeHtml(ad.profileUrl || `https://www.roblox.com/users/${encodeURIComponent(ad.robloxUserId || '')}/profile`);
 
                     feed.innerHTML += `
                         <div class="ad-card">
                             <div class="ad-user-info">
-                                <img src="${ad.avatar || 'https://via.placeholder.com/40'}" class="ad-avatar" alt="avatar">
+                                <img src="${escapeHtml(ad.avatar || 'https://via.placeholder.com/40')}" class="ad-avatar" alt="avatar">
                                 <div>
-                                    <div class="ad-username">${ad.username}</div>
-                                    <div class="ad-time">${ad.time || '방금 전'}</div>
+                                    <div class="ad-username">${escapeHtml(ad.username || 'Roblox User')}</div>
+                                    <div class="ad-time">${escapeHtml(ad.time || '방금 전')}</div>
                                 </div>
                             </div>
-                            <div class="ad-body" style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                            <div class="ad-body">
                                 <div><b style="font-size:11px; color:var(--text-secondary);">GIVE:</b></div>
                                 <div style="display:flex; gap:4px;">${offerHtml}</div>
                                 <div style="margin:0 5px; color:var(--text-secondary);">➔</div>
                                 <div><b style="font-size:11px; color:var(--text-secondary);">WANT:</b></div>
                                 <div style="display:flex; gap:4px;">${requestHtml}</div>
-                                ${ad.note ? `<div style="font-size:11px; color:var(--accent-yellow); width:100%; margin-top:4px;">💬 ${ad.note}</div>` : ''}
+                                ${ad.note ? `<div style="font-size:11px; color:var(--accent-yellow); width:100%; margin-top:4px;">💬 ${escapeHtml(ad.note)}</div>` : ''}
                             </div>
-                            <div style="display: flex; flex-direction: column; gap: 6px;">
-                                <a href="${ad.profileUrl}" target="_blank" class="trade-btn profile" style="font-size:11px; padding:6px 10px;">👤 프로필</a>
-                                <a href="${ad.profileUrl}" target="_blank" class="trade-btn" style="font-size:11px; padding:6px 10px;">🎮 Trade</a>
+                            <div style="display:flex; flex-direction:column; gap:6px;">
+                                <a href="${profileUrl}" target="_blank" rel="noopener noreferrer" class="trade-btn profile" style="font-size:11px; padding:6px 10px;">👤 프로필</a>
+                                <a href="${profileUrl}" target="_blank" rel="noopener noreferrer" class="trade-btn" style="font-size:11px; padding:6px 10px;">🎮 Trade</a>
                             </div>
                         </div>
                     `;
                 });
-            } catch (e) {
-                console.error("서버에서 Trade Ads 데이터를 불러오지 못했습니다.", e);
+            } catch (error) {
+                console.error('서버에서 Trade Ads 데이터를 불러오지 못했습니다.', error);
+                feed.innerHTML = '<div style="text-align:center; color:var(--accent-red); padding:20px;">Trade Ads 서버에 연결할 수 없습니다.</div>';
             }
         }
 
         // 새 거래 글 서버로 전송하기
         async function submitTradeAd() {
+            if (!currentUser || !isRobloxAccessTokenValid()) {
+                alert('Trade Ads를 게시하려면 먼저 Roblox 계정으로 로그인해주세요.');
+                showAdsLogin();
+                return;
+            }
+
             if (adOffer.length === 0 && adRequest.length === 0) {
-                alert("주는 유닛이나 원하는 유닛 중 최소 하나 이상을 선택해주세요!");
+                alert('주는 유닛이나 원하는 유닛 중 최소 하나 이상을 선택해주세요!');
                 return;
             }
 
             const note = document.getElementById('adNote').value.trim();
 
             try {
-                const response = await fetch('http://localhost:3000/api/trades', {
+                const response = await fetch('/api/trades', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${robloxAccessToken}`
+                    },
                     body: JSON.stringify({
+                        robloxUserId: currentUser.id,
                         username: currentUser.username,
+                        displayName: currentUser.displayName,
                         avatar: currentUser.avatar,
                         profileUrl: currentUser.profileUrl,
                         offerUnits: adOffer,
                         requestUnits: adRequest,
-                        note: note
+                        note
                     })
                 });
 
-                if (response.ok) {
-                    adOffer = [];
-                    adRequest = [];
-                    document.getElementById('adNote').value = '';
-                    updateAdPreviews();
-                    loadTradeAds();
-                } else {
-                    alert("게시물 등록에 실패했습니다.");
+                if (response.status === 401) {
+                    alert('Roblox 로그인 세션이 만료되었습니다. 다시 로그인해주세요.');
+                    robloxAccessToken = null;
+                    currentUser = null;
+                    showAdsLogin();
+                    return;
                 }
-            } catch (e) {
-                alert("서버 연결에 실패했습니다. Node.js 백엔드 서버 상태를 확인해주세요.");
+
+                if (!response.ok) {
+                    throw new Error(`POST /api/trades ${response.status}`);
+                }
+
+                adOffer = [];
+                adRequest = [];
+                document.getElementById('adNote').value = '';
+                updateAdPreviews();
+                await loadTradeAds();
+            } catch (error) {
+                console.error(error);
+                alert('게시물 등록에 실패했습니다. Ads 서버 상태를 확인해주세요.');
             }
         }
 
         // 페이지 로드시 초기화
         renderValueList();
         initTierList();
+        updateCalculator();
+        updateAdPreviews();
+        handleRobloxCallback();
     </script>
 </body>
 </html>
