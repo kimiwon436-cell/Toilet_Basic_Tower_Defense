@@ -1,45 +1,62 @@
-// server.js (Node.js 환경)
 const express = require('express');
 const cors = require('cors');
+const fs = require('fs');
+const path = require('path');
 const app = express();
 
 app.use(cors());
-app.use(express.json()); // JSON 데이터 파싱
+app.use(express.json());
 
-// 임시 데이터베이스 역할 (실제로는 MongoDB나 MySQL을 사용해야 함)
-let activeTradeAds = []; 
+const DATA_FILE = path.join(__dirname, 'trades.json');
 
-// 1. 거래 글 불러오기 API (클라이언트가 피드를 새로고침 할 때 호출)
+// 저장된 거래 글 불러오기
+function loadTrades() {
+    if (!fs.existsSync(DATA_FILE)) return [];
+    try {
+        return JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
+    } catch (e) {
+        return [];
+    }
+}
+
+// 거래 글 영구 저장하기
+function saveTrades(trades) {
+    fs.writeFileSync(DATA_FILE, JSON.stringify(trades, null, 2), 'utf8');
+}
+
+// 1. 거래 글 목록 조회 API
 app.get('/api/trades', (req, res) => {
-    res.json(activeTradeAds);
+    const trades = loadTrades();
+    res.json(trades);
 });
 
-// 2. 새 거래 글 작성 API (클라이언트가 'Post Trade' 버튼을 누를 때 호출)
+// 2. 새 거래 글 작성 API
 app.post('/api/trades', (req, res) => {
-    const { robloxId, username, avatar, offerUnits, requestUnits, note } = req.body;
+    const { username, avatar, profileUrl, offerUnits, requestUnits, note } = req.body;
 
-    // 데이터베이스에 저장할 새로운 거래 글 객체 생성
-    const newTradeAd = {
-        id: Date.now(), // 고유 ID
-        robloxId: robloxId, // 로블록스 OAuth를 통해 검증된 실제 ID
-        username: username,
-        avatar: avatar,
-        offerUnits: offerUnits,
-        requestUnits: requestUnits,
-        note: note,
-        timestamp: new Date().toISOString()
-    };
-
-    activeTradeAds.unshift(newTradeAd); // 최신 글을 맨 앞으로 추가
-    
-    // 배열이 너무 커지지 않도록 오래된 글 100개 제한 (DB 사용시 만료시간 TTL 설정 권장)
-    if (activeTradeAds.length > 100) {
-        activeTradeAds.pop();
+    if (!username || !profileUrl) {
+        return res.status(400).json({ error: "로블록스 정보가 부족합니다." });
     }
 
-    res.status(201).json({ message: "성공적으로 등록되었습니다.", ad: newTradeAd });
+    const trades = loadTrades();
+    const newTrade = {
+        id: Date.now(),
+        username,
+        avatar: avatar || "https://tr.rbxcdn.com/15053a479bba760317e08cdce013143c/150/150/AvatarHeadshot/Png",
+        profileUrl, // 로블록스 팔로우/프로필 링크
+        offerUnits: offerUnits || [],
+        requestUnits: requestUnits || [],
+        note: note || "",
+        time: "방금 전"
+    };
+
+    trades.unshift(newTrade);
+    if (trades.length > 100) trades.pop(); // 최대 100개 유지
+    saveTrades(trades);
+
+    res.status(201).json({ message: "성공적으로 등록되었습니다.", ad: newTrade });
 });
 
 app.listen(3000, () => {
-    console.log('서버가 3000번 포트에서 실행 중입니다.');
+    console.log('백엔드 서버가 3000번 포트에서 실행 중입니다.');
 });
