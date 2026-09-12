@@ -18,6 +18,7 @@
             --accent-purple: #a855f7;
             --accent-blue: #3b82f6;
             --accent-red: #ef4444;
+            --roblox-blue: #00a2ff;
         }
 
         * {
@@ -71,137 +72,33 @@
         }
 
         /* 탭 컨텐츠 구역 */
-        .tab-pane {
-            display: none;
-        }
+        .tab-pane { display: none; }
+        .tab-pane.active { display: block; }
 
-        .tab-pane.active {
-            display: block;
-        }
-
-        /* 출시 예정 (Coming Soon) 박스 */
+        /* 공통 박스 */
         .coming-soon-box {
             background: var(--panel-bg);
             border: 1px solid var(--border-color);
             border-radius: 14px;
             padding: 60px 20px;
             text-align: center;
-            color: var(--text-primary);
-            font-size: 20px;
-            font-weight: 700;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            align-items: center;
-            justify-content: center;
+            display: flex; flex-direction: column; gap: 12px; align-items: center;
         }
 
-        .coming-soon-icon {
-            font-size: 48px;
-            margin-bottom: 10px;
-        }
+        /* ================= 1. Value List ================= */
+        .category-filters { display: flex; gap: 6px; overflow-x: auto; margin-bottom: 12px; }
+        .filter-btn { background: var(--panel-bg); border: 1px solid var(--border-color); color: var(--text-secondary); padding: 6px 14px; border-radius: 8px; cursor: pointer; }
+        .filter-btn.active { background: #2d3446; color: #fff; border-color: #4a556e; }
+        
+        .controls-row { display: flex; gap: 10px; margin-bottom: 12px; }
+        .search-container { display: flex; gap: 10px; background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 10px; padding: 8px 14px; flex: 1; }
+        .search-input { background: none; border: none; color: #fff; width: 100%; outline: none; }
+        .sort-select { background: var(--panel-bg); border: 1px solid var(--border-color); color: #fff; padding: 0 14px; border-radius: 10px; outline: none; }
 
-        .coming-soon-desc {
-            font-size: 14px;
-            font-weight: 400;
-            color: var(--text-secondary);
-        }
-
-        /* ================= 1. 가치표 (Value List) ================= */
-        .category-filters {
-            display: flex;
-            gap: 6px;
-            overflow-x: auto;
-            padding-bottom: 8px;
-            margin-bottom: 12px;
-        }
-
-        .filter-btn {
-            background-color: var(--panel-bg);
-            border: 1px solid var(--border-color);
-            color: var(--text-secondary);
-            padding: 6px 14px;
-            border-radius: 8px;
-            font-size: 13px;
-            font-weight: 500;
-            cursor: pointer;
-            white-space: nowrap;
-        }
-
-        .filter-btn.active {
-            background-color: #2d3446;
-            color: #fff;
-            border-color: #4a556e;
-        }
-
-        .controls-row {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 12px;
-        }
-
-        .search-container {
-            display: flex;
-            gap: 10px;
-            background-color: var(--panel-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 8px 14px;
-            align-items: center;
-            flex: 1;
-        }
-
-        .search-input {
-            background: none;
-            border: none;
-            color: #fff;
-            font-size: 14px;
-            width: 100%;
-            outline: none;
-        }
-
-        .sort-select {
-            background-color: var(--panel-bg);
-            border: 1px solid var(--border-color);
-            color: var(--text-primary);
-            padding: 0 14px;
-            border-radius: 10px;
-            font-size: 13px;
-            font-weight: 500;
-            cursor: pointer;
-            outline: none;
-        }
-
-        .card-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 14px;
-        }
-
-        .unit-card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 14px;
-            padding: 14px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .unit-title {
-            font-size: 15px;
-            font-weight: 700;
-            margin-bottom: 2px;
-            text-align: center;
-        }
-
-        .rarity-tag {
-            font-size: 11px;
-            font-weight: 700;
-            margin-bottom: 8px;
-            text-transform: uppercase;
-        }
-
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
+        .unit-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 14px; padding: 14px; text-align: center; }
+        .unit-title { font-weight: 700; margin-bottom: 2px; }
+        .rarity-tag { font-size: 11px; font-weight: 700; margin-bottom: 8px; text-transform: uppercase; }
         .rarity-Exclusive { color: var(--accent-pink); }
         .rarity-Mythical { color: #f43f5e; }
         .rarity-Legendary { color: var(--accent-yellow); }
@@ -210,327 +107,88 @@
         .rarity-Uncommon { color: var(--accent-green); }
         .rarity-Common { color: var(--text-secondary); }
 
-        .unit-img-wrapper {
-            width: 100%;
-            height: 100px;
-            background-color: #11131a;
-            border-radius: 10px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 10px;
-            border: 1px solid #232736;
-            overflow: hidden;
-        }
-
-        .unit-img-wrapper img {
-            max-width: 80%;
-            max-height: 80%;
-            object-fit: contain;
-        }
-
-        .stats-list {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            font-size: 12px;
-        }
-
-        .stat-row {
-            display: flex;
-            justify-content: space-between;
-            color: var(--text-secondary);
-        }
-
-        .stat-val { font-weight: 700; color: #ffffff; }
+        .unit-img-wrapper { height: 100px; background: #11131a; border-radius: 10px; display: flex; justify-content: center; align-items: center; margin-bottom: 10px; border: 1px solid #232736; }
+        .unit-img-wrapper img { max-width: 80%; max-height: 80%; object-fit: contain; }
+        
+        .stats-list { display: flex; flex-direction: column; gap: 6px; font-size: 12px; }
+        .stat-row { display: flex; justify-content: space-between; color: var(--text-secondary); }
+        .stat-val { font-weight: 700; color: #fff; }
         .stat-val.stable { color: var(--accent-yellow); }
         .stat-val.rising { color: var(--accent-green); }
 
-        /* ================= 2. 거래 계산기 (Trade Calculator) ================= */
-        .calc-wrapper {
-            display: grid;
-            grid-template-columns: 1fr 140px 1fr;
-            gap: 16px;
-            align-items: start;
-        }
-
-        .calc-panel {
-            background-color: var(--panel-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 14px;
-            padding: 16px;
-            min-height: 420px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .calc-panel-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-bottom: 10px;
-            border-bottom: 1px solid var(--border-color);
-            margin-bottom: 12px;
-        }
-
-        .calc-sum {
-            font-size: 18px;
-            font-weight: 800;
-            color: var(--accent-green);
-        }
-
-        .add-unit-btn {
-            background: #222938;
-            border: 1px dashed var(--border-color);
-            color: #fff;
-            padding: 10px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            margin-bottom: 12px;
-            transition: 0.2s;
-        }
-
-        .add-unit-btn:hover { background: #2d364a; }
-
-        .selected-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-            gap: 6px;
-            flex: 1;
-            align-content: start;
-        }
-
-        .selected-unit-mini {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 6px 4px;
-            text-align: center;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 2px;
-            height: fit-content;
-        }
-
+        /* ================= 2. Calculator ================= */
+        .calc-wrapper { display: grid; grid-template-columns: 1fr 140px 1fr; gap: 16px; align-items: start; }
+        .calc-panel { background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 14px; padding: 16px; min-height: 420px; display: flex; flex-direction: column; }
+        .calc-panel-header { display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 12px; }
+        .calc-sum { font-size: 18px; font-weight: 800; color: var(--accent-green); }
+        
+        .add-unit-btn { background: #222938; border: 1px dashed var(--border-color); color: #fff; padding: 10px; border-radius: 8px; cursor: pointer; font-weight: 600; margin-bottom: 12px; }
+        .selected-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 6px; align-content: start; }
+        
+        .selected-unit-mini { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 6px 4px; text-align: center; position: relative; display: flex; flex-direction: column; align-items: center; }
         .selected-unit-mini img { width: 34px; height: 34px; object-fit: contain; }
         .selected-unit-mini .name { font-size: 9px; font-weight: bold; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; width: 100%; }
         .selected-unit-mini .val { font-size: 9px; color: var(--accent-green); font-weight: bold; }
+        .remove-btn { position: absolute; top: -3px; right: -3px; background: var(--accent-red); color: #fff; border-radius: 50%; width: 15px; height: 15px; font-size: 9px; line-height: 15px; cursor: pointer; border: none; }
         
-        .remove-btn {
-            position: absolute;
-            top: -3px; right: -3px;
-            background: var(--accent-red);
-            color: #fff;
-            border-radius: 50%;
-            width: 15px; height: 15px;
-            font-size: 9px;
-            line-height: 15px;
-            cursor: pointer;
-            border: none;
-        }
-
-        .vs-box {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding-top: 80px;
-            gap: 12px;
-        }
-
-        .result-badge {
-            padding: 10px 14px;
-            border-radius: 8px;
-            font-weight: 800;
-            font-size: 14px;
-            text-align: center;
-            width: 100%;
-        }
-
+        .vs-box { display: flex; flex-direction: column; align-items: center; justify-content: center; padding-top: 80px; gap: 12px; }
+        .result-badge { padding: 10px 14px; border-radius: 8px; font-weight: 800; font-size: 14px; text-align: center; width: 100%; }
         .result-fair { background: #2d2a10; color: var(--accent-yellow); border: 1px solid var(--accent-yellow); }
         .result-win { background: #0f2d18; color: var(--accent-green); border: 1px solid var(--accent-green); }
         .result-lose { background: #331416; color: var(--accent-red); border: 1px solid var(--accent-red); }
 
-        /* ================= 3. Trade Ads 전용 스타일 ================= */
-        .roblox-btn {
-            background-color: #ffffff;
-            color: #000000;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-top: 15px;
-            transition: 0.2s;
-        }
-        .roblox-btn:hover { background-color: #e5e5e5; }
-        .roblox-btn img { width: 24px; height: 24px; }
+        /* ================= 3. Trade Ads ================= */
+        .ads-container { display: flex; flex-direction: column; gap: 16px; }
+        
+        /* 로그인 UI */
+        #ads-login-view { text-align: center; padding: 60px 20px; background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 14px; }
+        .roblox-btn { background: var(--roblox-blue); color: #fff; border: none; padding: 12px 24px; font-size: 16px; font-weight: bold; border-radius: 8px; cursor: pointer; margin-top: 16px; }
+        .roblox-btn:hover { background: #008be5; }
 
-        .ad-dashboard {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
+        /* 게시판 UI */
+        #ads-board-view { display: none; }
+        .ads-header { display: flex; justify-content: space-between; align-items: center; background: var(--panel-bg); padding: 16px; border-radius: 14px; border: 1px solid var(--border-color); }
+        .user-profile { display: flex; align-items: center; gap: 10px; font-weight: bold; }
+        .avatar-circle { width: 36px; height: 36px; background: #2d3446; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 18px; }
+        .post-ad-btn { background: var(--accent-green); color: #000; border: none; padding: 10px 16px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        
+        .ad-list { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
+        .ad-card { background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 16px; }
+        .ad-user { font-weight: bold; color: var(--text-secondary); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+        .ad-content { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+        .ad-offer-box { display: flex; gap: 6px; background: #0f1219; padding: 10px; border-radius: 8px; border: 1px solid #1f2433; }
+        .ad-want-box { flex: 1; background: #0f1219; padding: 12px; border-radius: 8px; border: 1px solid #1f2433; min-width: 200px; }
+        .ad-want-box .label { font-size: 11px; color: var(--accent-yellow); margin-bottom: 4px; font-weight: bold; }
+        
+        .copy-user-btn { background: #2d3446; color: #fff; border: 1px solid #4a556e; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; margin-left: auto; }
 
-        .ad-card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 15px;
-        }
+        /* 글쓰기 모달 폼 */
+        .post-form { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
+        .post-textarea { background: #0f1219; color: #fff; border: 1px solid var(--border-color); padding: 10px; border-radius: 8px; resize: vertical; height: 80px; outline: none; font-family: inherit; }
 
-        .ad-user-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            min-width: 150px;
-        }
-
-        .ad-avatar {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            background-color: #272c3d;
-            border: 2px solid var(--border-color);
-            object-fit: cover;
-        }
-
-        .ad-username { font-size: 14px; font-weight: 700; color: #fff; }
-        .ad-time { font-size: 11px; color: var(--text-secondary); }
-
-        .ad-content {
-            flex: 1;
-            background: #11131a;
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px solid #232736;
-            font-size: 14px;
-            color: #e2e8f0;
-        }
-
-        .trade-btn {
-            background-color: var(--accent-blue);
-            color: #fff;
-            border: none;
-            padding: 10px 16px;
-            border-radius: 8px;
-            font-weight: 700;
-            cursor: pointer;
-            white-space: nowrap;
-            transition: 0.2s;
-        }
-        .trade-btn:hover { background-color: #2563eb; }
-
-        /* ================= 4. 티어 리스트 (Tier Lists) ================= */
-        .tier-row {
-            background: var(--panel-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            margin-bottom: 12px;
-            display: flex;
-            overflow: hidden;
-        }
-
-        .tier-label {
-            width: 70px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
-            font-weight: 900;
-            color: #000;
-        }
-
+        /* ================= 4. Tier Lists ================= */
+        .tier-row { background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 12px; margin-bottom: 12px; display: flex; overflow: hidden; }
+        .tier-label { width: 70px; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 900; color: #000; }
         .tier-S { background: #ff7f7f; }
         .tier-A { background: #ffbf7f; }
         .tier-B { background: #ffff7f; }
         .tier-C { background: #7fff7f; }
         .tier-D { background: #7fffff; }
-
-        .tier-items {
-            padding: 10px;
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            flex: 1;
-        }
-
-        .tier-unit-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 6px;
-            text-align: center;
-            width: 75px;
-        }
-
+        .tier-items { padding: 10px; display: flex; gap: 10px; flex-wrap: wrap; flex: 1; }
+        .tier-unit-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 6px; text-align: center; width: 75px; }
         .tier-unit-card img { width: 45px; height: 45px; object-fit: contain; }
         .tier-unit-card .name { font-size: 10px; font-weight: bold; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
 
-        /* 선택 모달 */
-        .modal-overlay {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.8);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-
-        .modal-body {
-            background: var(--panel-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 14px;
-            width: 90%;
-            max-width: 600px;
-            max-height: 80vh;
-            padding: 16px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .modal-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
-            gap: 10px;
-            overflow-y: auto;
-            margin-top: 10px;
-        }
-
-        .modal-item {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 8px;
-            text-align: center;
-            cursor: pointer;
-        }
-
-        @media (max-width: 768px) {
-            .calc-wrapper { grid-template-columns: 1fr; }
-            .vs-box { padding-top: 0; }
-            .ad-card { flex-direction: column; align-items: stretch; }
-            .trade-btn { width: 100%; text-align: center; }
-        }
+        /* 모달 공통 */
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 1000; }
+        .modal-body { background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 14px; width: 90%; max-width: 600px; max-height: 80vh; padding: 16px; display: flex; flex-direction: column; }
+        .modal-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 10px; overflow-y: auto; margin-top: 10px; }
+        .modal-item { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 8px; text-align: center; cursor: pointer; }
     </style>
 </head>
 <body>
 
     <div class="main-wrapper">
-        <!-- 메인 네비게이션 탭 -->
         <div class="nav-tabs">
             <button class="nav-tab-btn active" onclick="switchTab('valuelist', this)">Value List</button>
             <button class="nav-tab-btn" onclick="switchTab('calculator', this)">Trade Calculator</button>
@@ -540,7 +198,7 @@
             <button class="nav-tab-btn" onclick="switchTab('discord', this)">Discord</button>
         </div>
 
-        <!-- ================= TAB 1: Value List ================= -->
+        <!-- 1. Value List -->
         <div id="tab-valuelist" class="tab-pane active">
             <div class="category-filters">
                 <button class="filter-btn active" onclick="setCategory('All', this)">All</button>
@@ -552,7 +210,6 @@
                 <button class="filter-btn" onclick="setCategory('Uncommon', this)">Uncommon</button>
                 <button class="filter-btn" onclick="setCategory('Common', this)">Common</button>
             </div>
-
             <div class="controls-row">
                 <div class="search-container">
                     🔍 <input type="text" id="searchInput" class="search-input" placeholder="Search Noob Tower Defense items..." oninput="renderValueList()">
@@ -564,80 +221,63 @@
                     <option value="rarity-desc">⭐ Rarity: High to Low</option>
                 </select>
             </div>
-
             <div id="cardGrid" class="card-grid"></div>
         </div>
 
-        <!-- ================= TAB 2: Trade Calculator ================= -->
+        <!-- 2. Calculator -->
         <div id="tab-calculator" class="tab-pane">
             <div class="calc-wrapper">
                 <div class="calc-panel">
-                    <div class="calc-panel-header">
-                        <span>My Offer</span>
-                        <span class="calc-sum">💎 <span id="mySum">0</span></span>
-                    </div>
+                    <div class="calc-panel-header"><span>My Offer</span><span class="calc-sum">💎 <span id="mySum">0</span></span></div>
                     <button class="add-unit-btn" onclick="openPicker('my')">+ Add Unit</button>
                     <div id="myOfferGrid" class="selected-list"></div>
                 </div>
-
                 <div class="vs-box">
                     <div style="font-size:28px; font-weight:900; color:var(--text-secondary);">VS</div>
                     <div id="calcResult" class="result-badge result-fair">⚖️ FAIR TRADE</div>
                 </div>
-
                 <div class="calc-panel">
-                    <div class="calc-panel-header">
-                        <span>Their Offer</span>
-                        <span class="calc-sum">💎 <span id="theirSum">0</span></span>
-                    </div>
+                    <div class="calc-panel-header"><span>Their Offer</span><span class="calc-sum">💎 <span id="theirSum">0</span></span></div>
                     <button class="add-unit-btn" onclick="openPicker('their')">+ Add Unit</button>
                     <div id="theirOfferGrid" class="selected-list"></div>
                 </div>
             </div>
         </div>
 
-        <!-- ================= TAB 3: Trade Ads (업데이트 됨) ================= -->
+        <!-- 3. Trade Ads -->
         <div id="tab-ads" class="tab-pane">
             
-            <!-- 로그인 전 화면 (Roblox Login) -->
-            <div id="roblox-login-box" class="coming-soon-box">
-                <div class="coming-soon-icon">🔗</div>
-                <div>Connect Roblox Account</div>
-                <div class="coming-soon-desc">안전한 실시간 거래 매칭을 위해 로블록스 계정을 연동해주세요.</div>
-                <button class="roblox-btn" onclick="mockRobloxLogin()">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Roblox_player_icon_black.svg" alt="Roblox">
-                    Login with Roblox
-                </button>
+            <!-- 로그인 시뮬레이션 화면 -->
+            <div id="ads-login-view">
+                <div style="font-size: 48px; margin-bottom: 10px;">🛡️</div>
+                <h2>Connect Roblox Account</h2>
+                <p style="color: var(--text-secondary); margin-top: 10px; margin-bottom: 20px;">
+                    거래 게시판에 글을 올리려면 로블록스 계정을 연동해야 합니다.<br>
+                    (현재는 데모 버전이므로 닉네임만 입력하면 즉시 연동됩니다!)
+                </p>
+                <button class="roblox-btn" onclick="simulateRobloxLogin()">🔗 Login with Roblox</button>
             </div>
 
-            <!-- 로그인 후 화면 (Trade Dashboard) -->
-            <div id="trade-ads-dashboard" class="ad-dashboard" style="display: none;">
-                
-                <!-- 내 거래 글 올리기 -->
-                <div class="calc-panel" style="min-height: auto;">
-                    <div class="calc-panel-header">
-                        <span style="font-weight: 700;">📝 Post a Trade Ad</span>
+            <!-- 실제 게시판 화면 -->
+            <div id="ads-board-view" class="ads-container">
+                <div class="ads-header">
+                    <div class="user-profile">
+                        <div class="avatar-circle">👤</div>
+                        <div id="display-username">Username</div>
                     </div>
-                    <div style="display: flex; gap: 10px; align-items: center;">
-                        <input type="text" id="adInput" class="search-input" style="border: 1px solid var(--border-color); padding: 12px;" placeholder="Ex) Trading [Laser Noob] for [Hologram Noob]! Reply fast.">
-                        <button class="add-unit-btn" style="margin: 0; padding: 12px 20px;" onclick="submitTradeAd()">Post</button>
+                    <div>
+                        <button class="post-ad-btn" onclick="openCreateAdModal()">+ Create Ad</button>
+                        <button class="filter-btn" style="margin-left:8px;" onclick="logoutRoblox()">Logout</button>
                     </div>
                 </div>
-
-                <!-- 실시간 거래 피드 -->
-                <div class="calc-panel" style="min-height: auto;">
-                    <div class="calc-panel-header">
-                        <span style="font-weight: 700;">📢 Live Trades</span>
-                    </div>
-                    <div id="ads-feed" style="display: flex; flex-direction: column; gap: 12px;">
-                        <!-- Ads가 JavaScript로 여기에 렌더링 됩니다 -->
-                    </div>
+                <div id="adListContainer" class="ad-list">
+                    <!-- 거래 글들이 여기에 들어갑니다 -->
                 </div>
             </div>
 
         </div>
 
-        <!-- ================= TAB 4: Tier Lists ================= -->
+        <!-- 4. Tier Lists -->
         <div id="tab-tierlist" class="tab-pane">
             <div class="tier-row"><div class="tier-label tier-S">S</div><div id="tier-S" class="tier-items"></div></div>
             <div class="tier-row"><div class="tier-label tier-A">A</div><div id="tier-A" class="tier-items"></div></div>
@@ -646,26 +286,24 @@
             <div class="tier-row"><div class="tier-label tier-D">D</div><div id="tier-D" class="tier-items"></div></div>
         </div>
 
-        <!-- ================= TAB 5: Codes ================= -->
+        <!-- 5. Codes -->
         <div id="tab-codes" class="tab-pane">
             <div class="coming-soon-box">
-                <div class="coming-soon-icon">🎁</div>
+                <div style="font-size: 48px;">🎁</div>
                 <div>Game Codes - Coming Soon!</div>
-                <div class="coming-soon-desc">게임 내에서 사용 가능한 최신 쿠폰 코드가 곧 업데이트됩니다.</div>
             </div>
         </div>
 
-        <!-- ================= TAB 6: Discord ================= -->
+        <!-- 6. Discord -->
         <div id="tab-discord" class="tab-pane">
             <div class="coming-soon-box">
-                <div class="coming-soon-icon">💬</div>
+                <div style="font-size: 48px;">💬</div>
                 <div>Official Discord - Coming Soon!</div>
-                <div class="coming-soon-desc">공식 디스코드 커뮤니티 서버가 곧 오픈됩니다.</div>
             </div>
         </div>
     </div>
 
-    <!-- 유닛 선택 모달 -->
+    <!-- 유닛 선택용 공통 모달 -->
     <div id="unitModal" class="modal-overlay">
         <div class="modal-body">
             <div style="display:flex; justify-content:space-between; align-items:center;">
@@ -673,6 +311,33 @@
                 <button onclick="closePicker()" style="background:none; border:none; color:#fff; cursor:pointer; font-size:16px;">✕</button>
             </div>
             <div id="modalGrid" class="modal-grid"></div>
+        </div>
+    </div>
+
+    <!-- 글쓰기용 모달 -->
+    <div id="createAdModal" class="modal-overlay">
+        <div class="modal-body">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <h3>Post a Trade Ad</h3>
+                <button onclick="closeCreateAdModal()" style="background:none; border:none; color:#fff; cursor:pointer; font-size:16px;">✕</button>
+            </div>
+            
+            <div class="post-form">
+                <div>
+                    <label style="color:var(--text-secondary); font-size:12px;">Your Offer (Max 4)</label>
+                    <div style="display:flex; gap:10px; margin-top:6px; margin-bottom: 6px;">
+                        <button class="add-unit-btn" style="margin:0; padding: 6px 12px;" onclick="openPicker('ad-offer')">+ Add Unit</button>
+                        <div id="adDraftGrid" style="display:flex; gap:6px;"></div>
+                    </div>
+                </div>
+
+                <div>
+                    <label style="color:var(--text-secondary); font-size:12px;">Looking For</label>
+                    <textarea id="adTextarea" class="post-textarea" placeholder="Ex) LF: Builder Noob or Overpay"></textarea>
+                </div>
+
+                <button class="post-ad-btn" style="margin-top:10px;" onclick="submitTradeAd()">Post Ad</button>
+            </div>
         </div>
     </div>
 
@@ -700,45 +365,26 @@
             { id: 1, name: "Hologram Noob", rarity: "Mythical", tier: "S", value: 3000, demand: "9/10", stability: "Rising", img: "Hologram_Noob.png" }
         ];
 
-        const rarityWeight = {
-            "Common": 1, "Uncommon": 2, "Rare": 3, "Epic": 4, 
-            "Legendary": 5, "Mythical": 6, "Exclusive": 7
-        };
+        const rarityWeight = { "Common": 1, "Uncommon": 2, "Rare": 3, "Epic": 4, "Legendary": 5, "Mythical": 6, "Exclusive": 7 };
 
-        let selectedCategory = 'All';
-        let myOffer = [];
-        let theirOffer = [];
-        let pickerTarget = 'my';
-        let currentUser = null; // 로블록스 로그인 유저 정보
-
-        // 더미 거래 데이터 (게시판 확인용)
-        let tradeAds = [
-            { username: "RobloxKing_99", avatar: "https://tr.rbxcdn.com/38c6edcb50633730ff4cf39ac8859840/150/150/AvatarHeadshot/Png", text: "Trading King Noob and Laser Noob! Looking for Hologram Noob. W/L?", time: "2 mins ago" },
-            { username: "ProTrader123", avatar: "https://tr.rbxcdn.com/a42b102878ce65293dae21184ff5d901/150/150/AvatarHeadshot/Png", text: "Anyone have Fairy Noob? Offering 300 gems worth of units.", time: "15 mins ago" }
-        ];
-
-        // 탭 전환
+        // 탭 시스템
         function switchTab(tabId, btn) {
             document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
             document.querySelectorAll('.nav-tab-btn').forEach(b => b.classList.remove('active'));
-            
             document.getElementById(`tab-${tabId}`).classList.add('active');
             btn.classList.add('active');
         }
 
-        /* ----------------------------------
-           기존 기능: Value List / Calculator / Tier List
-           ---------------------------------- */
+        // ================= Value List =================
+        let selectedCategory = 'All';
         function renderValueList() {
             const grid = document.getElementById('cardGrid');
             const query = document.getElementById('searchInput').value.toLowerCase();
             const sortVal = document.getElementById('sortSelect').value;
+            
             grid.innerHTML = '';
-            let filtered = unitData.filter(unit => {
-                const matchName = unit.name.toLowerCase().includes(query);
-                const matchCategory = selectedCategory === 'All' || unit.rarity === selectedCategory;
-                return matchName && matchCategory;
-            });
+            let filtered = unitData.filter(u => u.name.toLowerCase().includes(query) && (selectedCategory === 'All' || u.rarity === selectedCategory));
+
             filtered.sort((a, b) => {
                 if (sortVal === 'value-desc') return b.value - a.value;
                 if (sortVal === 'value-asc') return a.value - b.value;
@@ -746,23 +392,21 @@
                 if (sortVal === 'rarity-asc') return rarityWeight[a.rarity] - rarityWeight[b.rarity];
                 return 0;
             });
+
             filtered.forEach(unit => {
-                const card = document.createElement('div');
-                card.className = 'unit-card';
                 const imgSrc = encodeURI(`./${unit.img}`);
-                card.innerHTML = `
-                    <div class="unit-title">${unit.name}</div>
-                    <div class="rarity-tag rarity-${unit.rarity}">${unit.rarity}</div>
-                    <div class="unit-img-wrapper">
-                        <img src="${imgSrc}" loading="lazy" onerror="this.src='https://via.placeholder.com/120/11131a/ef4444?text=Missing'">
-                    </div>
-                    <div class="stats-list">
-                        <div class="stat-row"><span>Value</span> <span class="stat-val">💎 ${unit.value.toLocaleString()}</span></div>
-                        <div class="stat-row"><span>Demand</span> <span class="stat-val">${unit.demand}</span></div>
-                        <div class="stat-row"><span>Stability</span> <span class="stat-val ${unit.stability.includes('Rising') ? 'rising' : 'stable'}">${unit.stability}</span></div>
+                grid.innerHTML += `
+                    <div class="unit-card">
+                        <div class="unit-title">${unit.name}</div>
+                        <div class="rarity-tag rarity-${unit.rarity}">${unit.rarity}</div>
+                        <div class="unit-img-wrapper"><img src="${imgSrc}" onerror="this.src='https://via.placeholder.com/120'"></div>
+                        <div class="stats-list">
+                            <div class="stat-row"><span>Value</span> <span class="stat-val">💎 ${unit.value.toLocaleString()}</span></div>
+                            <div class="stat-row"><span>Demand</span> <span class="stat-val">${unit.demand}</span></div>
+                            <div class="stat-row"><span>Stability</span> <span class="stat-val ${unit.stability.includes('Rising')?'rising':'stable'}">${unit.stability}</span></div>
+                        </div>
                     </div>
                 `;
-                grid.appendChild(card);
             });
         }
 
@@ -773,43 +417,50 @@
             renderValueList();
         }
 
+        // ================= Calculator & Unit Picker =================
+        let myOffer = [], theirOffer = [], pickerTarget = 'my';
+        
         function openPicker(target) {
             pickerTarget = target;
+            if(target === 'ad-offer' && adDraftUnits.length >= 4) {
+                alert("You can only add up to 4 units!");
+                return;
+            }
+
             const modalGrid = document.getElementById('modalGrid');
             modalGrid.innerHTML = '';
             unitData.forEach(unit => {
                 const item = document.createElement('div');
                 item.className = 'modal-item';
                 item.onclick = () => {
-                    if (pickerTarget === 'my') myOffer.push(unit);
-                    else theirOffer.push(unit);
+                    if (pickerTarget === 'my') { myOffer.push(unit); updateCalculator(); }
+                    else if (pickerTarget === 'their') { theirOffer.push(unit); updateCalculator(); }
+                    else if (pickerTarget === 'ad-offer') { adDraftUnits.push(unit); renderAdDraft(); }
                     closePicker();
-                    updateCalculator();
                 };
-                const imgSrc = encodeURI(`./${unit.img}`);
-                item.innerHTML = `
-                    <img src="${imgSrc}" style="width:40px; height:40px; object-fit:contain;" onerror="this.src='https://via.placeholder.com/40'">
-                    <div style="font-size:10px; font-weight:bold;">${unit.name}</div>
-                    <div style="font-size:10px; color:var(--accent-green);">💎 ${unit.value}</div>
-                `;
+                item.innerHTML = `<img src="${encodeURI('./'+unit.img)}" style="width:40px; height:40px;" onerror="this.src='https://via.placeholder.com/40'">
+                                  <div style="font-size:10px; font-weight:bold;">${unit.name}</div>`;
                 modalGrid.appendChild(item);
             });
             document.getElementById('unitModal').style.display = 'flex';
         }
 
         function closePicker() { document.getElementById('unitModal').style.display = 'none'; }
-        function removeFromCalc(target, idx) { target === 'my' ? myOffer.splice(idx, 1) : theirOffer.splice(idx, 1); updateCalculator(); }
+        
+        function removeFromList(target, idx) {
+            if(target === 'my') { myOffer.splice(idx, 1); updateCalculator(); }
+            else if(target === 'their') { theirOffer.splice(idx, 1); updateCalculator(); }
+            else if(target === 'ad-offer') { adDraftUnits.splice(idx, 1); renderAdDraft(); }
+        }
 
         function updateCalculator() {
-            const myGrid = document.getElementById('myOfferGrid');
-            const theirGrid = document.getElementById('theirOfferGrid');
-            myGrid.innerHTML = ''; theirGrid.innerHTML = '';
             let mySum = 0, theirSum = 0;
-            myOffer.forEach((u, i) => { mySum += u.value; myGrid.appendChild(createMiniCard(u, 'my', i)); });
-            theirOffer.forEach((u, i) => { theirSum += u.value; theirGrid.appendChild(createMiniCard(u, 'their', i)); });
+            document.getElementById('myOfferGrid').innerHTML = myOffer.map((u, i) => { mySum+=u.value; return createMini(u, 'my', i); }).join('');
+            document.getElementById('theirOfferGrid').innerHTML = theirOffer.map((u, i) => { theirSum+=u.value; return createMini(u, 'their', i); }).join('');
+            
             document.getElementById('mySum').innerText = mySum.toLocaleString();
             document.getElementById('theirSum').innerText = theirSum.toLocaleString();
-            
+
             const res = document.getElementById('calcResult');
             const diff = mySum - theirSum;
             if (mySum === 0 && theirSum === 0 || Math.abs(diff) <= Math.max(mySum, theirSum) * 0.1) {
@@ -821,94 +472,140 @@
             }
         }
 
-        function createMiniCard(u, target, idx) {
-            const card = document.createElement('div'); card.className = 'selected-unit-mini';
-            const imgSrc = encodeURI(`./${u.img}`);
-            card.innerHTML = `<button class="remove-btn" onclick="removeFromCalc('${target}', ${idx})">✕</button><img src="${imgSrc}" onerror="this.src='https://via.placeholder.com/40'"><div class="name">${u.name}</div><div class="val">💎 ${u.value}</div>`;
-            return card;
+        function createMini(u, target, idx) {
+            return `<div class="selected-unit-mini">
+                        <button class="remove-btn" onclick="removeFromList('${target}', ${idx})">✕</button>
+                        <img src="${encodeURI('./'+u.img)}" onerror="this.src='https://via.placeholder.com/40'">
+                        <div class="name">${u.name}</div><div class="val">💎 ${u.value}</div>
+                    </div>`;
         }
 
-        function initTierList() {
-            ['S', 'A', 'B', 'C', 'D'].forEach(tier => {
-                const container = document.getElementById(`tier-${tier}`);
-                unitData.filter(u => u.tier === tier).forEach(u => {
-                    const imgSrc = encodeURI(`./${u.img}`);
-                    container.innerHTML += `<div class="tier-unit-card"><img src="${imgSrc}" onerror="this.src='https://via.placeholder.com/45'"><div class="name">${u.name}</div></div>`;
-                });
-            });
-        }
-
-        /* ----------------------------------
-           신규 기능: 로블록스 연동 및 Trade Ads
-           ---------------------------------- */
+        // ================= Trade Ads (로블록스 연동 시뮬레이션) =================
+        let activeRobloxUser = localStorage.getItem('ntd_roblox_user');
         
-        // 로블록스 로그인 가짜 연동 처리
-        function mockRobloxLogin() {
-            // 실제 환경에서는 여기서 백엔드 OAuth 서버로 리다이렉트 됩니다.
-            // 여기서는 프론트엔드 UI 시뮬레이션을 위해 유저 데이터를 하드코딩합니다.
-            currentUser = {
-                username: "YourRobloxUser_123",
-                avatar: "https://tr.rbxcdn.com/15053a479bba760317e08cdce013143c/150/150/AvatarHeadshot/Png"
-            };
+        // 더미 데이터 세팅 (처음 접속시 게시판이 비어있지 않게)
+        let adDatabase = JSON.parse(localStorage.getItem('ntd_ads_db')) || [
+            { id: 1, user: "ProTrader99", offerIds: [10, 11], text: "LF: Barbarian Noob or Good offers", time: Date.now() - 3600000 },
+            { id: 2, user: "NoobMaster", offerIds: [8], text: "Only looking for Overpays. Send message.", time: Date.now() - 7200000 }
+        ];
 
-            // 로그인 섹션 숨기고 대시보드 노출
-            document.getElementById('roblox-login-box').style.display = 'none';
-            document.getElementById('trade-ads-dashboard').style.display = 'flex';
-            
-            alert(`✅ 성공적으로 연결되었습니다: ${currentUser.username}`);
-            renderTradeAds();
+        let adDraftUnits = [];
+
+        function checkLoginState() {
+            if(activeRobloxUser) {
+                document.getElementById('ads-login-view').style.display = 'none';
+                document.getElementById('ads-board-view').style.display = 'block';
+                document.getElementById('display-username').innerText = activeRobloxUser;
+                renderAds();
+            } else {
+                document.getElementById('ads-login-view').style.display = 'block';
+                document.getElementById('ads-board-view').style.display = 'none';
+            }
         }
 
-        // 거래 글 화면에 출력
-        function renderTradeAds() {
-            const feed = document.getElementById('ads-feed');
-            feed.innerHTML = '';
+        function simulateRobloxLogin() {
+            const username = prompt("로블록스 닉네임을 입력하세요:\n(이 작업은 계정을 훔치지 않으며 시뮬레이션용입니다.)");
+            if(username && username.trim().length > 2) {
+                activeRobloxUser = username.trim();
+                localStorage.setItem('ntd_roblox_user', activeRobloxUser);
+                checkLoginState();
+            }
+        }
 
-            tradeAds.forEach((ad, index) => {
-                feed.innerHTML += `
+        function logoutRoblox() {
+            activeRobloxUser = null;
+            localStorage.removeItem('ntd_roblox_user');
+            checkLoginState();
+        }
+
+        function renderAds() {
+            const container = document.getElementById('adListContainer');
+            container.innerHTML = '';
+            
+            // 최신 글이 위로 오도록 정렬
+            const sortedAds = [...adDatabase].sort((a,b) => b.time - a.time);
+
+            sortedAds.forEach(ad => {
+                // 저장된 Unit ID를 바탕으로 유닛 객체 찾기
+                const offerHtml = ad.offerIds.map(id => {
+                    const u = unitData.find(x => x.id === id);
+                    if(!u) return '';
+                    return `<div style="background:var(--card-bg); padding:4px; border-radius:6px; text-align:center;">
+                                <img src="${encodeURI('./'+u.img)}" style="width:30px; height:30px;" onerror="this.src='https://via.placeholder.com/30'">
+                            </div>`;
+                }).join('');
+
+                container.innerHTML += `
                     <div class="ad-card">
-                        <div class="ad-user-info">
-                            <img src="${ad.avatar}" class="ad-avatar" alt="avatar">
-                            <div>
-                                <div class="ad-username">${ad.username}</div>
-                                <div class="ad-time">${ad.time}</div>
-                            </div>
+                        <div class="ad-user">
+                            👤 ${ad.user} 
+                            <button class="copy-user-btn" onclick="navigator.clipboard.writeText('${ad.user}'); alert('Username Copied!');">📋 Copy Username</button>
                         </div>
                         <div class="ad-content">
-                            ${ad.text}
+                            <div class="ad-offer-box">
+                                ${offerHtml || '<span style="color:var(--text-secondary); font-size:12px;">No units attached</span>'}
+                            </div>
+                            <div style="color:var(--text-secondary); font-weight:bold;">➡</div>
+                            <div class="ad-want-box">
+                                <div class="label">LOOKING FOR</div>
+                                <div style="font-size:14px;">${ad.text}</div>
+                            </div>
                         </div>
-                        <button class="trade-btn" onclick="alert('로블록스에서 ${ad.username}님에게 거래 요청을 보냅니다 (시뮬레이션)')">Trade in Game</button>
                     </div>
                 `;
             });
         }
 
-        // 새 거래 글 등록
-        function submitTradeAd() {
-            const input = document.getElementById('adInput');
-            const text = input.value.trim();
+        // 새 거래글 쓰기 모달 관련
+        function openCreateAdModal() {
+            adDraftUnits = [];
+            document.getElementById('adTextarea').value = '';
+            renderAdDraft();
+            document.getElementById('createAdModal').style.display = 'flex';
+        }
 
-            if (!text) {
-                alert("내용을 입력해주세요!");
+        function closeCreateAdModal() { document.getElementById('createAdModal').style.display = 'none'; }
+
+        function renderAdDraft() {
+            document.getElementById('adDraftGrid').innerHTML = adDraftUnits.map((u, i) => createMini(u, 'ad-offer', i)).join('');
+        }
+
+        function submitTradeAd() {
+            const text = document.getElementById('adTextarea').value.trim();
+            if(adDraftUnits.length === 0 && text === '') {
+                alert("Please add at least one unit or write a description.");
                 return;
             }
 
-            // 배열 맨 앞에 추가
-            tradeAds.unshift({
-                username: currentUser.username,
-                avatar: currentUser.avatar,
-                text: text,
-                time: "Just now"
-            });
+            const newAd = {
+                id: Date.now(),
+                user: activeRobloxUser,
+                offerIds: adDraftUnits.map(u => u.id),
+                text: text || "Trading these units",
+                time: Date.now()
+            };
 
-            input.value = ''; // 입력창 초기화
-            renderTradeAds(); // 피드 재렌더링
+            adDatabase.push(newAd);
+            localStorage.setItem('ntd_ads_db', JSON.stringify(adDatabase));
+            
+            closeCreateAdModal();
+            renderAds();
         }
 
+        // ================= Tier List =================
+        function initTierList() {
+            ['S', 'A', 'B', 'C', 'D'].forEach(tier => {
+                const container = document.getElementById(`tier-${tier}`);
+                unitData.filter(u => u.tier === tier).forEach(u => {
+                    container.innerHTML += `<div class="tier-unit-card"><img src="${encodeURI('./'+u.img)}" onerror="this.src='https://via.placeholder.com/45'"><div class="name">${u.name}</div></div>`;
+                });
+            });
+        }
 
-        // 페이지 로드시 초기화
+        // 초기 실행
         renderValueList();
         initTierList();
+        checkLoginState();
     </script>
 </body>
 </html>
